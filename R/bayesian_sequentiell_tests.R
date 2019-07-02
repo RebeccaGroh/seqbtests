@@ -192,8 +192,10 @@ results
 
 seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, max_repls = 20, measure =NULL, test = NULL, rho = 0.1, rope = c(-0.01, 0.01), ...) {
   result = data.frame()
-  for (i in 2:max_repls) {
+  for (i in 1:max_repls) {
     data <- get_replications(i = i, ...)
+    ## check if passed names, define columns in dataset 
+    checkmate::assert_true(check_names(data, problemset, baseline, learner_b = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     } 
@@ -216,7 +218,7 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, max_repls 
       } else {
         threshold <- b_test$posterior.probabilities[2] + b_test$posterior.probabilities[3]
       }
-      if (threshold > 0.95) {
+      if (threshold > 0.99) {
         break
       }
       result[j, "method"] <- b_test$method  
@@ -233,7 +235,7 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, max_repls 
 
 ## verwendete sample werden nicht mit repls eingschr?nkt 
 ## learner_b wird angegeben 
-results <- seq_b_corr_t_test(df = benchmark_test_no_pars, problemset = "Adiac", baseline = "classif.xgboost", learner_b = "classif.ksvm", rho=0.1, rope=c(-0.01, 0.01))
+results <- seq_b_corr_t_test(df = benchmark_test_no_pars, problemset = "Adiac", baseline = "classif.xgboost", max_repls = 10, learner_b = "classif.ksvm", rho=0.1, rope=c(-0.01, 0.01))
 ## learner_b wird nicht angegeben 
 results <- seq_b_corr_t_test(df = benchmark_test_no_pars, problemset = "Adiac", baseline = "classif.xgboost", test ="better", max_repls = 10, rho=0.1, rope=c(-0.01, 0.01))
 results

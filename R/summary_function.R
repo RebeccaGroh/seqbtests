@@ -17,8 +17,7 @@ data_summary <- function(df){
 #' Drop rows that contain any NA depending on groups
 #' @param 
 #' df input data frame 
-#' group group Variable
-#' measure Variable containing measure values 
+l#' measure Variable containing measure values 
 #' @return new Data Frame without NAs 
 #' @export 
 na_drop <- function(df, group ,measure) {
