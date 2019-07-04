@@ -9,7 +9,7 @@
 #' @param measure Measure column (default: first measure column in data frame)
 #' @return A list containing the following components: \code{measure}, used measure column; \code{method}, a character string indicating what type of test was performed; \code{statistic}, the value of the statistic used in the test and \code{p.value}, the p-value for the test
 #' @details The test has first been implemented in scmamp
-#' @references https://github.com/b0rxa/scmamp
+#' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
 wilcoxon_signed_test <- function(df, problemset, learner_a, learner_b, measure =NULL) {
   checkmate::assert_true(check_names(data = df, problemset, learner_a, learner_b = NULL, measure = NULL))
@@ -44,7 +44,7 @@ wilcoxon_signed_test <- function(df, problemset, learner_a, learner_b, measure =
 #' must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
 #' @return A list containing the following components: \code{measure}, used measure column; \code{method}, a character string indicating what type of test was performed; \code{statistic}, the value of the statistic used in the test and \code{p.value}, the p-value for the test
 #' @details The test has first been implemented in scmamp
-#' @references https://github.com/b0rxa/scmamp
+#' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
 corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL, rho = 0.01, alternative="two.sided") {
   checkmate::assert_true(check_names(data = df, problemset, learner_a, learner_b = NULL, measure = NULL))
