@@ -7,7 +7,7 @@
 #' @param measure Measure column (default: first measure column in data frame)
 #' @return A list containing the following components:
 #' @details The test has first been implemented in scmamp
-#' @references ??
+#' @references https://github.com/b0rxa/scmamp
 #' @export
 b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL, rho = 0.1, rope = c(-0.01, 0.01)) {
   requireNamespace("scmamp", quietly = TRUE)
