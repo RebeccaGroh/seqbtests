@@ -1,0 +1,14 @@
+Package: sequentiell_tests
+Type: Package
+Title: A Sequential Bayesian Approach for Performance Comparison of Machine Learning Algorithms
+Version: 0.1.0
+Author: person("Rebecca", "Groh", email = "rebeccagroh@hotmail.de",
+                  role = c("aut", "cre"))
+Description: Implementation of statistical test. 
+License: ??
+Encoding: UTF-8
+LazyData: true
+Imports: scmamp, 
+    checkmate
+Suggests: 
+    
