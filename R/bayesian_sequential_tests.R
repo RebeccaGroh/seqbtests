@@ -15,7 +15,9 @@
 ## nach Signfikanz wird mit den Replikationen abgebrochen. Alle Algorithmen werden 
 ## gegen die Baseline getestet
 
-b_correlated_t_test <- function(df, problemset, baseline, learner_b = NULL, replications = 10, measure =NULL, rho = 0.1, rope = c(-0.01, 0.01)) {
+b_correlated_t_test <- function(df, problemset, baseline, learner_b = NULL, 
+                                replications = 10, measure =NULL, rho = 0.1, 
+                                rope = c(-0.01, 0.01)) {
   requireNamespace("scmamp", quietly = TRUE)
   if (!is.null(measure)) {
     measure <- measure 
@@ -28,13 +30,16 @@ b_correlated_t_test <- function(df, problemset, baseline, learner_b = NULL, repl
   result = data.frame()
   for (i in 2:length(unique(df[["replications"]]))) {
     # define samples 
-    x <- df[df[["problem"]] == problemset & df[["algorithm"]] == baseline, measure]
+    x <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == baseline, measure]
     for (j in unique(df[["algorithm"]])) {
       if (!is.null(learner_b)) {
         j <- learner_b
-        y <- df[df[["problem"]] == problemset & df[["algorithm"]] == j, measure]
+        y <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == j, measure]
       } else {
-        y <- df[df[["problem"]] == problemset & df[["algorithm"]] == j, measure]
+        y <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == j, measure]
       }
       # Bayesian correlated t Test 
       b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)

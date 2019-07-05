@@ -1,9 +1,10 @@
 #' @title Check column names 
 #' @description 
-#' Check if column names that were passed by User
-#' are contained in the data frame. 
+#'   Check if column names that were passed by User
+#'   are contained in the data frame. 
 #' 
-check_names <- function(data, problemset, baseline, learner_a = NULL, learner_b = NULL, measure = NULL) {
+check_names <- function(data, problemset, baseline, learner_a = NULL, 
+                        learner_b = NULL, measure = NULL) {
   checkmate::assert_true(problemset %in% data[["problem"]])
   checkmate::assert_true(baseline %in% data[["algorithm"]])
   if (!is.null(learner_a)) {
@@ -22,13 +23,14 @@ check_names <- function(data, problemset, baseline, learner_a = NULL, learner_b 
 
 #' @title Check Columns of Data Frame 
 #' @description 
-#' Check if data frame only contains legit columns
-#' and whether the compulsory columns exist. 
+#'   Check if data frame only contains legit columns
+#'   and whether the compulsory columns exist. 
 #' @param df input data frame
 #' @return TRUE if test was successful 
 #' @export
 check_column_names <- function(df) {
-  checkmate::assert_true(get_main_columns_count(df) + get_measure_columns_count(df)
+  checkmate::assert_true(get_main_columns_count(df) 
+                         + get_measure_columns_count(df)
                          + get_parameter_columns_count(df) == ncol(df))
   checkmate::assert_true("problem" %in% colnames(df))
   checkmate::assert_true("algorithm" %in% colnames(df))
@@ -39,7 +41,7 @@ check_column_names <- function(df) {
 
 #' @title Check Structure 
 #' @description 
-#' Check if the structure of the data frame satisfies the requriements. 
+#'   Check if the structure of the data frame satisfies the requriements. 
 #' @param df input data frame 
 #' @return TRUE if test was successful 
 #' @export

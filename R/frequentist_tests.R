@@ -1,7 +1,7 @@
 #' @title Wilcoxon signed-rank test 
 #' @description This function implements the paired Wilcoxon signed-rank test. 
-#' A non-parametric statistical hypothesis test sed to compare the means of two 
-#' paired samples. 
+#'   A non-parametric statistical hypothesis test sed to compare the means of two 
+#'   paired samples. 
 #' @param df input data frame
 #' @param problemset 
 #' @param learner_a First algorithm 
@@ -11,20 +11,27 @@
 #' @details The test has first been implemented in scmamp
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
-wilcoxon_signed_test <- function(df, problemset, learner_a, learner_b, measure =NULL) {
-  checkmate::assert_true(check_names(data = df, problemset, learner_a, learner_b = NULL, measure = NULL))
+wilcoxon_signed_test <- function(df, problemset, learner_a, 
+                                 learner_b, measure =NULL) {
+  checkmate::assert_true(check_names(data = df, problemset, 
+                                     learner_a, learner_b = NULL, 
+                                     measure = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
   # define samples 
-  x <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_a, measure]
-  y <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_b, measure]
+  x <- df[df[["problem"]] == problemset 
+          & df[["algorithm"]] == learner_a, measure]
+  y <- df[df[["problem"]] == problemset 
+          & df[["algorithm"]] == learner_b, measure]
   # Wilcoxon signed rank test 
   w_test <- scmamp::wilcoxonSignedTest (x, y)
   ## return results 
   result <- list()
   result$measure <- measure
-  test <- list(method = w_test$method, statistic = w_test$statistic, p.value = w_test$p.value)
+  test <- list(method = w_test$method, 
+               statistic = w_test$statistic, 
+               p.value = w_test$p.value)
   class(test) <- "htest"
   result$teststatistic <- test 
   return(result)
@@ -46,20 +53,26 @@ wilcoxon_signed_test <- function(df, problemset, learner_a, learner_b, measure =
 #' @details The test has first been implemented in scmamp
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
-corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL, rho = 0.01, alternative="two.sided") {
-  checkmate::assert_true(check_names(data = df, problemset, learner_a, learner_b = NULL, measure = NULL))
+corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL, 
+                        rho = 0.01, alternative="two.sided") {
+  checkmate::assert_true(check_names(data = df, problemset, learner_a, 
+                                     learner_b = NULL, measure = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
   # define samples 
-  x <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_a, measure]
-  y <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_b, measure]
+  x <- df[df[["problem"]] == problemset 
+          & df[["algorithm"]] == learner_a, measure]
+  y <- df[df[["problem"]] == problemset 
+          & df[["algorithm"]] == learner_b, measure]
   # Correlated t Test 
   corr_test <- scmamp::correlatedTtest(x,y, rho, alternative="two.sided")
   ## return results 
   result <- list()
   result$measure <- measure
-  test <- list(method = corr_test$method, statistic = corr_test$statistic, p.value = corr_test$p.value)
+  test <- list(method = corr_test$method, 
+               statistic = corr_test$statistic, 
+               p.value = corr_test$p.value)
   class(test) <- "htest"
   result$teststatistic <- test 
   return(result)

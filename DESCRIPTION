@@ -9,6 +9,8 @@ License:
 Encoding: UTF-8
 LazyData: true
 Imports: scmamp, 
-    checkmate
+    checkmate, 
+    dplyr
 Suggests: 
+    testthat (>= 2.1.0)
 RoxygenNote: 6.1.1

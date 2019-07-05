@@ -1,7 +1,7 @@
 #' @title Main Columns 
 #' @description 
-#' Get the list of names of the main columns within the data frame, 
-#' namely "problem", "algorithm" and "replications". 
+#'   Get the list of names of the main columns within the data frame, 
+#'   namely "problem", "algorithm" and "replications". 
 #' @param df input data frame
 #' @return A vector containing all main column names.
 #' @export
@@ -79,3 +79,8 @@ get_measure_columns_count <- function(df){
 get_replications <- function(i, df) {
   df[df[["replications"]] <= i, ]
 }
+
+paste_algo_pars <- function(algorithm, parameter_algorithm) {
+  algorithm <- paste(algorithm, parameter_algorithm, sep = "_")
+}
+  
