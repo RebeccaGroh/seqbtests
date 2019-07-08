@@ -80,7 +80,28 @@ get_replications <- function(i, df) {
   df[df[["replications"]] <= i, ]
 }
 
+#' @title Check number of replications 
+#' @describtion
+#' Check if number of observations in the first an second sample are equal.
+#' @param x First sample.
+#' @param y Second sample.
+#' @return TRUE if both samples are of same length. 
+#' @export
+get_replications_count <- function(x, y) {
+  checkmate::assert_true(length(x) == length(y))
+}
+
+
+#' @title Paste algorithm and parameter
+#' @description 
+#' If there is a parameter additional to the algorithm, both can be combined, 
+#' when using this function. 
+#' @param algorithm Algorithm in data frame.
+#' @param parameter_algorithm Algorithm parameter in data frame. 
+#' @return New algorithm name, combining algorithm and its parameter. 
+#' @export 
 paste_algo_pars <- function(algorithm, parameter_algorithm) {
   algorithm <- paste(algorithm, parameter_algorithm, sep = "_")
 }
+
   

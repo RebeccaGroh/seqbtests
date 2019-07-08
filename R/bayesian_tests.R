@@ -9,23 +9,36 @@
 #' @details The test has first been implemented in scmamp
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
-b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL, 
-                          rho = 0.1, rope = c(-0.01, 0.01)) {
+b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
+                          parameter_algorithm = NULL, rho = 0.1, rope = c(-0.01, 0.01)) {
   requireNamespace("scmamp", quietly = TRUE)
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
+  ## oder der User gibt direkt den richtigen Namen für learner_a/_b an. 
+  if (!is.null(parameter_algorithm)){
+    learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
+    learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
+    df[["algorithm"]] <- paste_algo_pars(algorithm = df[["algorithm"]], 
+                                         parameter_algorithm = df[["parameter_algorithm"]])
+  }
   # define samples 
   x <- df[df[["problem"]] == problemset 
           & df[["algorithm"]] == learner_a, measure]
   y <- df[df[["problem"]] == problemset 
           & df[["algorithm"]] == learner_b, measure]
+  # check numbers in sample
+  checkmate::assert_true(get_replications_count(x, y))
   # Bayesian correlated t Test 
   b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
   result <- list()
   result$measure <- measure
   result$method <- b_corr$method
   result$posteriror_probabilities <- b_corr$posterior.probabilities
+  result$approximate <- b_corr$approximate
+  result$posterior <- b_corr$posterior
+  result$additional <- b_corr$additional
+  result$parameters <- b_corr$parameters
   return(result)
 }
 
@@ -56,4 +69,14 @@ results <- b_corr_t_test(df = benchmark_test_full, problemset = "Adiac", learner
 ## ohne measure 
 results <- b_corr_t_test(df = benchmark_test_full, problemset = "Adiac", learner_a = "classif.xgboost", learner_b = "classif.ksvm", rho=0.1, rope=c(-0.01, 0.01))
 results
+
+df <- benchmark_test_full
+problemset <- "BirdChicken"
+learner_a <- "classif.rpart"
+learner_b <- "classif.ksvm"
+measure <- "measure_ber"
+x <- df[df[["problem"]] == problemset 
+        & df[["algorithm"]] == learner_a, measure]
+y <- df[df[["problem"]] == problemset 
+        & df[["algorithm"]] == learner_b, measure]
 
