@@ -12,6 +12,7 @@
 b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
                           parameter_algorithm = NULL, rho = 0.1, rope = c(-0.01, 0.01)) {
   requireNamespace("scmamp", quietly = TRUE)
+  checkmate::assert_true(check_structure(df))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 

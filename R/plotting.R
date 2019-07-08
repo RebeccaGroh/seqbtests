@@ -15,8 +15,9 @@
 #' @param plot.samples A logical value. If true, the samples are plotted (only when the posterior is approximate)
 #' @param alpha Numeric value for the transparency of the points, only applicable if \code{plot.samples} is true
 #' @return An object of class \linkS4class{ggplot} with the plot
+#' @details The test has first been implemented in scmamp
+#' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
-
 plot_posteriror <- function(results, parameter=1, num.points=1000, plot.rope=TRUE, plot.samples=TRUE, alpha=NULL, ...) {
   scmamp::plotPosterior(results, parameter=1, num.points=1000, plot.rope=TRUE, plot.samples=TRUE, alpha=NULL, ...)
 }
