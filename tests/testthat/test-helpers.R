@@ -1,25 +1,52 @@
-context()
+context("helpers")
 
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+# check if get_main_columns() works correctly for test_benchmark 
+test_that("get_main_columns for test_benchmark", {
+  columns = get_main_columns(test_benchmark)
+  expect_output(str(columns), "chr [1:3]", fixed = TRUE)
+})
+
+# check if get_parameter_columns() works correctly for test_benchmark 
+test_that("get_parameter_columns() for test_benchmark", {
+  columns = get_parameter_columns(test_benchmark)
+  expect_match(columns, "parameter_algorithm")
 })
 
 
-#' @title Main Columns 
-#' @description 
-#'   Get the list of names of the main columns within the data frame, 
-#'   namely "problem", "algorithm" and "replications". 
-#' @param df input data frame
-#' @return A vector containing all main column names.
-#' @export
-get_main_columns <- function(df) {
-  main_columns <- c("problem", "algorithm", "replications")
-  return(intersect(names(df), main_columns))
+#  check if get_measure_columns works correctly for test_benchmark
+test_that("get_measure_columns for test_benchmark", {
+  columns = get_measure_columns(test_benchmark)
+  expect_match(columns, "measure_mmce")
+})
+
+
+# check if get_main_columns_count works correctly for test_benchmark 
+test_that("get_main_columns_count for test_benchmark", {
+  count = get_main_columns_count(test_benchmark)
+  expect_equal(count, 3)
+})
+
+
+# check if get_parameter_columns_count works correctly for test_benchmark
+test_that("get_parameter_columns_count for test_benchmark", {
+  count = get_parameter_columns_count(test_benchmark)
+  expect_equal(count, 1)
+})
+
+
+# check if get_measure_columns_count works correctly for test_benchmark
+test_that("get_measure_columns_count for test_benchmark", {
+  count = get_measure_columns_count(test_benchmark)
+  expect_equal(count, 1)
+})
+
+# 
+test_that("get_replications", {
+  data <- get_replications(df = )
+})
+##  muss man hier auch mit einem realen Datensatz arbeiten?? 
+
+get_replications <- function(i, df) {
+  df[df[["replications"]] <= i, ]
 }
-
-get_main_columns(df)
-
-
-test_that("get_main_columns", {
-  expect
-})
+data <- get_replications(df= test_benchmark, i = 10)
