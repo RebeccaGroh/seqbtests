@@ -13,40 +13,52 @@ test_that("get_parameter_columns() for test_benchmark", {
 })
 
 
-#  check if get_measure_columns works correctly for test_benchmark
+# check if get_measure_columns() works correctly for test_benchmark
 test_that("get_measure_columns for test_benchmark", {
   columns = get_measure_columns(test_benchmark)
   expect_match(columns, "measure_mmce")
 })
 
 
-# check if get_main_columns_count works correctly for test_benchmark 
+# check if get_main_columns_count() works correctly for test_benchmark 
 test_that("get_main_columns_count for test_benchmark", {
   count = get_main_columns_count(test_benchmark)
   expect_equal(count, 3)
 })
 
 
-# check if get_parameter_columns_count works correctly for test_benchmark
+# check if get_parameter_columns_count() works correctly for test_benchmark
 test_that("get_parameter_columns_count for test_benchmark", {
   count = get_parameter_columns_count(test_benchmark)
   expect_equal(count, 1)
 })
 
 
-# check if get_measure_columns_count works correctly for test_benchmark
+# check if get_measure_columns_count() works correctly for test_benchmark
 test_that("get_measure_columns_count for test_benchmark", {
   count = get_measure_columns_count(test_benchmark)
   expect_equal(count, 1)
 })
 
-# 
-test_that("get_replications", {
-  data <- get_replications(df = )
+# check if get_replications() works correctly for test_benchmark 
+test_that("get_replications for test_benchmark" , {
+  data <- get_replications(df = test_benchmark, i = 10)
+  expect_type(data, "list")
 })
-##  muss man hier auch mit einem realen Datensatz arbeiten?? 
 
-get_replications <- function(i, df) {
-  df[df[["replications"]] <= i, ]
-}
-data <- get_replications(df= test_benchmark, i = 10)
+
+# check if get_replications_count() works correctly on test samples 
+test_that("get_replications tests for the same number of replications", {
+  x <- rnorm(25, 1, 1)
+  y <- rnorm(25, 1.5, 1)
+  expect_true(get_replications_count(x, y))
+})
+
+
+# check if paste_algo_pars() works correctly for test_benchmark 
+test_that("paste_algo_pars for test_benchmark", {
+  data <- paste_algo_pars(algorithm = test_benchmark$algorithm, 
+                          parameter_algorithm = test_benchmark$parameter_algorithm)
+  expect_output(str(data), "chr [1:2500]", fixed = TRUE)
+})
+
