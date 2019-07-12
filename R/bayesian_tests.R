@@ -189,6 +189,8 @@ b_signed_rank_test <- function (df, problemset, learner_a, learner_b, measure = 
   return(result)
 }
 
+#-------------------------------------------------------------------------------
+# Bayesian hierarchical correlated t-test
 
 
 
