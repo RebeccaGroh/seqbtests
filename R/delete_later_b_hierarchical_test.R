@@ -1,7 +1,7 @@
 
 
 
-x.matrix First sample, a matrix with the results obtained by the first algorithm (each dataset in a row)
+#x.matrix First sample, a matrix with the results obtained by the first algorithm (each dataset in a row)
 
 
 ## versuchen den Sample zu erstellen: 

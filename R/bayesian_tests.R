@@ -81,6 +81,8 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b,
 #' probabilities}
 #' @details 
 #' The test has first been implemented in rNPBST.  
+#' Note that the default value for measure is the first measure column in the 
+#' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @export
 b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
@@ -146,7 +148,9 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' \item{code{posteriror_probabilities}}{a vector with the left, rope and right 
 #' probabilities}
 #' @details 
-#' The test has first been implemented in rNPBST.  
+#' The test has first been implemented in rNPBST. 
+#' Note that the default value for measure is the first measure column in the 
+#' data frame. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @export
 b_signed_rank_test <- function (df, problemset, learner_a, learner_b, measure = NULL, 
