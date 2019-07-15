@@ -1,6 +1,14 @@
 
 
 
+
+
+# matrix mit wide t long format erstellen: 
+# wie soll der Datensatz aufgebaut sein? 
+# x.matrix First sample, a matrix with the results obtained by the first algorithm (each dataset in a row)
+
+
+
 #x.matrix First sample, a matrix with the results obtained by the first algorithm (each dataset in a row)
 
 

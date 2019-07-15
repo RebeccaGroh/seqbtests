@@ -88,7 +88,7 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b,
 b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
                         parameter_algorithm = NULL, s = 1, z_0 = 0, 
                         weights = c(s/2, rep(1, length(x))), mc_samples = 100000, 
-                        rope = c(-0-01, 0.01)){
+                        rope = c(-0.01, 0.01)){
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope
             (min, max), but the values are not orderd. They will be swapped to
@@ -153,15 +153,14 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' data frame. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @export
-b_signed_rank_test <- function (df, problemset, learner_a, learner_b, measure = NULL, 
+b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, measure = NULL, 
                                 parameter_algorithm = NULL, s = 0.5, z_0 = 0, 
                                 weights = NULL, mc_samples = 100000, 
-                                rope = c(-0-01, 0.01)){
+                                rope = c(-0.01, 0.01)){
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope
             (min, max), but the values are not orderd. They will be swapped to
             follow with the procedure")
-    
     rope <- sort(rope)
   }
   rope.min <- rope[1]
@@ -177,11 +176,20 @@ b_signed_rank_test <- function (df, problemset, learner_a, learner_b, measure = 
     df[["algorithm"]] <- paste_algo_pars(algorithm = df[["algorithm"]], 
                                          parameter_algorithm = df[["parameter_algorithm"]])
   }
-  # define samples 
-  x <- df[df[["problem"]] == problemset 
-          & df[["algorithm"]] == learner_a, measure]
-  y <- df[df[["problem"]] == problemset 
-          & df[["algorithm"]] == learner_b, measure]
+  # define samples when testing on multiple datasets
+  if (is.null(problemset)) {
+    data_wide <- spread(df, algorithm, measure)
+    sum_data <- aggregate(data_wide[, c(learner_a, learner_b)],
+                          by = list(data_wide[["problem"]]), FUN = mean)
+    x <- sum_data[,  learner_a]
+    y <- sum_data[,  learner_b]
+  } else{
+    # define samples when testing on a single dataset 
+    x <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == learner_a, measure]
+    y <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == learner_b, measure]
+  }
   mc.samples <- mc_samples 
   # Bayesian signed rank test 
   b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, rope.min, 

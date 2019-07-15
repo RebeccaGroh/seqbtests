@@ -14,7 +14,8 @@ Imports:
     checkmate, 
     dplyr,
     ggplot2,
-    rNPBST
+    rNPBST, 
+    tidyr
 Suggests: 
     testthat (>= 2.1.0)
 RoxygenNote: 6.1.1
