@@ -15,7 +15,9 @@ Imports:
     dplyr,
     ggplot2,
     rNPBST, 
-    tidyr
+    tidyr, 
+    rstan, 
+    metRology
 Suggests: 
     testthat (>= 2.1.0)
 RoxygenNote: 6.1.1

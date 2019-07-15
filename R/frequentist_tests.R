@@ -95,24 +95,34 @@ corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL,
 }
 
 
-#-------------------------------------------------------------------------------
-## Problem: bei vielen von den Tests wird als Argument nur "data" angegeben. 
-# Herausfinden, wie dieser Datensatz aufgebaut sein sollte und versuchen diesen 
-# innerhalb der Funktion nach dem selben Konzept aufzubauen, wie das auch in den 
-# anderen Funktionen gemacht wird. 
-# bei scmamp kann man in der Vignette nach Beispielen schauen. Da müsste angegeben 
-# werden wie der Datensatz aussieht. Die arbeiten einfach mit dem Datensatz data.gh.2008
-# ohne jegliche Anpassung 
-# Aufbau: Datensätze in den Zeilen und Algorithmen in den Spalten
-# in den Zellen selbst sind dann die Werte angegeben 
-# kann man ähnlichen Code verwenden wie um die Matrizen bei den bayesianischen 
-# Tests zu bauen 
 
 #' @title Friedman's test 
 #' 
+friedman_test <- function(df, algorithm_cols, measure = NULL, ...) {
+  checkmate::assert_true(check_structure(df))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  } 
+  data_wide <- spread(df, algorithm, measure)
+  sum_data <- aggregate(data_wide[, algorithm_cols],
+                        by = list(data_wide[["problem"]]), FUN = mean)
+  # define dataset
+  data <- data.frame(sum_data[,-1], row.names=sum_data[,1])
+  # Friedman Test 
+  f_test <- scmamp::friedmanTest(data, ...)
+  ## return results 
+  result <- list()
+  result$measure <- measure
+  test <- list(p_value = f_test$p.value, 
+               method = f_test$method, 
+               statistic = f_test$statistic,
+               parameter = f_test$parameter)
+  class(test) <- "htest"
+  result$teststatistic <- test 
+  return(result)
+}
 
-friedman_test <- function()
-
+## hier funktioniert irgendetwas noch nicht (p-wert wird nicht angezeigt)
 
 
 

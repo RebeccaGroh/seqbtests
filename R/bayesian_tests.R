@@ -81,6 +81,8 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b,
 #' probabilities}
 #' @details 
 #' The test has first been implemented in rNPBST.  
+#' For testing over multiple datasets, don´t specify the problemset argument in 
+#' the function. 
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
@@ -109,11 +111,20 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     df[["algorithm"]] <- paste_algo_pars(algorithm = df[["algorithm"]], 
                                          parameter_algorithm = df[["parameter_algorithm"]])
   }
-  # define samples 
-  x <- df[df[["problem"]] == problemset 
-          & df[["algorithm"]] == learner_a, measure]
-  y <- df[df[["problem"]] == problemset 
-          & df[["algorithm"]] == learner_b, measure]
+  # define samples when testing on multiple datasets
+  if (is.null(problemset)) {
+    data_wide <- spread(df, algorithm, measure)
+    sum_data <- aggregate(data_wide[, c(learner_a, learner_b)],
+                          by = list(data_wide[["problem"]]), FUN = mean)
+    x <- sum_data[,  learner_a]
+    y <- sum_data[,  learner_b]
+  } else{
+    # define samples when testing on a single dataset 
+    x <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == learner_a, measure]
+    y <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == learner_b, measure]
+  }
   n.samples <- mc_samples 
   # Bayesian Sign Test 
   b_sign <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max,
@@ -149,8 +160,10 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' probabilities}
 #' @details 
 #' The test has first been implemented in rNPBST. 
+#' For testing over multiple datasets, don´t specify the problemset argument in 
+#' the function. 
 #' Note that the default value for measure is the first measure column in the 
-#' data frame. 
+#' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @export
 b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, measure = NULL, 
