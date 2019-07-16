@@ -1,51 +1,3 @@
-#' @title Wilcoxon signed-rank test 
-#' @description 
-#' This function implements the paired Wilcoxon signed-rank test. A 
-#' non-parametric statistical hypothesis test sed to compare the means of two 
-#' paired samples. 
-#' @param df Input data frame. 
-#' @param problemset Problemset on which the test should be performed. 
-#' @param learner_a First algorithm.
-#' @param learner_b Second algorithm. 
-#' @param measure Measure column. 
-#' @return A list containing the following components: 
-#' \item{code{measure}}{a string with the name of the measure column used}
-#' \item{code{method}}{a string with the name of the method used}
-#' \item{code{statistic}}{the value of the statistic used in the test}
-#' \item{code{p_value}}{the p-value for the test}
-#' @details 
-#' The test has first been implemented in scmamp.
-#' Note that the default value for measure is the first measure column in the 
-#' data frame.
-#' @references \url{https://github.com/b0rxa/scmamp}
-#' @export
-wilcoxon_signed_test <- function(df, problemset, learner_a, 
-                                 learner_b, measure =NULL) {
-  checkmate::assert_true(check_names(data = df, problemset, 
-                                     learner_a, learner_b = NULL, 
-                                     measure = NULL))
-  if (is.null(measure)) {
-    measure <- get_measure_columns(df)[1]
-  } 
-  # define samples 
-  x <- df[df[["problem"]] == problemset 
-          & df[["algorithm"]] == learner_a, measure]
-  y <- df[df[["problem"]] == problemset 
-          & df[["algorithm"]] == learner_b, measure]
-  # Wilcoxon signed rank test 
-  w_test <- scmamp::wilcoxonSignedTest (x, y)
-  ## return results 
-  result <- list()
-  result$measure <- measure
-  test <- list(method = w_test$method, 
-               statistic = w_test$statistic, 
-               p_value = w_test$p.value)
-  class(test) <- "htest"
-  result$teststatistic <- test 
-  return(result)
-}
-
-
 #' @title Correlated t Test 
 #' @description This function implements the t-Test for paired samples. 
 #' @param df Input data frame. 
@@ -95,41 +47,92 @@ corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL,
 }
 
 
-
-#' @title Friedman's test 
-#' 
-friedman_test <- function(df, algorithm_cols, measure = NULL, ...) {
-  checkmate::assert_true(check_structure(df))
+#' @title Wilcoxon signed-rank test 
+#' @description 
+#' This function implements the paired Wilcoxon signed-rank test. A 
+#' non-parametric statistical hypothesis test sed to compare the means of two 
+#' paired samples. 
+#' @param df Input data frame. 
+#' @param problemset Problemset on which the test should be performed. 
+#' @param learner_a First algorithm.
+#' @param learner_b Second algorithm. 
+#' @param measure Measure column. 
+#' @return A list containing the following components: 
+#' \item{code{measure}}{a string with the name of the measure column used}
+#' \item{code{method}}{a string with the name of the method used}
+#' \item{code{statistic}}{the value of the statistic used in the test}
+#' \item{code{p_value}}{the p-value for the test}
+#' @details 
+#' The test has first been implemented in scmamp.
+#' Note that the default value for measure is the first measure column in the 
+#' data frame.
+#' @references \url{https://github.com/b0rxa/scmamp}
+#' @export
+wilcoxon_signed_test <- function(df, problemset, learner_a, 
+                                 learner_b, measure =NULL) {
+  checkmate::assert_true(check_names(data = df, problemset, 
+                                     learner_a, learner_b = NULL, 
+                                     measure = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
-  data_wide <- spread(df, algorithm, measure)
-  sum_data <- aggregate(data_wide[, algorithm_cols],
-                        by = list(data_wide[["problem"]]), FUN = mean)
-  # define dataset
-  data <- data.frame(sum_data[,-1], row.names=sum_data[,1])
-  # Friedman Test 
-  f_test <- scmamp::friedmanTest(data, ...)
+  # define samples 
+  x <- df[df[["problem"]] == problemset 
+          & df[["algorithm"]] == learner_a, measure]
+  y <- df[df[["problem"]] == problemset 
+          & df[["algorithm"]] == learner_b, measure]
+  # Wilcoxon signed rank test 
+  w_test <- scmamp::wilcoxonSignedTest (x, y)
   ## return results 
   result <- list()
   result$measure <- measure
-  test <- list(p_value = f_test$p.value, 
-               method = f_test$method, 
-               statistic = f_test$statistic,
-               parameter = f_test$parameter)
+  test <- list(method = w_test$method, 
+               statistic = w_test$statistic, 
+               p_value = w_test$p.value)
   class(test) <- "htest"
   result$teststatistic <- test 
   return(result)
 }
 
-## hier funktioniert irgendetwas noch nicht (p-wert wird nicht angezeigt)
+
+#' @title Friedman's test 
+#' @description This function implements the Friedman's test for multiple 
+#' comparisons.A non-parametric statistical test zo detect differences in 
+#' in algorithms performances over multiple datasets. 
+#' @param df Input data frame.
+#' @param measure Measure column. 
+#' @return A list containing the following components: 
+  #' \item{code{measure}}{a string with the name of the measure column used}
+  #' \item{code{method}}{a string with the name of the method used}
+  #' \item{code{statistic}}{the value of the statistic used in the test}
+  #' \item{code{p_value}}{the p-value for the test}
+  #' @details The test has first been implemented in scmamp.
+  #' Note that the default value for measure is the first measure column in the 
+  #' data frame.
+  #' @references \url{https://github.com/b0rxa/scmamp}
+  #' @export
+friedman_test <- function(df, measure = NULL) {
+  checkmate::assert_true(check_structure(df))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  } 
+  algo_names <- unique(df$algorithm)
+  data_wide <- spread(df, algorithm, measure)
+  sum_data <- aggregate(data_wide[, algo_names],
+                        by = list(data_wide[["problem"]]), FUN = mean)
+  # define dataset
+  data <- data.frame(sum_data[,-1], row.names=sum_data[,1])
+  # Friedman Test 
+  f_test <- scmamp::friedmanTest(data)
+  ## return results 
+  result <- list()
+  result$measure <- measure
+  result$method <- f_test$method
+  result$statistic <- f_test$statistic
+  result$p_value <- f_test$p.value
+  return(result)
+}
 
 
 
 
-## testen 
-## mit measure 
-results <- corr_t_test(df = benchmark_test_no_pars, problemset = "Adiac", learner_a = "classif.xgboost", learner_b = "classif.ksvm", measure = "measure_ber")
-## ohne measure 
-results <- corr_t_test(df = benchmark_test_no_pars, problemset = "Adiac", learner_a = "classif.xgboost", learner_b = "classif.ksvm")
-results  
