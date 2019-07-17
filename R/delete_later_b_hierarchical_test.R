@@ -11,8 +11,73 @@ y <- matrix(data_wide[,  learner_b], byrow=TRUE, nrow=length(unique(data_wide$re
 
 
 
+data_transformation <- function(df, algorithm, measure = NULL){
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  } 
+  keep_algo <- subset(df, df[["algorithm"]] = algorithm)
+  data_wide <- spread(keep_algo, replications, measure)
+  drop_cols <- setdiff(colnames(df), unique(df[["replications"]]))
+  # subset 
+  names.use <- names(df)[!(names(df) %in% cols)]
+  subset_df <- df[, names.use]
+  df <- t(subset_df)
+  return(df_[["algorithm"]])
+}
+  
+
+
+data_transformation <- function(df, learner_a, learner_b, measure = NULL){
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  } 
+  for (i in c(learner_a, learner_b)) {
+    keep_algo[i] <- subset(df, df[["algorithm"]] = i)
+    data_wide[i] <- spread(keep_algo[i], replications, measure)
+    drop_cols <- setdiff(colnames(df), unique(df[["replications"]]))
+    # subset 
+    names.use <- names(df)[!(names(df) %in% cols)]
+    subset_df[i] <- data_wide[i][, names.use]
+    df[i] <- t(subset_df[i])
+}
+  
+  
+  
+#-------------------------------------------------------------------------------
+# darüber nachdenken!!! 
+# wenn ich das später benutzen will wäre es cool wenn ich das für alle algorithmen 
+# im Datensatz durchführen könnte, dafür 
+  
+  
+  keep_algo <- subset(df, df[["algorithm"]] = algorithm)
+  data_wide <- spread(keep_algo, replications, measure)
+  drop_cols <- setdiff(colnames(df), unique(df[["replications"]]))
+  # subset 
+  names.use <- names(df)[!(names(df) %in% cols)]
+  subset_df <- df[, names.use]
+  df <- t(subset_df)
+  return(df_[["algorithm"]])
+}
+
+
+#-------------------------------------------------------------------------------
+  
+  
+test <- subset(test_benchmark_small, 
+               algorithm == "algo_1")
+data_wide <- spread(test, replications, measure_col)
+
+repls <- unique(df[["replications"]]) 
+cols <- setdiff(colnames(data_wide), unique(df[["replications"]]))
+# subset
+names.use <- names(data_wide)[!(names(data_wide) %in% cols)]
+subset_df <- data_wide[, names.use]
+df_transpose = t(subset_df)
+
+
+#-------------------------------------------------------------------------------
 b_hierarchical_test <- function(df, learner_a, learner_b, 
-                          measure = NULL, parameter_algorithm = NULL, rho = 0.1,
+                          measure = NULL, parameter_algorithm = NULL, rho = 0.1, 
                           std.upper=1000, d0.lower=NULL, d0.upper=NULL, 
                           alpha.lower=0.5, alpha.upper=5, 
                           beta.lower=0.05, beta.upper=0.15,

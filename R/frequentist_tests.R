@@ -47,6 +47,49 @@ corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL,
 }
 
 
+
+#' @title Friedman's test 
+#' @description This function implements the Friedman's test for multiple 
+#' comparisons.A non-parametric statistical test zo detect differences in 
+#' in algorithms performances over multiple datasets. 
+#' @param df Input data frame.
+#' @param measure Measure column. 
+#' @return A list containing the following components: 
+#' \item{code{measure}}{a string with the name of the measure column used}
+#' \item{code{method}}{a string with the name of the method used}
+#' \item{code{statistic}}{the value of the statistic used in the test}
+#' \item{code{p_value}}{the p-value for the test}
+#' @details The test has first been implemented in scmamp.
+#' Note that the default value for measure is the first measure column in the 
+#' data frame.
+#' @references \url{https://github.com/b0rxa/scmamp}
+#' @example 
+#' friedman_test(test_benchmark)
+#' @export
+friedman_test <- function(df, measure = NULL) {
+  checkmate::assert_true(check_structure(df))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  } 
+  algo_names <- unique(df$algorithm)
+  data_wide <- spread(df, algorithm, measure)
+  sum_data <- aggregate(data_wide[, algo_names],
+                        by = list(data_wide[["problem"]]), FUN = mean)
+  # define dataset
+  data <- data.frame(sum_data[,-1], row.names=sum_data[,1])
+  # Friedman Test 
+  f_test <- scmamp::friedmanTest(data)
+  ## return results 
+  result <- list()
+  result$measure <- measure
+  result$method <- f_test$method
+  result$statistic <- f_test$statistic
+  result$p_value <- f_test$p.value
+  return(result)
+}
+
+
+
 #' @title Wilcoxon signed-rank test 
 #' @description 
 #' This function implements the paired Wilcoxon signed-rank test. A 
@@ -95,44 +138,5 @@ wilcoxon_signed_test <- function(df, problemset, learner_a,
 }
 
 
-#' @title Friedman's test 
-#' @description This function implements the Friedman's test for multiple 
-#' comparisons.A non-parametric statistical test zo detect differences in 
-#' in algorithms performances over multiple datasets. 
-#' @param df Input data frame.
-#' @param measure Measure column. 
-#' @return A list containing the following components: 
-#' \item{code{measure}}{a string with the name of the measure column used}
-#' \item{code{method}}{a string with the name of the method used}
-#' \item{code{statistic}}{the value of the statistic used in the test}
-#' \item{code{p_value}}{the p-value for the test}
-#' @details The test has first been implemented in scmamp.
-#' Note that the default value for measure is the first measure column in the 
-#' data frame.
-#' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' friedman_test(test_benchmark)
-#' @export
-friedman_test <- function(df, measure = NULL) {
-  checkmate::assert_true(check_structure(df))
-  if (is.null(measure)) {
-    measure <- get_measure_columns(df)[1]
-  } 
-  algo_names <- unique(df$algorithm)
-  data_wide <- spread(df, algorithm, measure)
-  sum_data <- aggregate(data_wide[, algo_names],
-                        by = list(data_wide[["problem"]]), FUN = mean)
-  # define dataset
-  data <- data.frame(sum_data[,-1], row.names=sum_data[,1])
-  # Friedman Test 
-  f_test <- scmamp::friedmanTest(data)
-  ## return results 
-  result <- list()
-  result$measure <- measure
-  result$method <- f_test$method
-  result$statistic <- f_test$statistic
-  result$p_value <- f_test$p.value
-  return(result)
-}
 
 
