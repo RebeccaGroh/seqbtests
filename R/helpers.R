@@ -104,4 +104,25 @@ paste_algo_pars <- function(algorithm, parameter_algorithm) {
   algorithm <- paste(algorithm, parameter_algorithm, sep = "_")
 }
 
-  
+
+#' @title Data transformation
+#' @description Extract a data matrix out of the original dataset. The matrix 
+#' contains all observations for each replication in each problemset. 
+#' The replications are stored in the rows, while the columns are according to 
+#' the problemsets. 
+#' @param df Input data frame. 
+#' @param algo Name of the algorithm that shall be compared. 
+#' @param measure Measure column. 
+#' @return Matrix. 
+data_transformation <- function(df, algo, measure = NULL){
+  keep_algo <- subset(df, df[["algorithm"]] == algo)
+  data_wide <- spread(keep_algo, replications, measure)
+  # columns need to be dropped 
+  drop_cols <- setdiff(colnames(data_wide), unique(df[["replications"]]))
+  # columns to keep 
+  names.use <- names(data_wide)[!(names(data_wide) %in% drop_cols)]
+  # subset 
+  subset_df <- data_wide[, names.use]
+  df_algo <- t(subset_df)
+  return(df_algo)
+}

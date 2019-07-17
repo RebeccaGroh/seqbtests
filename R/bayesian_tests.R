@@ -214,17 +214,44 @@ b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, mea
   return(result)
 }
 
-#-------------------------------------------------------------------------------
-# Bayesian hierarchical correlated t-test
 
+#' @title Bayesian hierarchical correlated t-test
+b_hierarchical_test <- function(df, learner_a, learner_b, 
+                                measure = NULL, parameter_algorithm = NULL, rho = 0.1, 
+                                std.upper=1000, d0.lower=NULL, d0.upper=NULL, 
+                                alpha.lower=0.5, alpha.upper=5, 
+                                beta.lower=0.05, beta.upper=0.15,
+                                rope = c(-0.01, 0.01), nsim=2000, nchains=8, 
+                                parallel=TRUE, stan.output.file=NULL,
+                                seed=as.numeric(Sys.time()), ...) {
+  requireNamespace("scmamp", quietly = TRUE)
+  checkmate::assert_true(check_structure(df))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  } 
+  if (!is.null(parameter_algorithm)){
+    learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
+    learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
+    df[["algorithm"]] <- paste_algo_pars(algorithm = df[["algorithm"]], 
+                                         parameter_algorithm = df[["parameter_algorithm"]])
+  }
+  # define samples 
+  x.matrix <- data_transformation(df, algo = learner_a, measure)
+  y.matrix <- data_transformation(df, algo = learner_b, measure)
+  # check numbers in sample
+  checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
+  # Bayesian correlated t Test 
+  b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, 
+                                              std.upper, d0.lower, d0.upper, 
+                                              alpha.lower, alpha.upper, 
+                                              beta.lower, beta.upper, 
+                                              rope, nsim, nchains, parallel, 
+                                              stan.output.file, seed)
+  result <- list()
+  result$measure <- measure
+  result$method <- b_hierarchical$method
+  result$posteriror_probabilities <- b_hierarchical$posterior.probabilities
+  return(result)
+}
 
-
-
-#-------------------------------------------------------------------------------
-## testen 
-## mit measure 
-results <- b_sign_test(df = benchmark_test_full, problemset = "Adiac", learner_a = "classif.xgboost", learner_b = "classif.ksvm", measure = "measure_ber", rope=c(-0.01, 0.01))
-## ohne measure 
-results <- b_corr_t_test(df = benchmark_test_full, problemset = "Adiac", learner_a = "classif.xgboost", learner_b = "classif.ksvm", rho=0.1, rope=c(-0.01, 0.01))
-results
 
