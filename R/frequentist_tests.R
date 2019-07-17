@@ -102,15 +102,17 @@ wilcoxon_signed_test <- function(df, problemset, learner_a,
 #' @param df Input data frame.
 #' @param measure Measure column. 
 #' @return A list containing the following components: 
-  #' \item{code{measure}}{a string with the name of the measure column used}
-  #' \item{code{method}}{a string with the name of the method used}
-  #' \item{code{statistic}}{the value of the statistic used in the test}
-  #' \item{code{p_value}}{the p-value for the test}
-  #' @details The test has first been implemented in scmamp.
-  #' Note that the default value for measure is the first measure column in the 
-  #' data frame.
-  #' @references \url{https://github.com/b0rxa/scmamp}
-  #' @export
+#' \item{code{measure}}{a string with the name of the measure column used}
+#' \item{code{method}}{a string with the name of the method used}
+#' \item{code{statistic}}{the value of the statistic used in the test}
+#' \item{code{p_value}}{the p-value for the test}
+#' @details The test has first been implemented in scmamp.
+#' Note that the default value for measure is the first measure column in the 
+#' data frame.
+#' @references \url{https://github.com/b0rxa/scmamp}
+#' @example 
+#' friedman_test(test_benchmark)
+#' @export
 friedman_test <- function(df, measure = NULL) {
   checkmate::assert_true(check_structure(df))
   if (is.null(measure)) {
@@ -132,7 +134,5 @@ friedman_test <- function(df, measure = NULL) {
   result$p_value <- f_test$p.value
   return(result)
 }
-
-
 
 
