@@ -123,6 +123,5 @@ data_transformation <- function(df, algo, measure = NULL){
   names.use <- names(data_wide)[!(names(data_wide) %in% drop_cols)]
   # subset 
   subset_df <- data_wide[, names.use]
-  df_algo <- t(subset_df)
-  return(df_algo)
+  return(subset_df)
 }

@@ -216,8 +216,49 @@ b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, mea
 
 
 #' @title Bayesian hierarchical correlated t-test
-b_hierarchical_test <- function(df, learner_a, learner_b, 
-                                measure = NULL, parameter_algorithm = NULL, rho = 0.1, 
+#' @description 
+#' This function implements a Bayesian hierarchical test.
+#' @param df Input data frame. 
+#' @param learner_a First algorithm.
+#' @param learner_b Second algorithm. 
+#' @param measure Measure column. 
+#' @param parameter_algorithm Specifies parameters concerning the corresponding 
+#' algorithm. 
+#' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0 (see Benavoli \emph{et al.} 2017 for more details)
+#' @param d0.lower Lower bound for the prior for mu_0. If not provided, the smallest observed difference is used
+#' @param d0.upper Upper bound for the prior for mu_0. If not provided, the biggest observed difference is used
+#' @param alpha.lower Lower bound for the (uniform) prior for the alpha hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.5, as in the original paper
+#' @param alpha.upper Upper bound for the (uniform) prior for the alpha hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 5, as in the original paper
+#' @param beta.lower Lower bound for the (uniform) prior for the beta hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.05, as in the original paper
+#' @param beta.lower Upper bound for the (uniform) prior for the beta hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.15, as in the original paper
+#' @param z0 Position of the pseudo-observation associated to the prior Dirichlet Process. The default value is set to 0 (inside the rope)
+#' @param rope Interval for the difference considered as "irrelevant"
+#' @param nsim Number of samples (per chain) used to estimate the posterior distribution. Note that, by default, half the simulations are used for the burn-in
+#' @param nchain Number of MC chains to be simulated. As half the simulations are used for the warm-up, the total number of simulations will be \code{nchain}*\code{nsim}/2
+#' @param parallel Logical value. If \code{true}, Stan code is executed in parallel
+#' @param stan.output.file String containing the base name for the output files produced by Stan. If \code{NULL}, no files are stored.
+#' @param seed Optional parameter used to fix the random seed
+#' @param ... Additional arguments for the rstan::stan function that runs the analysis 
+#' @return A list with the following elements: 
+#' \item{\code{method}}{a string with the name of the method used}
+#' \item{\code{parameters}}{parameters used by the method}
+#' \item{\code{posterior.probabilities}}{a vector with the left, rope and right probabilities}
+#' \item{\code{approximated}}{a logical value, \code{TRUE} if the posterior distribution is approximated (sampled) and \code{FALSE} if it is exact}
+#' \item{\code{posterior}}{Sampled probabilities (see details)}
+#' \item{\code{additional}}{Additional information provided by the model. This includes:\code{per.dataset}, the results per dataset (left, rope and right probabilities together with the expected mean value); \code{global.sin} sampled probabilities of mu_0 being positive or negative and \code{stan.results}, the complete set of results produced by Stan program}
+#' @details The results includes the typical information relative to the three 
+#' areas of the posterior density (left, right and rope probabilities), both global and per dataset (in the additional information). Also, the simulation results are included.
+#' 
+#' As for the prior parameters, they are set to the default values indicated in Benavoli \emph{et al.} 2017, except for the bound for the prior distribution of mu_0, which are set to the maximum and minimum values observed in the sample. You should not modify them unless you know what you are doing.
+#' @references
+#' @example 
+#' results <- b_hierarchical_test(df= test_benchmark_small, 
+#'                                learner_a = "algo_1", learner_b = "algo_2", 
+#'                                rho=0.1, rope=c(-0.01, 0.01), nsim=2000, 
+#'                                nchains=5)
+#' results 
+b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL, 
+                                parameter_algorithm = NULL, rho = 0.1, 
                                 std.upper=1000, d0.lower=NULL, d0.upper=NULL, 
                                 alpha.lower=0.5, alpha.upper=5, 
                                 beta.lower=0.05, beta.upper=0.15,
@@ -253,5 +294,4 @@ b_hierarchical_test <- function(df, learner_a, learner_b,
   result$posteriror_probabilities <- b_hierarchical$posterior.probabilities
   return(result)
 }
-
 
