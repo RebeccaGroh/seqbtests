@@ -65,7 +65,6 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b,
 }
 
 
-
 #' @title Bayesian Sign test 
 #' @description 
 #' This function implements the Bayesian version of the sign test. 
