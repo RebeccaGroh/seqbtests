@@ -2,9 +2,9 @@ context("check_structure")
 
 # check if check_names() works correctly for test_benchmark 
 test_that("check_names for test_benchmark", {
-  expect_true(check_names(data = test_benchmark, problemset = "problem_a", 
+  expect_true(check_names(df = test_benchmark, problemset = "problem_a", 
                           baseline = "algo_1", learner_b = "algo_2", 
-                          measure = "measure_col"))
+                          measure = "measure_col", parameter_algorithm = "par_5"))
 })
 
 

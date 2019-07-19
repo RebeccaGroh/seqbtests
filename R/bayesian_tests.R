@@ -21,12 +21,18 @@
 #' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
 #' in the equivalent of the standard t test    
 #' @references \url{https://github.com/b0rxa/scmamp}
+#' @example 
+#' results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
+#'                          learner_a = "algo_1", learner_b = "algo_2")
+#' results
 #' @export
 b_corr_t_test <- function(df, problemset, learner_a, learner_b, 
                           measure = NULL, parameter_algorithm = NULL, 
                           rho = 0.1, rope = c(-0.01, 0.01)) {
   requireNamespace("scmamp", quietly = TRUE)
   checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, 
+                                     measure = NULL, parameter_algorithm = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
@@ -59,6 +65,7 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b,
 }
 
 
+
 #' @title Bayesian Sign test 
 #' @description 
 #' This function implements the Bayesian version of the sign test. 
@@ -86,6 +93,10 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b,
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
+#' @example 
+#' results <- b_sign_test(df= test_benchmark_small, problemset = "problem_a", 
+#'                        learner_a = "algo_1", learner_b = "algo_2")
+#' results
 #' @export
 b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
                         parameter_algorithm = NULL, s = 1, z_0 = 0, 
@@ -101,6 +112,8 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
   rope.min <- rope[1]
   rope.max <- rope[2]
   checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, 
+                                     measure = NULL, parameter_algorithm = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
@@ -165,6 +178,10 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
+#' @example 
+#' results <- b_signed_rank_test(df= test_benchmark_small, 
+#'                               learner_a = "algo_1", learner_b = "algo_2")
+#' results
 #' @export
 b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, measure = NULL, 
                                 parameter_algorithm = NULL, s = 0.5, z_0 = 0, 
@@ -179,6 +196,9 @@ b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, mea
   rope.min <- rope[1]
   rope.max <- rope[2]
   checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, problemset = NULL, learner_a, 
+                                     learner_b, measure = NULL, 
+                                     parameter_algorithm = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
@@ -215,6 +235,7 @@ b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, mea
 }
 
 
+
 #' @title Bayesian hierarchical correlated t-test
 #' @description 
 #' This function implements a Bayesian hierarchical test.
@@ -222,8 +243,8 @@ b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, mea
 #' @param learner_a First algorithm.
 #' @param learner_b Second algorithm. 
 #' @param measure Measure column. 
-#' @param parameter_algorithm Specifies parameters concerning the corresponding 
-#' algorithm. 
+#' @param parameter_algorithm Specifies parameters concerning the corresponding algorithm. 
+#' @param rho Correlation factor. 
 #' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0 (see Benavoli \emph{et al.} 2017 for more details)
 #' @param d0.lower Lower bound for the prior for mu_0. If not provided, the smallest observed difference is used
 #' @param d0.upper Upper bound for the prior for mu_0. If not provided, the biggest observed difference is used
@@ -246,17 +267,23 @@ b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, mea
 #' \item{\code{approximated}}{a logical value, \code{TRUE} if the posterior distribution is approximated (sampled) and \code{FALSE} if it is exact}
 #' \item{\code{posterior}}{Sampled probabilities (see details)}
 #' \item{\code{additional}}{Additional information provided by the model. This includes:\code{per.dataset}, the results per dataset (left, rope and right probabilities together with the expected mean value); \code{global.sin} sampled probabilities of mu_0 being positive or negative and \code{stan.results}, the complete set of results produced by Stan program}
-#' @details The results includes the typical information relative to the three 
-#' areas of the posterior density (left, right and rope probabilities), both global and per dataset (in the additional information). Also, the simulation results are included.
-#' 
-#' As for the prior parameters, they are set to the default values indicated in Benavoli \emph{et al.} 2017, except for the bound for the prior distribution of mu_0, which are set to the maximum and minimum values observed in the sample. You should not modify them unless you know what you are doing.
-#' @references
+#' @details 
+#' The results includes the typical information relative to the three areas of 
+#' the posterior density (left, right and rope probabilities), both global and
+#' per dataset (in the additional information). Also, the simulation results are 
+#' included.
+#' As for the prior parameters, they are set to the default values indicated in 
+#' Benavoli \emph{et al.} 2017, except for the bound for the prior distribution 
+#' of mu_0, which are set to the maximum and minimum values observed in the 
+#' sample. You should not modify them unless you know what you are doing.
 #' @example 
 #' results <- b_hierarchical_test(df= test_benchmark_small, 
 #'                                learner_a = "algo_1", learner_b = "algo_2", 
 #'                                rho=0.1, rope=c(-0.01, 0.01), nsim=2000, 
 #'                                nchains=5)
 #' results 
+#' @references \url{https://github.com/b0rxa/scmamp}
+#' @export
 b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL, 
                                 parameter_algorithm = NULL, rho = 0.1, 
                                 std.upper=1000, d0.lower=NULL, d0.upper=NULL, 
@@ -267,6 +294,9 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
                                 seed=as.numeric(Sys.time()), ...) {
   requireNamespace("scmamp", quietly = TRUE)
   checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, problemset = NULL, 
+                                     learner_a, learner_b, measure = NULL, 
+                                     parameter_algorithm = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 

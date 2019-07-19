@@ -62,3 +62,10 @@ test_that("paste_algo_pars for test_benchmark", {
   expect_output(str(data), "chr [1:2500]", fixed = TRUE)
 })
 
+
+# check if data_transformation() returns data frame 
+test_that("data_transformation returns data frame", {
+  data <- data_transformation(df= test_benchmark_small, algo = "algo_1", 
+                              measure = "measure_col")
+  expect_data_frame(data)
+})

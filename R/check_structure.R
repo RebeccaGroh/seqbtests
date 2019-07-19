@@ -2,19 +2,26 @@
 #' @description 
 #'   Check if column names that were passed by User
 #'   are contained in the data frame. 
-#' 
-check_names <- function(data, problemset, baseline, learner_a = NULL, 
-                        learner_b = NULL, measure = NULL) {
-  checkmate::assert_true(problemset %in% data[["problem"]])
-  checkmate::assert_true(baseline %in% data[["algorithm"]])
+check_names <- function(df, problemset = NULL, baseline = NULL, 
+                        learner_a = NULL, learner_b = NULL, 
+                        measure = NULL, parameter_algorithm= NULL) {
+  if (!is.null(problemset)) {
+    checkmate::assert_true(problemset %in% df[["problem"]])
+  }
+  if (!is.null(baseline)) {
+    checkmate::assert_true(baseline %in% df[["algorithm"]])
+  }
   if (!is.null(learner_a)) {
-    checkmate::assert_true(learner_a %in% data[["algorithm"]])
+    checkmate::assert_true(learner_a %in% df[["algorithm"]])
   }
   if (!is.null(learner_b)) {
-    checkmate::assert_true(learner_b %in% data[["algorithm"]])
+    checkmate::assert_true(learner_b %in% df[["algorithm"]])
   }
   if (!is.null(measure)){
-    checkmate::assert_true(measure %in% colnames(data))
+    checkmate::assert_true(measure %in% colnames(df))
+  }
+  if (!is.null(parameter_algorithm)) {
+    checkmate::assert_true(parameter_algorithm %in% df[["parameter_algorithm"]])
   }
   return(TRUE)
 }

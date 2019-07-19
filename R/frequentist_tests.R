@@ -20,11 +20,16 @@
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
+#' @example 
+#' results <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
+#'                                 learner_a = "algo_1", learner_b = "algo_2")
+#' results
 #' @export
 corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL, 
                         rho = 0.01, alternative="two.sided") {
-  checkmate::assert_true(check_names(data = df, problemset, learner_a, 
-                                     learner_b = NULL, measure = NULL))
+  checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, problemset, learner_a, 
+                                     learner_b, measure =NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
@@ -64,10 +69,12 @@ corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL,
 #' data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
-#' friedman_test(test_benchmark)
+#' results <- friedman_test(test_benchmark) 
+#' results
 #' @export
 friedman_test <- function(df, measure = NULL) {
   checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, measure = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
@@ -87,7 +94,6 @@ friedman_test <- function(df, measure = NULL) {
   result$p_value <- f_test$p.value
   return(result)
 }
-
 
 
 #' @title Wilcoxon signed-rank test 
@@ -110,12 +116,16 @@ friedman_test <- function(df, measure = NULL) {
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
+#' @example 
+#' results <- wilcoxon_signed_test(df = test_benchmark, problemset = "problem_a", 
+#'                                 learner_a = "algo_1", learner_b = "algo_2")  
+#' results
 #' @export
 wilcoxon_signed_test <- function(df, problemset, learner_a, 
                                  learner_b, measure =NULL) {
-  checkmate::assert_true(check_names(data = df, problemset, 
-                                     learner_a, learner_b = NULL, 
-                                     measure = NULL))
+  checkmate::assert_true(check_names(df, problemset, learner_a, 
+                                     learner_b, measure = NULL))
+  checkmate::assert_true(check_names(df))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   } 
@@ -136,7 +146,4 @@ wilcoxon_signed_test <- function(df, problemset, learner_a,
   result$teststatistic <- test 
   return(result)
 }
-
-
-
 

@@ -114,7 +114,7 @@ paste_algo_pars <- function(algorithm, parameter_algorithm) {
 #' @param algo Name of the algorithm that shall be compared. 
 #' @param measure Measure column. 
 #' @return Matrix. 
-data_transformation <- function(df, algo, measure = NULL){
+data_transformation <- function(df, algo, measure){
   keep_algo <- subset(df, df[["algorithm"]] == algo)
   data_wide <- spread(keep_algo, replications, measure)
   # columns need to be dropped 
