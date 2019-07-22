@@ -137,13 +137,12 @@ wilcoxon_signed_test <- function(df, problemset, learner_a,
   # Wilcoxon signed rank test 
   w_test <- scmamp::wilcoxonSignedTest (x, y)
   ## return results 
+  ## return results 
   result <- list()
   result$measure <- measure
-  test <- list(method = w_test$method, 
-               statistic = w_test$statistic, 
-               p_value = w_test$p.value)
-  class(test) <- "htest"
-  result$teststatistic <- test 
+  result$method <- w_test$method
+  result$statistic <- w_test$statistic
+  result$p_value <- w_test$p.value
   return(result)
 }
 
