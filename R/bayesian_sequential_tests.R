@@ -223,7 +223,7 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, max_repls 
       } else {
         threshold <- b_test$posterior.probabilities[2] + b_test$posterior.probabilities[3]
       }
-      if (threshold > 0.99) {
+      if (threshold > 0.95) {
         break
       }
       result[j, "method"] <- b_test$method  
@@ -240,7 +240,7 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, max_repls 
 
 ## verwendete sample werden nicht mit repls eingschr?nkt 
 ## learner_b wird angegeben 
-results <- seq_b_corr_t_test(df = benchmark_test_no_pars, problemset = "Adiac", baseline = "classif.xgboost", max_repls = 10, learner_b = "classif.ksvm", rho=0.1, rope=c(-0.01, 0.01))
+results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = "problem_a", baseline = "algo_1", max_repls = 10, learner_b = "algo_2", rho=0.1, rope=c(-0.01, 0.01))
 ## learner_b wird nicht angegeben 
 results <- seq_b_corr_t_test(df = benchmark_test_no_pars, problemset = "Adiac", baseline = "classif.xgboost", test ="better", max_repls = 10, rho=0.1, rope=c(-0.01, 0.01))
 results
@@ -248,23 +248,3 @@ results
 ## Problem: 
 # Algorithmus bricht eine Runde zu früh ab, eigentlich müsste noch eine Replikation 
 # mehr betrachtet werden, bevor abgebrochen wird --> woran liegt das, wie kann man es beheben?
-
-
-### Funktion die testet, ob Algorithm, problemset etc. wirklich im Datensatz enthalten sind
-
-check_names <- function(data, problemset, baseline, learner_b, measure) {
-  checkmate::assert_true(problemset %in% names(data))
-  checkmate::assert_true(baseline %in% names(data))
-  checkmate::assert_true(learner_b %in% names(data))
-  checkmate::assert_true(measure %in% names(data))
-}
-## sollte noch in die Funktion eingebaut werden, funktioniert aktuell aber nicht
-checkmate::assert_true(check_names(...))
-check
-## was ist mit den anderen Funktionen die die Struktur des Datensatzes überprüfen, 
-## eigentlich könnte man die auch alle hier einbauen, dann müssen sie nicht explizit 
-## aufgerufen werden, aber der Test kann nur durchgeführt werden, wenn der Datensatz
-## in der passenden Form vorliegt
-## Dann sollte zusätzlich auch noch überprüft werden, dass die Anzahl der Replkationen 
-## für alle Gruppen stimmt, weil das aktuell noch nicht der Fall ist! 
-## und es sollte in allen Funktionen einheitlich beim Aufrufen keine " " nötig sein 
