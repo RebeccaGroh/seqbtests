@@ -16,6 +16,7 @@
 #' nemenyi_test(test_benchmark)
 #' @export
 nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
+  checkmate::assert_true(check_names(df, measure = NULL))
   checkmate::assert_true(check_structure(df))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
@@ -53,6 +54,7 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 #' friedman_post(test_benchmark)
 #' @export
 friedman_post <- function(df, measure = NULL, control = NULL) {
+  checkmate::assert_true(check_names(df, measure = NULL))
   checkmate::assert_true(check_structure(df))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
