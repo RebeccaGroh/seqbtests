@@ -59,7 +59,7 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure =N
       }
       # Bayesian correlated t Test 
       b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)      
-      if (test == "better") {     ## test for better 
+      if (is.null(test)) {     ## test for better 
         threshold <- b_test$posterior.probabilities[3]
       } else if (test == "equal") {
         threshold <- b_test$posterior.probabilities[2] + b_test$posterior.probabilities[3]
@@ -80,7 +80,4 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure =N
   }
   return(result)
 }
-
-
-
 
