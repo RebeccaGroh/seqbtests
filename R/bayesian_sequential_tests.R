@@ -1,5 +1,41 @@
-
-seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, max_repls = 20, measure =NULL, test = NULL, rho = 0.1, rope = c(-0.01, 0.01), ...) {
+#' @title Sequential bayesian correlated t test 
+#' @description 
+#' This function implements a sequential approach to compare the performance of 
+#' machine learning algorithms to one another. Sample size is not fixed in 
+#' adavnce, data are evaluated as they are collected. Further samoling is 
+#' stopped in accordance with a pre-defined stopping rule as soon as signficant 
+#' results are obtained.  
+#' @param problemset Problemset on which the test should be performed. 
+#' @param baseline First algorithm.
+#' @param learner_b Second algorithm. If not defined, every algorithm will be 
+#' tested against baseline. 
+#' @param measure Measure column. 
+#' @param test Defines whether the performances should be tested for either 
+#' being better ('better') or being just as good ('equal').
+#' @param rho Correlation factor. 
+#' @param rope Region of practical equivalence. 
+#' @param max_repls maximum number of replications that should be build in 
+#' get_replications, or maximum number of replications in data frame, if 
+#' complete data frame is being used.  
+#' @param rope Region of practical equivalence. 
+#' @return A data frame with one row for each considered algorithm that is 
+#' tested against the baseline, containing the following components:
+#' \item{code{measure}}{a string with the name of the measure column used}
+#' \item{code{method}}{a string with the name of the method used}
+#' \item{code{posteriror_probabilities}}{a vector with the left, rope and right 
+#' probabilities}
+#' \item{code{repls}}{number of the considered replications}
+#' @details The basics of the test have first been implemented in scmamp. 
+#' Note that the default value for measure is the first measure column in the 
+#' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
+#' in the equivalent of the standard t test. 
+#' @example 
+#' results <- seq_b_corr_t_test(test = "euqal", df = test_benchmark_small, 
+#' problemset = "problem_a", baseline = "algo_1", max_repls = 10, 
+#' rho=0.1, rope=c(-0.01, 0.01))
+#' results
+#' @export
+seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure =NULL, test = NULL, rho = 0.1, rope = c(-0.01, 0.01), max_repls = 20,  ...) {
   result = data.frame()
   max_repls <- max_repls
   for (i in 2:max_repls) {
@@ -23,7 +59,14 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, max_repls 
       }
       # Bayesian correlated t Test 
       b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)      
-      if (b_test[["posterior.probabilities"]][3] >= 0.95) { 
+      if (test == "better") {     ## test for better 
+        threshold <- b_test$posterior.probabilities[3]
+      } else if (test == "equal") {
+        threshold <- b_test$posterior.probabilities[2] + b_test$posterior.probabilities[3]
+      } else {
+        threshold <- b_test$posterior.probabilities[3]
+      }
+      if (threshold > 0.95) {
         break
       }
       result[k, "baseline"] <- baseline  
@@ -38,9 +81,6 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, max_repls 
   return(result)
 }
 
-
-results <- seq_b_corr_t_test(test = "better", df = test_benchmark_small, problemset = "problem_a", baseline = "algo_1", max_repls = 10, rho=0.1, rope=c(-0.01, 0.01))
-results
 
 
 
