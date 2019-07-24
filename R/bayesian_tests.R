@@ -21,10 +21,7 @@
 #' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
 #' in the equivalent of the standard t test    
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
-#'                          learner_a = "algo_1", learner_b = "algo_2")
-#' results
+#' @example results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a", learner_a = "algo_1", learner_b = "algo_2")
 #' @export
 b_corr_t_test <- function(df, problemset, learner_a, learner_b, 
                           measure = NULL, parameter_algorithm = NULL, 
@@ -92,10 +89,7 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b,
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
-#' @example 
-#' results <- b_sign_test(df= test_benchmark_small, problemset = "problem_a", 
-#'                        learner_a = "algo_1", learner_b = "algo_2")
-#' results
+#' @example results <- b_sign_test(df= test_benchmark_small, problemset = "problem_a", learner_a = "algo_1", learner_b = "algo_2")
 #' @export
 b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
                         parameter_algorithm = NULL, s = 1, z_0 = 0, 
@@ -177,10 +171,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
-#' @example 
-#' results <- b_signed_rank_test(df= test_benchmark_small, 
-#'                               learner_a = "algo_1", learner_b = "algo_2")
-#' results
+#' @example results <- b_signed_rank_test(df= test_benchmark_small, learner_a = "algo_1", learner_b = "algo_2")
 #' @export
 b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, measure = NULL, 
                                 parameter_algorithm = NULL, s = 0.5, z_0 = 0, 
@@ -275,12 +266,7 @@ b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, mea
 #' Benavoli \emph{et al.} 2017, except for the bound for the prior distribution 
 #' of mu_0, which are set to the maximum and minimum values observed in the 
 #' sample. You should not modify them unless you know what you are doing.
-#' @example 
-#' results <- b_hierarchical_test(df= test_benchmark_small, 
-#'                                learner_a = "algo_1", learner_b = "algo_2", 
-#'                                rho=0.1, rope=c(-0.01, 0.01), nsim=2000, 
-#'                                nchains=5)
-#' results 
+#' @example results <- b_hierarchical_test(df= test_benchmark_small, learner_a = "algo_1", learner_b = "algo_2", rho=0.1, rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
 b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL, 

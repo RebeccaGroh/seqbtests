@@ -12,8 +12,7 @@
 #' \item{code{significance}}{a matrix with all the pairwise comparisons showing if there are signficant differences among the algorithms}
 #' @details The test has first been implemented in scmamp. Note that the default value for measure is the first measure column in the data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' nemenyi_test(test_benchmark)
+#' @example nemenyi_test(test_benchmark)
 #' @export
 nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
   checkmate::assert_true(check_names(df, measure = NULL))
@@ -50,8 +49,7 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 #' @return A matrix with all the pairwise raw p-values. 
 #' @details The test has first been implemented in scmamp. Note that the default value for measure is the first measure column in the data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' friedman_post(test_benchmark)
+#' @example friedman_post(test_benchmark)
 #' @export
 friedman_post <- function(df, measure = NULL, control = NULL) {
   checkmate::assert_true(check_names(df, measure = NULL))

@@ -20,10 +20,7 @@
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' results <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
-#'                                 learner_a = "algo_1", learner_b = "algo_2")
-#' results
+#' @example results <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", learner_a = "algo_1", learner_b = "algo_2")
 #' @export
 corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL, 
                         rho = 0.01, alternative="two.sided") {
@@ -68,9 +65,7 @@ corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL,
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' results <- friedman_test(test_benchmark) 
-#' results
+#' @example results <- friedman_test(test_benchmark) 
 #' @export
 friedman_test <- function(df, measure = NULL) {
   checkmate::assert_true(check_structure(df))
@@ -116,10 +111,7 @@ friedman_test <- function(df, measure = NULL) {
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' results <- wilcoxon_signed_test(df = test_benchmark, problemset = "problem_a", 
-#'                                 learner_a = "algo_1", learner_b = "algo_2")  
-#' results
+#' @example results <- wilcoxon_signed_test(df = test_benchmark, problemset = "problem_a", learner_a = "algo_1", learner_b = "algo_2")  
 #' @export
 wilcoxon_signed_test <- function(df, problemset, learner_a, 
                                  learner_b, measure =NULL) {

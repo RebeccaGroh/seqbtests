@@ -29,11 +29,7 @@
 #' Note that the default value for measure is the first measure column in the 
 #' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
 #' in the equivalent of the standard t test. 
-#' @example 
-#' results <- seq_b_corr_t_test(test = "euqal", df = test_benchmark_small, 
-#' problemset = "problem_a", baseline = "algo_1", max_repls = 10, 
-#' rho=0.1, rope=c(-0.01, 0.01))
-#' results
+#' @example results <- seq_b_corr_t_test(test = "euqal", df = test_benchmark_small, problemset = "problem_a", baseline = "algo_1", max_repls = 10, rho=0.1, rope=c(-0.01, 0.01))
 #' @export
 seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure =NULL, test = NULL, rho = 0.1, rope = c(-0.01, 0.01), max_repls = 20,  ...) {
   result = data.frame()
