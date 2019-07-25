@@ -76,4 +76,3 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure =N
   }
   return(result)
 }
-

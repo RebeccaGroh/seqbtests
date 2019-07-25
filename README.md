@@ -8,7 +8,7 @@ Package installation:
 
 ```r
 library(devtools)
-install_github("RebeccaGroh", "seqbtests")
+install_github("RebeccaGroh/seqbtests")
 ```
 
 This package provides some Bayesian approaches to compare classifiers in either single or multiple datasets. 
@@ -19,5 +19,7 @@ The tests [without any adaptions] in this package are modifications of tests pro
 
 | problem | algorithm | parameter_algorithm| replications | measure_\* |
 |:------:|:------:|:------:|:------:|:------:|
-| character | character | character | numeric | numeric |
+| character | character | character | integer | numeric |
 | mandatory | mandatory | optional | mandatory | mandatory |
+
+
