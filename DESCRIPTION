@@ -10,15 +10,15 @@ Depends: R (>= 3.0.2)
 Encoding: UTF-8
 LazyData: yes
 Imports: 
-    devtools,
-    scmamp, 
-    checkmate, 
+    checkmate,
     dplyr,
+    devtools,
     ggplot2,
+    metRology,
     rNPBST, 
-    tidyr, 
-    rstan, 
-    metRology
+    rstan,
+    scmamp,
+    tidyr
 Suggests: 
     testthat (>= 2.1.0)
 RoxygenNote: 6.1.1
