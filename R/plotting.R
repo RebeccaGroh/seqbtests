@@ -1,15 +1,15 @@
 
-#' @title Posterior denities plot 
+#' @title Posterior densities plot 
 #' @description This function plots, univariately, the posterior densities 
 #' obtained in Bayesian analyses. 
 #' @param results A list containing, at least three elements, one named 
 #' \code{approximate}, which is a logical value indicating whether the posterior 
-#' is a function or a sample, \code{rope}, a two dimensional vector with the 
+#' is a function or a sample, \code{rope}, a two-dimensional vector with the 
 #' minimum and maximum values of the rope and \code{posterior}, either a one 
 #' parameter function or a matrix (or data.frame) where each row is a sample and 
 #' each column a sampled parameter
 #' @param parameter Either a string or a number indicating, in case the 
-#' posterior is approximated, the parameter to be ploted (i.e., the name or the 
+#' posterior is approximated, the parameter to be plotted (i.e., the name or the 
 #' index of a column in the sample matrix)
 #' @param ... Additional parameters to the Rgraphviz function. This is mainly 
 #' to change the layout of the graph
@@ -36,10 +36,10 @@ plot_posteriror <- function(results, parameter=1, num.points=1000, plot.rope=TRU
 #' @param df Input data frame.
 #' @param measure Measure column. 
 #' @param alpha Significance level to get the critical difference.
-#' @param cex Numeric value to control the soze of the font. 
+#' @param cex Numeric value to control the size of the font. 
 #' @details The test has first been implemented in scmamp.
 #' Note that the default value for measure is the first measure column in the 
-#' data frame. By default the alpha value is 0.05 and the default for cex is 
+#' data frame. By default, the alpha value is 0.05 and the default for cex is 
 #' 0.75.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @9examples

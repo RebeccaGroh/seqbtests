@@ -52,7 +52,7 @@ corr_t_test <- function(df, problemset, learner_a, learner_b, measure =NULL,
 
 #' @title Friedman's test 
 #' @description This function implements the Friedman's test for multiple 
-#' comparisons.A non-parametric statistical test zo detect differences in 
+#' comparisons. A non-parametric statistical test to detect differences in 
 #' in algorithms performances over multiple datasets. 
 #' @param df Input data frame.
 #' @param measure Measure column. 

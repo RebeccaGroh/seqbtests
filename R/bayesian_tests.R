@@ -74,7 +74,7 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b,
 #' algorithm. 
 #' @param z_0 Prior pseudo-observation. 
 #' @param s Prior pseudo-observation probability. 
-#' @param weights A-priori weigthts. 
+#' @param weights A-priori weights. 
 #' @param mc_samples Number of samples of the distribution. 
 #' @param rope Region of practical equivalence. 
 #' @return A list containing the following components:
@@ -156,7 +156,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' algorithm. 
 #' @param z_0 Prior pseudo-observation. 
 #' @param s Prior pseudo-observation probability. 
-#' @param weights A-priori weigthts. 
+#' @param weights A-priori weights. 
 #' @param mc_samples Number of samples of the distribution. 
 #' @param rope Region of practical equivalence. 
 #' @return A list containing the following components:
@@ -166,7 +166,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' probabilities}
 #' @details 
 #' The test has first been implemented in rNPBST. 
-#' For testing over multiple datasets, don´t specify the problemset argument in 
+#' For testing over multiple datasets, don't specify the problemset argument in 
 #' the function. 
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.

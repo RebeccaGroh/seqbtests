@@ -1,5 +1,5 @@
 #' @title Nemenyi post hoc test 
-#' @description This function implements teh Nemenyi post hoc test. 
+#' @description This function implements the Nemenyi post hoc test. 
 #' @param df Input data frame. 
 #' @param measure Measure column. 
 #' @param alpha Significance level.
@@ -9,7 +9,7 @@
 #' \item{code{statistic}}{the value of the statistic used in the test}
 #' \item{code{p_value}}{the p-value for the test}
 #' \item{code{diff_matrix}}{a matrix with all the pairwise differences of average rankings}
-#' \item{code{significance}}{a matrix with all the pairwise comparisons showing if there are signficant differences among the algorithms}
+#' \item{code{significance}}{a matrix with all the pairwise comparisons showing if there are significant differences among the algorithms}
 #' @details The test has first been implemented in scmamp. Note that the default value for measure is the first measure column in the data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example nemenyi_test(test_benchmark)

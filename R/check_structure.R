@@ -48,7 +48,7 @@ check_column_names <- function(df) {
 
 #' @title Check Structure 
 #' @description 
-#'   Check if the structure of the data frame satisfies the requriements. 
+#'   Check if the structure of the data frame satisfies the requirements. 
 #' @param df input data frame 
 #' @return TRUE if test was successful 
 #' @export

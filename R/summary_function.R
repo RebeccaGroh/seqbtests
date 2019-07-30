@@ -4,7 +4,7 @@
 #'   Short summary of the data frame, 
 #'   including the columns names and number of rows
 #' @param df input data frame
-#' @return A vector containig the columns names and number of rows
+#' @return A vector containing the columns names and number of rows
 #' @export
 data_summary <- function(df){
   rows <- nrow(df)
@@ -24,7 +24,6 @@ data_summary <- function(df){
 #' @param check_var Column in data frame used to check for NAs
 #' @return List of Cases, NAs and the NA ratio according to the check_var values. 
 #' @export 
-#' 
 na_check <- function(df, measure, check_var) {
   if (any(is.na(df))) {
     # incomplete columns 
