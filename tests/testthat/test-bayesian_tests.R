@@ -47,21 +47,29 @@ test_that("b_sign_test() returns error", {
 })
 
 # check if b_sign_test() returns the same results as the test from scmamp
-#test_that("b_sign_test returns same results as origin", {
-#  sample_a <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
-#                                   & test_benchmark_small[["algorithm"]] == "algo_1", 
-#                                   "measure_col"]
-#  sample_b <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
-#                                   & test_benchmark_small[["algorithm"]] == "algo_2", 
-#                                   "measure_col"]  
-#  result_rnpbst <- rNPBST::   ::bCorrelatedTtest(x = sample_a, y = sample_b, 
-#                                            rho = 0.1, rope=c(-0.01, 0.01))
-#  result <- b_sign_test(df= test_benchmark_small, problemset = "problem_a",
-#                          learner_a = "algo_1", learner_b = "algo_2")
-#  expect_equal(result_scmamp$posterior.probabilities, result$posteriror_probabilities)
-#})
+test_that("b_sign_test returns same results as origin", {
+  sample_a <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
+                                   & test_benchmark_small[["algorithm"]] == "algo_1", 
+                                   "measure_col"]
+  sample_b <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
+                                   & test_benchmark_small[["algorithm"]] == "algo_2", 
+                                   "measure_col"]  
+  result_rnpbst <- rNPBST::   ::bCorrelatedTtest(x = sample_a, y = sample_b, 
+                                            rho = 0.1, rope=c(-0.01, 0.01))
+  result <- b_sign_test(df= test_benchmark_small, problemset = "problem_a",
+                          learner_a = "algo_1", learner_b = "algo_2")
+  expect_equal(result_scmamp$posterior.probabilities, result$posteriror_probabilities)
+})
+sample_a <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
+                                 & test_benchmark_small[["algorithm"]] == "algo_1", 
+                                 "measure_col"]
+sample_b <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
+                                 & test_benchmark_small[["algorithm"]] == "algo_2", 
+                                 "measure_col"]  
 
 
+sign.results <- rNPBST::binomialSign.test(cbind(sample_a, sample_b))
+#-------------------------------------------------------------------------------
 
 # check if b_signed_rank_test() returns a list with right information 
 test_that("b_signed_rank_test returns a list" , {
