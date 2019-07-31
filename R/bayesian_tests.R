@@ -178,7 +178,7 @@ b_signed_rank_test <- function (df, problemset = NULL, learner_a, learner_b, mea
                                 weights = NULL, mc_samples = 100000, 
                                 rope = c(-0.01, 0.01)){
   if (rope[2] < rope[1]) {
-    warning("The rope paremeter has to contain the ordered limits of the rope
+    warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
             follow with the procedure")
     rope <- sort(rope)

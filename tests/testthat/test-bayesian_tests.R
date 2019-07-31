@@ -54,22 +54,13 @@ test_that("b_sign_test returns same results as origin", {
   sample_b <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
                                    & test_benchmark_small[["algorithm"]] == "algo_2", 
                                    "measure_col"]  
-  result_rnpbst <- rNPBST::   ::bCorrelatedTtest(x = sample_a, y = sample_b, 
-                                            rho = 0.1, rope=c(-0.01, 0.01))
-  result <- b_sign_test(df= test_benchmark_small, problemset = "problem_a",
-                          learner_a = "algo_1", learner_b = "algo_2")
-  expect_equal(result_scmamp$posterior.probabilities, result$posteriror_probabilities)
+  result_rnpbst <- rNPBST::binomialSign.test(cbind(sample_a, sample_b))
+  result <-  b_sign_test(df= test_benchmark_small, problemset = "problem_a",
+                         learner_a = "algo_1", learner_b = "algo_2")
+  expect_equal(result_rnpbst$probabilities , result$posteriror_probabilities)
 })
-sample_a <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
-                                 & test_benchmark_small[["algorithm"]] == "algo_1", 
-                                 "measure_col"]
-sample_b <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
-                                 & test_benchmark_small[["algorithm"]] == "algo_2", 
-                                 "measure_col"]  
+## vielleicht muss (result_rnpbst$probabilities (der Name) angepasst werden 
 
-
-sign.results <- rNPBST::binomialSign.test(cbind(sample_a, sample_b))
-#-------------------------------------------------------------------------------
 
 # check if b_signed_rank_test() returns a list with right information 
 test_that("b_signed_rank_test returns a list" , {
@@ -85,6 +76,27 @@ test_that("b_signed_rank_test() returns error", {
   expect_error(b_signed_rank_test(df= test_benchmark_small, problemset = "problem_a",
                            learner_a = "algo_a", learner_b = "algo_2"))
 })
+
+# check if b_signed_rank_test() returns the same results as the test from scmamp
+test_that("b_signed_rank_test returns same results as origin", {
+  sample_a <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
+                                   & test_benchmark_small[["algorithm"]] == "algo_1", 
+                                   "measure_col"]
+  sample_b <- test_benchmark_small[test_benchmark_small[["problem"]] == "problem_a"
+                                   & test_benchmark_small[["algorithm"]] == "algo_2", 
+                                   "measure_col"]  
+  result_rnpbst <- rNPBST::bayesianSignedRank.test(sample_a, sample_b, s = 0.5, z_0 = 0,
+                                                   rope.min = -0.01, rope.max = 0.01,
+                                                   weights = NULL,
+                                                   mc.samples = 10000)
+  result <-  b_signed_rank_test(df= test_benchmark_small, problemset = "problem_a",
+                                learner_a = "algo_1", learner_b = "algo_2", 
+                                s = 0.5, z_0 = 0, 
+                                weights = NULL, mc_samples = 10000, 
+                                rope = c(-0.01, 0.01))
+  expect_equal(result_rnpbst$probabilities , result$posteriror_probabilities)
+})
+# die Ergebniss stimmen nicht genau überein 
 
 
 # check if b_hierarchical_test() returns a list with right information 
