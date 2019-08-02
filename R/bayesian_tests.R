@@ -309,4 +309,3 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
   result$posteriror_probabilities <- b_hierarchical$posterior.probabilities
   return(result)
 }
-
