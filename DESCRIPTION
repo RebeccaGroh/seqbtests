@@ -18,7 +18,8 @@ Imports:
     rNPBST, 
     rstan,
     scmamp,
-    tidyr
+    tidyr, 
+    remotes
 Suggests: 
     testthat (>= 2.1.0)
 RoxygenNote: 6.1.1
