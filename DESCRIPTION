@@ -15,7 +15,6 @@ Imports:
     devtools,
     ggplot2,
     metRology,
-    rNPBST, 
     rstan,
     scmamp,
     tidyr, 
@@ -23,3 +22,6 @@ Imports:
 Suggests: 
     testthat (>= 2.1.0)
 RoxygenNote: 6.1.1
+Remotes: github::JacintoCC/rNPBST, 
+    graph, 
+    Rgraphviz
