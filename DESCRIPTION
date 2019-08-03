@@ -18,7 +18,10 @@ Imports:
     rstan,
     scmamp,
     tidyr, 
-    remotes
+    remotes, 
+    rNPBST, 
+    graph, 
+    Rgraphviz
 Suggests: 
     testthat (>= 2.1.0)
 RoxygenNote: 6.1.1
