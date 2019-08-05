@@ -9,7 +9,7 @@ License: gpl3
 Depends: R (>= 3.0.2)
 Encoding: UTF-8
 LazyData: yes
-Imports: 
+Imports: devtools, 
     checkmate,
     dplyr,
     devtools,
@@ -23,8 +23,13 @@ Imports:
     graph, 
     Rgraphviz
 Suggests: 
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0), 
+    devtools, 
+    roxygen2, 
+    knitr
 RoxygenNote: 6.1.1
-Remotes: github::JacintoCC/rNPBST, 
+Remotes: JacintoCC/rNPBST, 
     graph, 
     Rgraphviz
+
+
