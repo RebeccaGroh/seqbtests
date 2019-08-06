@@ -23,7 +23,7 @@ heuristic to set the correlation is size of test set divided by total size
 of the dataset)}
 
 \item{alternative}{a character string specifying the alternative hypothesis, 
-must be one of "two.sided" (default), "greater" or "less". 
+must be one of 'two.sided' (default), 'greater' or 'less'. 
 You can specify just the initial letter.}
 }
 \value{

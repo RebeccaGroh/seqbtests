@@ -20,7 +20,7 @@ A list containing the following components:
 }
 \description{
 This function implements the Friedman's test for multiple 
-comparisons.A non-parametric statistical test zo detect differences in 
+comparisons. A non-parametric statistical test to detect differences in 
 in algorithms performances over multiple datasets.
 }
 \details{

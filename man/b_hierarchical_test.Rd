@@ -36,7 +36,7 @@ b_hierarchical_test(df, learner_a, learner_b, measure = NULL,
 
 \item{beta.lower}{Lower bound for the (uniform) prior for the beta hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.05, as in the original paper}
 
-\item{rope}{Interval for the difference considered as "irrelevant"}
+\item{rope}{Interval for the difference considered as 'irrelevant'}
 
 \item{nsim}{Number of samples (per chain) used to estimate the posterior distribution. Note that, by default, half the simulations are used for the burn-in}
 

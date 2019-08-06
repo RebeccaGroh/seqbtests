@@ -25,8 +25,10 @@
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
-plot_posteriror <- function(results, parameter=1, num.points=1000, plot.rope=TRUE, plot.samples=TRUE, alpha=NULL, ...) {
-  scmamp::plotPosterior(results, parameter=1, num.points=1000, plot.rope=TRUE, plot.samples=TRUE, alpha=NULL, ...)
+plot_posteriror <- function(results, parameter = 1, num.points = 1000, plot.rope = TRUE, plot.samples = TRUE, alpha = NULL, 
+    ...) {
+    scmamp::plotPosterior(results, parameter = 1, num.points = 1000, plot.rope = TRUE, plot.samples = TRUE, alpha = NULL, 
+        ...)
 }
 
 
@@ -45,19 +47,18 @@ plot_posteriror <- function(results, parameter=1, num.points=1000, plot.rope=TRU
 #' @9examples
 #' plot_cd(test_benchmark)
 #' @export
-plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75,...) {
-  checkmate::assert_true(check_structure(df))
-  if (is.null(measure)) {
-    measure <- get_measure_columns(df)[1]
-  } 
-  algo_names <- unique(df$algorithm)
-  data_wide <- spread(df, algorithm, measure)
-  sum_data <- aggregate(data_wide[, algo_names],
-                        by = list(data_wide[["problem"]]), FUN = mean)
-  # define dataset
-  results.matrix <- data.frame(sum_data[,-1], row.names=sum_data[,1])
-  # plot  CD
-  plotCD(results.matrix, alpha, cex)
+plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
+    checkmate::assert_true(check_structure(df))
+    if (is.null(measure)) {
+        measure <- get_measure_columns(df)[1]
+    }
+    algo_names <- unique(df$algorithm)
+    data_wide <- spread(df, algorithm, measure)
+    sum_data <- aggregate(data_wide[, algo_names], by = list(data_wide[["problem"]]), FUN = mean)
+    # define dataset
+    results.matrix <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
+    # plot CD
+    plotCD(results.matrix, alpha, cex)
 }
 
 

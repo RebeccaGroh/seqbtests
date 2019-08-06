@@ -13,7 +13,7 @@ plot_cd(df, measure = NULL, alpha = 0.05, cex = 0.75, ...)
 
 \item{alpha}{Significance level to get the critical difference.}
 
-\item{cex}{Numeric value to control the soze of the font.}
+\item{cex}{Numeric value to control the size of the font.}
 }
 \description{
 This function plots the critical differences plot.
@@ -21,7 +21,7 @@ This function plots the critical differences plot.
 \details{
 The test has first been implemented in scmamp.
 Note that the default value for measure is the first measure column in the 
-data frame. By default the alpha value is 0.05 and the default for cex is 
+data frame. By default, the alpha value is 0.05 and the default for cex is 
 0.75.
 }
 \references{

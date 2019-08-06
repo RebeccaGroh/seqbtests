@@ -14,5 +14,5 @@ A vector containing all main column names.
 }
 \description{
 Get the list of names of the main columns within the data frame, 
-  namely "problem", "algorithm" and "replications".
+  namely 'problem', 'algorithm' and 'replications'.
 }

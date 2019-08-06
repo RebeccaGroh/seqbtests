@@ -43,8 +43,8 @@ probabilities}
 \description{
 This function implements a sequential approach to compare the performance of 
 machine learning algorithms to one another. Sample size is not fixed in 
-adavnce, data are evaluated as they are collected. Further samoling is 
-stopped in accordance with a pre-defined stopping rule as soon as signficant 
+adavnce, data are evaluated as they are collected. Further sampling is 
+stopped in accordance with a pre-defined stopping rule as soon as significant 
 results are obtained.
 }
 \details{

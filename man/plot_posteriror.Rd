@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting.R
 \name{plot_posteriror}
 \alias{plot_posteriror}
-\title{Posterior denities plot}
+\title{Posterior densities plot}
 \usage{
 plot_posteriror(results, parameter = 1, num.points = 1000,
   plot.rope = TRUE, plot.samples = TRUE, alpha = NULL, ...)
@@ -10,13 +10,13 @@ plot_posteriror(results, parameter = 1, num.points = 1000,
 \arguments{
 \item{results}{A list containing, at least three elements, one named 
 \code{approximate}, which is a logical value indicating whether the posterior 
-is a function or a sample, \code{rope}, a two dimensional vector with the 
+is a function or a sample, \code{rope}, a two-dimensional vector with the 
 minimum and maximum values of the rope and \code{posterior}, either a one 
 parameter function or a matrix (or data.frame) where each row is a sample and 
 each column a sampled parameter}
 
 \item{parameter}{Either a string or a number indicating, in case the 
-posterior is approximated, the parameter to be ploted (i.e., the name or the 
+posterior is approximated, the parameter to be plotted (i.e., the name or the 
 index of a column in the sample matrix)}
 
 \item{num.points}{Number of points used to plot the functions}

@@ -10,7 +10,7 @@ data_summary(df)
 \item{df}{input data frame}
 }
 \value{
-A vector containig the columns names and number of rows
+A vector containing the columns names and number of rows
 }
 \description{
 Short summary of the data frame, 

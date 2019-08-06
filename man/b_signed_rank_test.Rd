@@ -26,7 +26,7 @@ algorithm.}
 
 \item{z_0}{Prior pseudo-observation.}
 
-\item{weights}{A-priori weigthts.}
+\item{weights}{A-priori weights.}
 
 \item{mc_samples}{Number of samples of the distribution.}
 
@@ -44,7 +44,7 @@ This function implements the Bayesian version of the signed rank test.
 }
 \details{
 The test has first been implemented in rNPBST. 
-For testing over multiple datasets, don´t specify the problemset argument in 
+For testing over multiple datasets, don't specify the problemset argument in 
 the function. 
 Note that the default value for measure is the first measure column in the 
 data frame.

@@ -13,5 +13,5 @@ check_structure(df)
 TRUE if test was successful
 }
 \description{
-Check if the structure of the data frame satisfies the requriements.
+Check if the structure of the data frame satisfies the requirements.
 }

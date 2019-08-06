@@ -6,10 +6,10 @@
 #' @param df input data frame
 #' @return A vector containing the columns names and number of rows
 #' @export
-data_summary <- function(df){
-  rows <- nrow(df)
-  columns <- colnames(df)
-  return(list(Rows = rows, Columns = columns))
+data_summary <- function(df) {
+    rows <- nrow(df)
+    columns <- colnames(df)
+    return(list(Rows = rows, Columns = columns))
 }
 
 
@@ -25,29 +25,27 @@ data_summary <- function(df){
 #' @return List of Cases, NAs and the NA ratio according to the check_var values. 
 #' @export 
 na_check <- function(df, measure, check_var) {
-  if (any(is.na(df))) {
-    # incomplete columns 
-    for (x in get_main_columns(df)) {
-      checkmate::assert_false(anyNA(df[[x]]))
-    }    
-    requireNamespace("dplyr")
-    check_var <- enquo(check_var)
-    print(check_var)
-    measure <- enquo(measure)
-    print(measure)
-    # Share of NAs in Measure Columns 
-    count <- df %>% 
-      group_by(!! check_var) %>% 
-      summarise(na_count = sum(is.na(!! measure)), cases_count = n())
-    na_dataframe <- data.frame(count)
-    # na_dataframe$cases_count <- col_count$cases_count
-    ratio <- (na_dataframe$na_count/na_dataframe$cases_count)
-    na_dataframe$na_ratio <- paste0(round(ratio*100,digits = 2), "%",sep = "")
-    result <- na_dataframe
-  }else {
-    result <- "data complete"
-  }
-  return(result)
+    if (any(is.na(df))) {
+        # incomplete columns
+        for (x in get_main_columns(df)) {
+            checkmate::assert_false(anyNA(df[[x]]))
+        }
+        requireNamespace("dplyr")
+        check_var <- enquo(check_var)
+        print(check_var)
+        measure <- enquo(measure)
+        print(measure)
+        # Share of NAs in Measure Columns
+        count <- df %>% group_by(!!check_var) %>% summarise(na_count = sum(is.na(!!measure)), cases_count = n())
+        na_dataframe <- data.frame(count)
+        # na_dataframe$cases_count <- col_count$cases_count
+        ratio <- (na_dataframe$na_count/na_dataframe$cases_count)
+        na_dataframe$na_ratio <- paste0(round(ratio * 100, digits = 2), "%", sep = "")
+        result <- na_dataframe
+    } else {
+        result <- "data complete"
+    }
+    return(result)
 }
 
 #' @title Drop NAs by groups 
@@ -58,9 +56,9 @@ na_check <- function(df, measure, check_var) {
 #' @param check_var Column in data frame used to check for NAs
 #' @return New data frame without NAs. 
 #' @export 
-na_drop <- function(df, check_var ,measure) {
-  x <- deparse(substitute(check_var))
-  y <- deparse(substitute(measure))
-  df[!(df[[x]] %in% df[[x]][is.na(df[[y]])]), ]
+na_drop <- function(df, check_var, measure) {
+    x <- deparse(substitute(check_var))
+    y <- deparse(substitute(measure))
+    df[!(df[[x]] %in% df[[x]][is.na(df[[y]])]), ]
 }
 

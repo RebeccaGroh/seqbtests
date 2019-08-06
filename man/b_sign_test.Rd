@@ -26,7 +26,7 @@ algorithm.}
 
 \item{z_0}{Prior pseudo-observation.}
 
-\item{weights}{A-priori weigthts.}
+\item{weights}{A-priori weights.}
 
 \item{mc_samples}{Number of samples of the distribution.}
 
