@@ -9,26 +9,27 @@ License: gpl3
 Depends: R (>= 3.0.2)
 Encoding: UTF-8
 LazyData: yes
-Imports: devtools, 
+Imports: 
     checkmate,
     dplyr,
     devtools,
     ggplot2,
+    graph, 
     metRology,
     rstan,
     scmamp,
     tidyr, 
-    remotes, 
-    rNPBST, 
-    graph, 
-    Rgraphviz
+    remotes,
+    Rgraphviz,
+    rNPBST
 Suggests: 
     testthat (>= 2.1.0), 
     devtools, 
     roxygen2, 
     knitr
 RoxygenNote: 6.1.1
-Remotes: JacintoCC/rNPBST, 
+Remotes: 
+    JacintoCC/rNPBST, 
     graph, 
     Rgraphviz
 

@@ -72,10 +72,10 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure =N
 # Signifikanz vorliegt, also TRUE angegeben wurde, dann brich für diesen Algorithmus nach 
 # dieser Replikation auf, 
 
-if (b_test$posterior.probabilities[3] > 0.95) {
-  stop <- TRUE
-}
-} 
-if (stop == TRUE) {
-  break
-}
+#if (b_test$posterior.probabilities[3] > 0.95) {
+#  stop <- TRUE
+#}
+#} 
+#if (stop == TRUE) {
+#  break
+#}

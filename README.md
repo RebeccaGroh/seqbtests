@@ -7,7 +7,10 @@ This is a package for sequential bayesian tests.
 Package installation:
 
 ```r
-library(devtools)
+if (!require("devtools")) {
+  install.packages("devtools")
+}
+
 install_github("RebeccaGroh/seqbtests")
 ```
 
