@@ -30,23 +30,28 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure = 
             result[k, "right"] <- b_test$posterior.probabilities[3]
             result[k, "repls"] <- i
             if (b_test$posterior.probabilities[3] > 0.95) {
+                result[k, "test"] <- i
                 result[k, "significance_appears"] <- TRUE
                 next
             } else {
                 result[k, "significance_appears"] <- FALSE
             }
+            #for (result[["significance_appears"]] == TRUE) {
+            #i <-  result[k, "test"] <- i 
+            #}
         }
-        if (result[k, "significance_appears"] == TRUE) {
-            break
-        }
+        
+        #if (result[k, "significance_appears"] == TRUE) {
+        #    break 
+        #} 
     }
     return(result)
 }
 
 
 
-# results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_a', baseline = 'algo_1', max_repls =
-# 10, rho=0.1, rope=c(-0.01, 0.01)) results
+results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_a', baseline = 'algo_1', max_repls = 10, rho=0.1, rope=c(-0.01, 0.01)) 
+results
 
 
 
