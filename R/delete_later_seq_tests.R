@@ -5,20 +5,21 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure = 
                               max_repls = 20, ...) {
   for (i in 2:max_repls) {
     data <- get_replications(i, ...)
-        ## check if passed names, define columns in dataset
-        checkmate::assert_true(check_structure(df = data))
-        checkmate::assert_true(check_names(df = data, problemset, baseline, learner_b = NULL, measure = NULL, parameter_algorithm = NULL))
-        if (is.null(measure)) {
-            measure <- get_measure_columns(data)[1]
-        }
-        # define samples
-        x <- data[data[["problem"]] == problemset & data[["algorithm"]] == baseline, measure]
-        algorithms <- unique(data[["algorithm"]])
-        result <- iterate_algorithms(data, algorithms, problemset, learner_b, 
-                                     baseline, measure, rho, rope, x, i)      
+    ## check if passed names, define columns in dataset
+    checkmate::assert_true(check_structure(df = data))
+    checkmate::assert_true(check_names(df = data, problemset, baseline, learner_b = NULL, measure = NULL, parameter_algorithm = NULL))
+    if (is.null(measure)) {
+      measure <- get_measure_columns(data)[1]
     }
-    return(result)
+    # define samples
+    x <- data[data[["problem"]] == problemset & data[["algorithm"]] == baseline, measure]
+    algorithms <- unique(data[["algorithm"]])
+    result <- iterate_algorithms(data, algorithms, problemset, learner_b, 
+                                 baseline, measure, rho, rope, x, i)      
+  }
+  return(result)
 }
+
 
 
 results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_a', 
@@ -101,9 +102,9 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure = 
       
       ## hiermit kann ich alle Ergebnisse aufrufen, die kann ich dann später immernoch 
       ## in einen schöneren Datensatz speichern 
-      if (b_test$posterior.probabilities[3] > 0.95) {next}
+      #if (b_test$posterior.probabilities[3] > 0.95) {next}
       output[i,k] <- b_test$posterior.probabilities[3]
-      if (b_test$posterior.probabilities[3] > 0.95) {next}
+      #if (b_test$posterior.probabilities[3] > 0.95) {next}
     }
     result[i, "baseline"] <- baseline
     result[i, "method"] <- b_test$method
@@ -118,17 +119,17 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure = 
 }
 
 
-results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_b', 
+result <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_b', 
                              baseline = 'algo_1', max_repls = 10, rho=0.1, 
                              rope=c(-0.01, 0.01)) 
-results
+result
 
 #-------------------------------------------------------------------------------
 # anstatt von dem einzelnen aufrufen der Ergebnisse ... kommt erst am Ende 
-cbind(
-  result, 
-  data.frame("baseline" = baseline, "method" = b_test$method, ...)
-)
+#cbind(
+#  result, 
+#  data.frame("baseline" = baseline, "method" = b_test$method, ...)
+#)
 
 
 #-------------------------------------------------------------------------------
@@ -154,14 +155,17 @@ cbind(
 
 
 
-if (result[k, "left"] > 0.95) {
-  result[k, "significance_appears"] <- TRUE
-} else {
-  result[k, "significance_appears"] <- FALSE
-}
+#if (result[k, "left"] > 0.95) {
+#  result[k, "significance_appears"] <- TRUE
+#} else {
+#  result[k, "significance_appears"] <- FALSE
+#}
 #if (result[["significance_appears"]] == TRUE) {
 #i <-  result[k, "test"] <- i 
 #}
-if (result[k, "significance_appears"] == TRUE) {
-  break 
-} 
+#if (result[k, "significance_appears"] == TRUE) {
+#  break 
+#} 
+
+
+
