@@ -31,8 +31,7 @@
 #' in the equivalent of the standard t test. 
 #' @example results <- seq_b_corr_t_test(test = 'equal', df = test_benchmark_small, problemset = 'problem_a', baseline = 'algo_1', max_repls = 10, rho=0.1, rope=c(-0.01, 0.01))
 #' @export
-seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure = NULL, test = NULL, rho = 0.1, rope = c(-0.01, 
-    0.01), max_repls = 20, ...) {
+seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, measure = NULL, test = NULL, rho = 0.1, rope = c(-0.01, 0.01), max_repls = 20, ...) {
     result = data.frame()
     for (i in 2:max_repls) {
         data <- get_replications(i, ...)
