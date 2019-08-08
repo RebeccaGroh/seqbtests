@@ -105,3 +105,84 @@ results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_a'
                              baseline = 'algo_1', max_repls = 10, rho=0.1, compare = "equal",
                              rope=c(-0.01, 0.01)) 
 results
+#------------------------------------------------------------------------------#
+#----------------------------- Bayesian Sign Test -----------------------------# 
+
+
+seq_b_sign_test <- function(problemset, baseline, learner_b = NULL, 
+                            measure = NULL, compare = NULL, s = 1, z_0 = 0,
+                            weights = c(s/2, rep(1, length(x))), 
+                            mc_samples = 1e+05, rope = c(-0.01, 0.01), 
+                            max_repls = 20, ...) {
+  if (rope[2] < rope[1]) {
+    warning("The rope paremeter has to contain the ordered limits of the rope 
+            (min, max), but the values are not orderd. They will be swapped to
+            follow with the procedure")
+    rope <- sort(rope)
+  }
+  rope.min <- rope[1]
+  rope.max <- rope[2]
+  result = data.frame()
+  for (i in 2:max_repls) {
+    data <- get_replications(i, ...)
+    ## check if passed names, define columns in dataset
+    checkmate::assert_true(check_structure(df = data))
+    checkmate::assert_true(check_names(df = data, problemset, baseline, 
+                                       learner_b = NULL, measure = NULL, 
+                                       parameter_algorithm = NULL))
+    if (is.null(measure)) {
+      measure <- get_measure_columns(data)[1]
+    }
+    ## alle "learner_b" mit k ersetzen? 
+    algorithms <- unique(data[["algorithm"]])
+    if (i == 2) {
+      liste <- c()
+    }
+    algorithms <- setdiff(algorithms, liste)
+    for (k in algorithms[algorithms != baseline]) {
+      # define samples when testing on multiple datasets
+      if (is.null(problemset)) {
+        data_wide <- spread(df, algorithm, measure)
+        sum_data <- aggregate(data_wide[, c(baseline, k)], 
+                              by = list(data_wide[["problem"]]), FUN = mean)
+        x <- sum_data[, baseline]
+        y <- sum_data[, k]
+      } else {
+        # define samples when testing on a single dataset
+        x <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == baseline, measure]
+        y <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == k, measure]
+      }
+      n.samples <- mc_samples
+      # Bayesian Sign Test
+      b_sign <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max, 
+                                          weights, n.samples)
+      
+      result[k, "baseline"] <- baseline
+      result[k, "method"] <- b_sign$method
+      result[k, "measure"] <- measure
+      result[k, "left"] <- b_sign$probabilities[1]
+      result[k, "rope"] <- b_sign$probabilities[2]
+      result[k, "right"] <- b_sign$probabilities[3]
+      result[k, "repls"] <- i
+      if (is.null(compare)) {compare <- "better"}
+      if (compare == "better") { 
+        threshold <- b_sign$probabilities[3]
+      } else if (compare == "equal") {
+        threshold <- b_sign$probabilities[2] + 
+          b_sign$probabilities[3]
+      } 
+      if (threshold > 0.95) {
+        result[k, "significance_appears"] <- TRUE
+      } else {
+        result[k, "significance_appears"] <- FALSE
+      }
+      liste <-  rownames(result[result[["significance_appears"]] == TRUE, ])
+    }
+  }
+  return(result)
+}
+
+#------------------------------------------------------------------------------#
+#----------------------------- Bayesian Sign Test -----------------------------# 
