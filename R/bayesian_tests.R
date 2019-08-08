@@ -21,13 +21,17 @@
 #' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
 #' in the equivalent of the standard t test    
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example results <- b_corr_t_test(df= test_benchmark_small, problemset = 'problem_a', learner_a = 'algo_1', learner_b = 'algo_2')
+#' @example 
+#' results <- b_corr_t_test(df= test_benchmark_small, problemset = 'problem_a', 
+#'                          learner_a = 'algo_1', learner_b = 'algo_2')
 #' @export
-b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, parameter_algorithm = NULL, rho = 0.1, 
-    rope = c(-0.01, 0.01)) {
-    requireNamespace("scmamp", quietly = TRUE)
+b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
+                          parameter_algorithm = NULL, rho = 0.1, 
+                          rope = c(-0.01, 0.01)) {
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, measure = NULL, parameter_algorithm = NULL))
+    checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, 
+                                       measure = NULL, 
+                                       parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
@@ -35,11 +39,15 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
     if (!is.null(parameter_algorithm)) {
         learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
         learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
-        df[["algorithm"]] <- paste_algo_pars(algorithm = df[["algorithm"]], parameter_algorithm = df[["parameter_algorithm"]])
+        df[["algorithm"]] <- 
+          paste_algo_pars(algorithm = df[["algorithm"]], 
+                          parameter_algorithm = df[["parameter_algorithm"]])
     }
     # define samples
-    x <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_a, measure]
-    y <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_b, measure]
+    x <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == learner_a, measure]
+    y <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == learner_b, measure]
     # check numbers in sample
     checkmate::assert_true(get_replications_count(x, y))
     # Bayesian correlated t Test
@@ -48,11 +56,13 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
     result$measure <- measure
     result$method <- b_corr$method
     result$posteriror_probabilities <- b_corr$posterior.probabilities
-    # needed for plotting result$approximate <- b_corr$approximate result$posterior <- b_corr$posterior result$additional
-    # <- b_corr$additional result$parameters <- b_corr$parameters
+    # needed for plotting 
+    # result$approximate <- b_corr$approximate 
+    # result$posterior <- b_corr$posterior 
+    # result$additional <- b_corr$additional 
+    # result$parameters <- b_corr$parameters
     return(result)
 }
-
 
 #' @title Bayesian Sign test 
 #' @description 
@@ -81,21 +91,25 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
-#' @example results <- b_sign_test(df= test_benchmark_small, problemset = 'problem_a', learner_a = 'algo_1', learner_b = 'algo_2')
+#' @example 
+#' results <- b_sign_test(df= test_benchmark_small, problemset = 'problem_a', 
+#'                        learner_a = 'algo_1', learner_b = 'algo_2')
 #' @export
-b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, parameter_algorithm = NULL, s = 1, z_0 = 0, 
-    weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
+b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
+                        parameter_algorithm = NULL, s = 1, z_0 = 0, 
+                        weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05, 
+                        rope = c(-0.01, 0.01)) {
     if (rope[2] < rope[1]) {
-        warning("The rope paremeter has to contain the ordered limits of the rope
-            (min, max), but the values are not orderd. They will be swapped to
-            follow with the procedure")
-        
+        warning("The rope paremeter has to contain the ordered limits of the 
+                  rope (min, max), but the values are not orderd. They will be 
+                  swapped to follow with the procedure")
         rope <- sort(rope)
     }
     rope.min <- rope[1]
     rope.max <- rope[2]
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, measure = NULL, parameter_algorithm = NULL))
+    checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, 
+                                       measure = NULL, parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
@@ -103,22 +117,28 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, pa
     if (!is.null(parameter_algorithm)) {
         learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
         learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
-        df[["algorithm"]] <- paste_algo_pars(algorithm = df[["algorithm"]], parameter_algorithm = df[["parameter_algorithm"]])
+        df[["algorithm"]] <- 
+          paste_algo_pars(algorithm = df[["algorithm"]], 
+                          parameter_algorithm = df[["parameter_algorithm"]])
     }
     # define samples when testing on multiple datasets
     if (is.null(problemset)) {
         data_wide <- spread(df, algorithm, measure)
-        sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], by = list(data_wide[["problem"]]), FUN = mean)
+        sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], 
+                              by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, learner_a]
         y <- sum_data[, learner_b]
     } else {
         # define samples when testing on a single dataset
-        x <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_a, measure]
-        y <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_b, measure]
+        x <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == learner_a, measure]
+        y <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == learner_b, measure]
     }
     n.samples <- mc_samples
     # Bayesian Sign Test
-    b_sign <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max, weights, n.samples)
+    b_sign <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max, 
+                                        weights, n.samples)
     result <- list()
     result$measure <- measure
     result$method <- b_sign$method
@@ -155,10 +175,14 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, pa
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
-#' @example results <- b_signed_rank_test(df= test_benchmark_small, learner_a = 'algo_1', learner_b = 'algo_2')
+#' @example 
+#' results <- b_signed_rank_test(df= test_benchmark_small, learner_a = 'algo_1', 
+#'                               learner_b = 'algo_2')
 #' @export
-b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b, measure = NULL, parameter_algorithm = NULL, 
-    s = 0.5, z_0 = 0, weights = NULL, mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
+b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b, 
+                               measure = NULL, parameter_algorithm = NULL, 
+                               s = 0.5, z_0 = 0, weights = NULL, 
+                               mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
     if (rope[2] < rope[1]) {
         warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -168,7 +192,9 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b, meas
     rope.min <- rope[1]
     rope.max <- rope[2]
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset = NULL, learner_a, learner_b, measure = NULL, parameter_algorithm = NULL))
+    checkmate::assert_true(check_names(df, problemset = NULL, learner_a, 
+                                       learner_b, measure = NULL, 
+                                       parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
@@ -176,22 +202,29 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b, meas
     if (!is.null(parameter_algorithm)) {
         learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
         learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
-        df[["algorithm"]] <- paste_algo_pars(algorithm = df[["algorithm"]], parameter_algorithm = df[["parameter_algorithm"]])
+        df[["algorithm"]] <- 
+          paste_algo_pars(algorithm = df[["algorithm"]], 
+                          parameter_algorithm = df[["parameter_algorithm"]])
     }
     # define samples when testing on multiple datasets
     if (is.null(problemset)) {
         data_wide <- spread(df, algorithm, measure)
-        sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], by = list(data_wide[["problem"]]), FUN = mean)
+        sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], 
+                              by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, learner_a]
         y <- sum_data[, learner_b]
     } else {
         # define samples when testing on a single dataset
-        x <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_a, measure]
-        y <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_b, measure]
+        x <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == learner_a, measure]
+        y <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == learner_b, measure]
     }
     mc.samples <- mc_samples
     # Bayesian signed rank test
-    b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, rope.min, rope.max, weights, mc.samples)
+    b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, 
+                                                     rope.min, rope.max, 
+                                                     weights, mc.samples)
     result <- list()
     result$measure <- measure
     result$method <- b_signed_rank$method
