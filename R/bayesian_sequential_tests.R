@@ -77,14 +77,13 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL,
       result[k, "rope"] <- b_test$posterior.probabilities[2]
       result[k, "right"] <- b_test$posterior.probabilities[3]
       result[k, "repls"] <- i
+      if (is.null(compare)) {compare <- "better"}
       if (compare == "better") { 
         threshold <- b_test$posterior.probabilities[3]
       } else if (compare == "equal") {
         threshold <- b_test$posterior.probabilities[2] + 
           b_test$posterior.probabilities[3]
-      } else {
-        threshold <- b_test$posterior.probabilities[3]
-      }
+      } 
       if (threshold > 0.95) {
         result[k, "significance_appears"] <- TRUE
       } else {
@@ -92,6 +91,17 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL,
       }
       liste <-  rownames(result[result[["significance_appears"]] == TRUE, ])
     }
+    if (!is.null(learner_b)) {
+      if (threshold > 0.95) {
+        break 
+      }
+    }
   }
   return(result)
 }
+
+
+results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_a', 
+                             baseline = 'algo_1', max_repls = 10, rho=0.1, compare = "equal",
+                             rope=c(-0.01, 0.01)) 
+results
