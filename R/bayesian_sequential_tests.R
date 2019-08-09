@@ -135,6 +135,9 @@ seq_b_sign_test <- function(problemset = NULL, baseline, learner_b = NULL,
     }
     algorithms <- setdiff(algorithms, liste)
     for (k in algorithms[algorithms != baseline]) {
+      if (!is.null(learner_b)) {
+        k <- learner_b
+      }
       # define samples when testing on multiple datasets
       if (is.null(problemset)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
@@ -175,22 +178,24 @@ seq_b_sign_test <- function(problemset = NULL, baseline, learner_b = NULL,
       }
       liste <-  rownames(result[result[["significance_appears"]] == TRUE, ])
     }
+    if (!is.null(learner_b)) {
+      if (threshold > 0.95) {
+        break 
+      }
+    }
   }
   return(result)
 }
 
 
 
+
 #------------------------------------------------------------------------------#
-#---------------------------- Bayesian Signed Test ----------------------------# 
-
-#+#+#+#+#+#+#+#+#+#+#+ klappt aber noch nicht --> dumme Fehlermeldung
-
-
+#-------------------------- Bayesian Signed Rank Test -------------------------# 
 
 
 seq_b_signed_rank_test <- function(problemset = NULL, baseline, learner_b = NULL, 
-                                   measure = NULL, compare = NULL, s = 1, z_0 = 0,
+                                   measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
                                    weights = NULL, mc_samples = 1e+05, 
                                    rope = c(-0.01, 0.01), max_repls = 20, ...) {
   if (rope[2] < rope[1]) {
@@ -219,6 +224,9 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline, learner_b = NULL
     }
     algorithms <- setdiff(algorithms, liste)
     for (k in algorithms[algorithms != baseline]) {
+      if (!is.null(learner_b)) {
+        k <- learner_b
+      }
       # define samples when testing on multiple datasets
       if (is.null(problemset)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
@@ -256,6 +264,11 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline, learner_b = NULL
         result[k, "significance_appears"] <- FALSE
       }
       liste <-  rownames(result[result[["significance_appears"]] == TRUE, ])
+    }
+    if (!is.null(learner_b)) {
+      if (threshold > 0.95) {
+        break 
+      }
     }
   }
   return(result)

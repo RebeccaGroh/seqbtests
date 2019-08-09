@@ -234,6 +234,7 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b,
 }
 
 
+
 #' @title Bayesian hierarchical correlated t-test
 #' @description 
 #' This function implements a Bayesian hierarchical test.
