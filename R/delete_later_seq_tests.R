@@ -1,3 +1,6 @@
+#------------------------------------------------------------------------------#
+#------------------------ test all against each other -------------------------#
+
 ## alle Algorithmen sollen gegeneinader getestet werden: 
 # dafür muss keine Baseline und kein learner gewählt werden, sondern es werden 
 # alle einfach so verwendet 
