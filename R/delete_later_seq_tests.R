@@ -72,8 +72,8 @@ seq_b_corr_t_test <- function(problemset, baseline = NULL, learner_b = NULL,
   return(result)
 }
 
-results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_a', 
-                             max_repls = 10, rho=0.1, 
-                             rope=c(-0.01, 0.01)) 
-results
+#results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_a', 
+#                             max_repls = 10, rho=0.1, 
+#                             rope=c(-0.01, 0.01)) 
+#results
 

@@ -123,7 +123,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     }
     # define samples when testing on multiple datasets
     if (is.null(problemset)) {
-        data_wide <- spread(df, algorithm, measure)
+        data_wide <- tidyr::spread(df, algorithm, measure)
         sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, learner_a]
@@ -208,7 +208,7 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b,
     }
     # define samples when testing on multiple datasets
     if (is.null(problemset)) {
-        data_wide <- spread(df, algorithm, measure)
+        data_wide <- tidyr::spread(df, algorithm, measure)
         sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, learner_a]
@@ -232,7 +232,8 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b,
     return(result)
 }
 
-
+results <- b_signed_rank_test(df= test_benchmark_small, learner_a = 'algo_1', 
+                              learner_b = 'algo_2')
 
 #' @title Bayesian hierarchical correlated t-test
 #' @description 
@@ -241,30 +242,52 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b,
 #' @param learner_a First algorithm.
 #' @param learner_b Second algorithm. 
 #' @param measure Measure column. 
-#' @param parameter_algorithm Specifies parameters concerning the corresponding algorithm. 
+#' @param parameter_algorithm Specifies parameters concerning the corresponding 
+#' algorithm. 
 #' @param rho Correlation factor. 
-#' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0 (see Benavoli \emph{et al.} 2017 for more details)
-#' @param d0.lower Lower bound for the prior for mu_0. If not provided, the smallest observed difference is used
-#' @param d0.upper Upper bound for the prior for mu_0. If not provided, the biggest observed difference is used
-#' @param alpha.lower Lower bound for the (uniform) prior for the alpha hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.5, as in the original paper
-#' @param alpha.upper Upper bound for the (uniform) prior for the alpha hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 5, as in the original paper
-#' @param beta.lower Lower bound for the (uniform) prior for the beta hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.05, as in the original paper
-#' @param beta.lower Upper bound for the (uniform) prior for the beta hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.15, as in the original paper
-#' @param z0 Position of the pseudo-observation associated to the prior Dirichlet Process. The default value is set to 0 (inside the rope)
+#' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0 
+#' (see Benavoli \emph{et al.} 2017 for more details)
+#' @param d0.lower Lower bound for the prior for mu_0. If not provided, 
+#' the smallest observed difference is used
+#' @param d0.upper Upper bound for the prior for mu_0. If not provided, 
+#' the biggest observed difference is used
+#' @param alpha.lower Lower bound for the (uniform) prior for the alpha 
+#' hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
+#' Default value set at 0.5, as in the original paper
+#' @param alpha.upper Upper bound for the (uniform) prior for the alpha 
+#' hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
+#' Default value set at 5, as in the original paper
+#' @param beta.lower Lower bound for the (uniform) prior for the beta 
+#' hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
+#' Default value set at 0.05, as in the original paper
+#' @param beta.lower Upper bound for the (uniform) prior for the beta 
+#' hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
+#' Default value set at 0.15, as in the original paper
+#' @param z0 Position of the pseudo-observation associated to the prior 
+#' Dirichlet Process. The default value is set to 0 (inside the rope)
 #' @param rope Interval for the difference considered as 'irrelevant'
-#' @param nsim Number of samples (per chain) used to estimate the posterior distribution. Note that, by default, half the simulations are used for the burn-in
-#' @param nchain Number of MC chains to be simulated. As half the simulations are used for the warm-up, the total number of simulations will be \code{nchain}*\code{nsim}/2
+#' @param nsim Number of samples (per chain) used to estimate the posterior 
+#' distribution. Note that, by default, half the simulations are used for the burn-in
+#' @param nchain Number of MC chains to be simulated. As half the simulations 
+#' are used for the warm-up, the total number of simulations will 
+#' be \code{nchain}*\code{nsim}/2
 #' @param parallel Logical value. If \code{true}, Stan code is executed in parallel
-#' @param stan.output.file String containing the base name for the output files produced by Stan. If \code{NULL}, no files are stored.
+#' @param stan.output.file String containing the base name for the output files 
+#' produced by Stan. If \code{NULL}, no files are stored.
 #' @param seed Optional parameter used to fix the random seed
 #' @param ... Additional arguments for the rstan::stan function that runs the analysis 
 #' @return A list with the following elements: 
 #' \item{\code{method}}{a string with the name of the method used}
 #' \item{\code{parameters}}{parameters used by the method}
 #' \item{\code{posterior.probabilities}}{a vector with the left, rope and right probabilities}
-#' \item{\code{approximated}}{a logical value, \code{TRUE} if the posterior distribution is approximated (sampled) and \code{FALSE} if it is exact}
+#' \item{\code{approximated}}{a logical value, \code{TRUE} if the posterior 
+#' distribution is approximated (sampled) and \code{FALSE} if it is exact}
 #' \item{\code{posterior}}{Sampled probabilities (see details)}
-#' \item{\code{additional}}{Additional information provided by the model. This includes:\code{per.dataset}, the results per dataset (left, rope and right probabilities together with the expected mean value); \code{global.sin} sampled probabilities of mu_0 being positive or negative and \code{stan.results}, the complete set of results produced by Stan program}
+#' \item{\code{additional}}{Additional information provided by the model. 
+#' This includes:\code{per.dataset}, the results per dataset (left, rope and 
+#' right probabilities together with the expected mean value); \code{global.sin} 
+#' sampled probabilities of mu_0 being positive or negative and \code{stan.results}, 
+#' the complete set of results produced by Stan program}
 #' @details 
 #' The results includes the typical information relative to the three areas of 
 #' the posterior density (left, right and rope probabilities), both global and
@@ -274,22 +297,34 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b,
 #' Benavoli \emph{et al.} 2017, except for the bound for the prior distribution 
 #' of mu_0, which are set to the maximum and minimum values observed in the 
 #' sample. You should not modify them unless you know what you are doing.
-#' @example results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', learner_b = 'algo_2', rho=0.1, rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
+#' @example 
+#' results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
+#'                                learner_b = 'algo_2', rho=0.1, rope=c(-0.01, 0.01), 
+#'                                nsim=2000,  nchains=5)
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
-b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL, parameter_algorithm = NULL, rho = 0.1, std.upper = 1000, 
-    d0.lower = NULL, d0.upper = NULL, alpha.lower = 0.5, alpha.upper = 5, beta.lower = 0.05, beta.upper = 0.15, rope = c(-0.01, 
-        0.01), nsim = 2000, nchains = 8, parallel = TRUE, stan.output.file = NULL, seed = as.numeric(Sys.time()), ...) {
-    requireNamespace("scmamp", quietly = TRUE)
+b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL, 
+                                parameter_algorithm = NULL, rho = 0.1, 
+                                std.upper = 1000, d0.lower = NULL, 
+                                d0.upper = NULL, alpha.lower = 0.5, 
+                                alpha.upper = 5, beta.lower = 0.05, 
+                                beta.upper = 0.15, rope = c(-0.01, 0.01), 
+                                nsim = 2000, nchains = 8, parallel = TRUE, 
+                                stan.output.file = NULL, 
+                                seed = as.numeric(Sys.time()), ...) {
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset = NULL, learner_a, learner_b, measure = NULL, parameter_algorithm = NULL))
+    checkmate::assert_true(check_names(df, problemset = NULL, learner_a, 
+                                       learner_b, measure = NULL, 
+                                       parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
     if (!is.null(parameter_algorithm)) {
         learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
         learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
-        df[["algorithm"]] <- paste_algo_pars(algorithm = df[["algorithm"]], parameter_algorithm = df[["parameter_algorithm"]])
+        df[["algorithm"]] <- 
+          paste_algo_pars(algorithm = df[["algorithm"]], 
+                          parameter_algorithm = df[["parameter_algorithm"]])
     }
     # define samples
     x.matrix <- data_transformation(df, algo = learner_a, measure)
@@ -297,11 +332,18 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL, parame
     # check numbers in sample
     checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
     # Bayesian correlated t Test
-    b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, std.upper, d0.lower, d0.upper, alpha.lower, 
-        alpha.upper, beta.lower, beta.upper, rope, nsim, nchains, parallel, stan.output.file, seed)
+    b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, rope,  
+                                                std.upper, d0.lower, d0.upper, 
+                                                alpha.lower, alpha.upper, 
+                                                beta.lower, beta.upper, nsim, 
+                                                nchains, parallel, 
+                                                stan.output.file, seed)
     result <- list()
     result$measure <- measure
     result$method <- b_hierarchical$method
     result$posteriror_probabilities <- b_hierarchical$posterior.probabilities
     return(result)
 }
+results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
+                               learner_b = 'algo_2', rho=0.1, rope=c(-0.01, 0.01), 
+                               nsim=2000,  nchains=5)

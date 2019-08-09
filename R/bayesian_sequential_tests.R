@@ -99,11 +99,9 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL,
   }
   return(result)
 }
-
-
 #results <- seq_b_corr_t_test(df = test_benchmark_small, problemset = 'problem_a', 
-#                             baseline = 'algo_1', max_repls = 10, rho=0.1, compare = "equal",
-#                             rope=c(-0.01, 0.01)) 
+#                             baseline = 'algo_1', max_repls = 10, rho=0.1, compare = "better",
+#                             rope=c(-0.01, 0.01), learner_b = "algo_2") 
 #results
 #------------------------------------------------------------------------------#
 #----------------------------- Bayesian Sign Test -----------------------------# 
@@ -142,17 +140,17 @@ seq_b_sign_test <- function(problemset, baseline, learner_b = NULL,
     for (k in algorithms[algorithms != baseline]) {
       # define samples when testing on multiple datasets
       if (is.null(problemset)) {
-        data_wide <- spread(df, algorithm, measure)
+        data_wide <- spread(data, algorithm, measure)
         sum_data <- aggregate(data_wide[, c(baseline, k)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, baseline]
         y <- sum_data[, k]
       } else {
         # define samples when testing on a single dataset
-        x <- df[df[["problem"]] == problemset 
-                & df[["algorithm"]] == baseline, measure]
-        y <- df[df[["problem"]] == problemset 
-                & df[["algorithm"]] == k, measure]
+        x <- data[data[["problem"]] == problemset 
+                & data[["algorithm"]] == baseline, measure]
+        y <- data[data[["problem"]] == problemset 
+                & data[["algorithm"]] == k, measure]
       }
       n.samples <- mc_samples
       # Bayesian Sign Test
@@ -183,6 +181,11 @@ seq_b_sign_test <- function(problemset, baseline, learner_b = NULL,
   }
   return(result)
 }
+#results <- seq_b_sign_test(df = test_benchmark_small, problemset = 'problem_a', 
+#                                  baseline = 'algo_1', max_repls = 10, 
+#                                  compare = "better", rope=c(-0.01, 0.01)) 
+#results
+
 
 #------------------------------------------------------------------------------#
 #---------------------------- Bayesian Signed Test ----------------------------# 
@@ -224,23 +227,21 @@ seq_b_signed_rank_test <- function(problemset, baseline, learner_b = NULL,
     for (k in algorithms[algorithms != baseline]) {
       # define samples when testing on multiple datasets
       if (is.null(problemset)) {
-        data_wide <- spread(df, algorithm, measure)
+        data_wide <- spread(data, algorithm, measure)
         sum_data <- aggregate(data_wide[, c(baseline, k)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, baseline]
         y <- sum_data[, k]
       } else {
         # define samples when testing on a single dataset
-        x <- df[df[["problem"]] == problemset 
-                & df[["algorithm"]] == baseline, measure]
-        y <- df[df[["problem"]] == problemset 
-                & df[["algorithm"]] == k, measure]
+        x <- data[data[["problem"]] == problemset 
+                & data[["algorithm"]] == baseline, measure]
+        y <- data[data[["problem"]] == problemset 
+                & data[["algorithm"]] == k, measure]
       }
       mc.samples <- mc_samples
       # Bayesian Sign Test
-      b_sign <- rNPBST::bayesianSignedRank.test(x, y, s, z_0,  mc.samples,
-                                                rope.min, rope.max, weights)
-      
+      b_sign <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, rope.min, rope.max, weights, mc.samples)
       result[k, "baseline"] <- baseline
       result[k, "method"] <- b_sign$method
       result[k, "measure"] <- measure
@@ -269,7 +270,15 @@ seq_b_signed_rank_test <- function(problemset, baseline, learner_b = NULL,
 
 #results <- seq_b_signed_rank_test(df = test_benchmark_small, problemset = 'problem_a', 
 #                                  baseline = 'algo_1', max_repls = 10, 
-#                                  compare = "equal",
-#                                  rope=c(-0.01, 0.01)) 
+#                                  compare = "equal", rope = c(-0.01, 0.01)) 
 #results
 
+#------------------------------------------------------------------------------#
+#------------------ Bayesian hierarchical correlated t-test -------------------# 
+
+
+
+#results <- seq_b_hierarchical_test(df = test_benchmark_small, 
+#                                   baseline = 'algo_1', max_repls = 10, rho=0.1, compare = "better",
+#                                   rope=c(-0.01, 0.01)) 
+#results

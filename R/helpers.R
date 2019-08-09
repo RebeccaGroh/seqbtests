@@ -106,7 +106,7 @@ paste_algo_pars <- function(algorithm, parameter_algorithm) {
 #' @return Matrix. 
 data_transformation <- function(df, algo, measure) {
     keep_algo <- subset(df, df[["algorithm"]] == algo)
-    data_wide <- spread(keep_algo, replications, measure)
+    data_wide <- tidyr::spread(keep_algo, replications, measure)
     # columns need to be dropped
     drop_cols <- setdiff(colnames(data_wide), unique(df[["replications"]]))
     # columns to keep
