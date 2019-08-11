@@ -4,8 +4,8 @@
 \alias{seq_b_corr_t_test}
 \title{Sequential bayesian correlated t test}
 \usage{
-seq_b_corr_t_test(problemset, baseline, learner_b = NULL,
-  measure = NULL, test = NULL, rho = 0.1, rope = c(-0.01, 0.01),
+seq_b_corr_t_test(problemset, baseline = NULL, learner_b = NULL,
+  measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01),
   max_repls = 20, ...)
 }
 \arguments{
@@ -18,8 +18,9 @@ tested against baseline.}
 
 \item{measure}{Measure column.}
 
-\item{test}{Defines whether the performances should be tested for either 
-being better ('better') or being just as good ('equal').}
+\item{compare}{Defines whether the performances should be tested for either 
+being better ('better') or being just as good ('equal'). If not defined, the 
+default is to test for 'better'.}
 
 \item{rho}{Correlation factor.}
 

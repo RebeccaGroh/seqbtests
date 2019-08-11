@@ -20,48 +20,70 @@ b_hierarchical_test(df, learner_a, learner_b, measure = NULL,
 
 \item{measure}{Measure column.}
 
-\item{parameter_algorithm}{Specifies parameters concerning the corresponding algorithm.}
+\item{parameter_algorithm}{Specifies parameters concerning the corresponding 
+algorithm.}
 
 \item{rho}{Correlation factor.}
 
-\item{std.upper}{Factor to set the upper bound for both sigma_i and sigma_0 (see Benavoli \emph{et al.} 2017 for more details)}
+\item{std.upper}{Factor to set the upper bound for both sigma_i and sigma_0 
+(see Benavoli \emph{et al.} 2017 for more details)}
 
-\item{d0.lower}{Lower bound for the prior for mu_0. If not provided, the smallest observed difference is used}
+\item{d0.lower}{Lower bound for the prior for mu_0. If not provided, 
+the smallest observed difference is used}
 
-\item{d0.upper}{Upper bound for the prior for mu_0. If not provided, the biggest observed difference is used}
+\item{d0.upper}{Upper bound for the prior for mu_0. If not provided, 
+the biggest observed difference is used}
 
-\item{alpha.lower}{Lower bound for the (uniform) prior for the alpha hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.5, as in the original paper}
+\item{alpha.lower}{Lower bound for the (uniform) prior for the alpha 
+hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
+Default value set at 0.5, as in the original paper}
 
-\item{alpha.upper}{Upper bound for the (uniform) prior for the alpha hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 5, as in the original paper}
+\item{alpha.upper}{Upper bound for the (uniform) prior for the alpha 
+hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
+Default value set at 5, as in the original paper}
 
-\item{beta.lower}{Lower bound for the (uniform) prior for the beta hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.05, as in the original paper}
+\item{beta.lower}{Lower bound for the (uniform) prior for the beta 
+hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
+Default value set at 0.05, as in the original paper}
 
 \item{rope}{Interval for the difference considered as 'irrelevant'}
 
-\item{nsim}{Number of samples (per chain) used to estimate the posterior distribution. Note that, by default, half the simulations are used for the burn-in}
+\item{nsim}{Number of samples (per chain) used to estimate the posterior 
+distribution. Note that, by default, half the simulations are used for the burn-in}
 
 \item{parallel}{Logical value. If \code{true}, Stan code is executed in parallel}
 
-\item{stan.output.file}{String containing the base name for the output files produced by Stan. If \code{NULL}, no files are stored.}
+\item{stan.output.file}{String containing the base name for the output files 
+produced by Stan. If \code{NULL}, no files are stored.}
 
 \item{seed}{Optional parameter used to fix the random seed}
 
 \item{...}{Additional arguments for the rstan::stan function that runs the analysis}
 
-\item{beta.lower}{Upper bound for the (uniform) prior for the beta hyperparameter (see Benavoli \emph{et al.} 2017 for more details). Default value set at 0.15, as in the original paper}
+\item{beta.lower}{Upper bound for the (uniform) prior for the beta 
+hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
+Default value set at 0.15, as in the original paper}
 
-\item{z0}{Position of the pseudo-observation associated to the prior Dirichlet Process. The default value is set to 0 (inside the rope)}
+\item{z0}{Position of the pseudo-observation associated to the prior 
+Dirichlet Process. The default value is set to 0 (inside the rope)}
 
-\item{nchain}{Number of MC chains to be simulated. As half the simulations are used for the warm-up, the total number of simulations will be \code{nchain}*\code{nsim}/2}
+\item{nchain}{Number of MC chains to be simulated. As half the simulations 
+are used for the warm-up, the total number of simulations will 
+be \code{nchain}*\code{nsim}/2}
 }
 \value{
 A list with the following elements: 
 \item{\code{method}}{a string with the name of the method used}
 \item{\code{parameters}}{parameters used by the method}
 \item{\code{posterior.probabilities}}{a vector with the left, rope and right probabilities}
-\item{\code{approximated}}{a logical value, \code{TRUE} if the posterior distribution is approximated (sampled) and \code{FALSE} if it is exact}
+\item{\code{approximated}}{a logical value, \code{TRUE} if the posterior 
+distribution is approximated (sampled) and \code{FALSE} if it is exact}
 \item{\code{posterior}}{Sampled probabilities (see details)}
-\item{\code{additional}}{Additional information provided by the model. This includes:\code{per.dataset}, the results per dataset (left, rope and right probabilities together with the expected mean value); \code{global.sin} sampled probabilities of mu_0 being positive or negative and \code{stan.results}, the complete set of results produced by Stan program}
+\item{\code{additional}}{Additional information provided by the model. 
+This includes:\code{per.dataset}, the results per dataset (left, rope and 
+right probabilities together with the expected mean value); \code{global.sin} 
+sampled probabilities of mu_0 being positive or negative and \code{stan.results}, 
+the complete set of results produced by Stan program}
 }
 \description{
 This function implements a Bayesian hierarchical test.
