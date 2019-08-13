@@ -115,3 +115,17 @@ data_transformation <- function(df, algo, measure) {
     subset_df <- data_wide[, names.use]
     return(subset_df)
 }
+
+
+
+#------------------------------------------------------------------------------#
+
+# Ausgabe der Ergebnisse 
+
+mean <- function (x, ...) {
+    UseMethod("mean", x)
+}
+
+htest2Tex <- function(test){
+    UseMethod("htest2Tex")
+}
