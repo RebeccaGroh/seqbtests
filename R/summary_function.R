@@ -25,6 +25,9 @@ data_summary <- function(df) {
 #' @return List of Cases, NAs and the NA ratio according to the check_var values. 
 #' @export 
 na_check <- function(df, measure, check_var) {
+  if (!requireNamespace("dplyr", quietly=TRUE)) {
+    stop("This function requires the dplyr package. Please install it.", call.=FALSE)
+  }
     if (any(is.na(df))) {
         # incomplete columns
         for (x in get_main_columns(df)) {

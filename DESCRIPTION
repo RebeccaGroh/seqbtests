@@ -11,23 +11,23 @@ Encoding: UTF-8
 LazyData: yes
 Imports: 
     checkmate,
-    dplyr,
     devtools,
     ggplot2,
     graph, 
     metRology,
-    rstan,
-    scmamp,
-    tidyr, 
     remotes,
     Rgraphviz,
-    rNPBST
+    rNPBST,
+    rstan,
+    scmamp,
+    tidyr
 Suggests: 
     testthat (>= 2.1.0),
     devtools,
-    roxygen2,
+    dplyr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    roxygen2
 RoxygenNote: 6.1.1
 Remotes: 
     JacintoCC/rNPBST, 
