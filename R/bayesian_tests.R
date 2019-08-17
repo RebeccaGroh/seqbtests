@@ -147,10 +147,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     #result$sample <- b_sign$sample
     return(result)
 }
-results <- b_sign_test(df= test_benchmark_small, 
-                       problemset = 'problem_a', 
-                       learner_a = 'algo_1', learner_b = 'algo_2')
-results
+
 
 
 #' @title Bayesian Signed Rank test 

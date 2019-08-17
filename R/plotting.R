@@ -8,18 +8,15 @@
 
 
 
-posterior_triangels <- function(results, num_points = nrow(results$sample),...) {
-  x <- results
-  num.points <- num_points 
-  # plot.PosteriorDirichlet from rNPBST
-  rNPBST::plot.PosteriorDirichlet(x, num.points,....)
-}
+#posterior_triangels <- function(results, num_points = nrow(results$sample),...) {
+#  x <- results
+#  num.points <- num_points 
+#  # plot.PosteriorDirichlet from rNPBST
+#  rNPBST::plot.PosteriorDirichlet(x, num.points,....)
+#}
 
 
-posterior_triangels(bst.results)
-
-
-
+#posterior_triangels(bst.results)
 
 
 
@@ -33,17 +30,20 @@ posterior_triangels(bst.results)
 
 
 
-bst.results <- rNPBST::bayesianSign.test(EBO, jSO,
-                                         rope.min = -10, rope.max = 10)
-plot(bst.results, num.points = 10000) +
-  ggplot2::labs(x = "jSO", z = "EBO")
 
-results <- b_sign_test(df= test_benchmark_small, 
-                      problemset = 'problem_a', 
-                      learner_a = 'algo_1', learner_b = 'algo_2')
-plot()
-plot(results, num.points = 10000) +
-  ggplot2::labs(x = "EBO", z = "jSO")
+
+
+#bst.results <- rNPBST::bayesianSign.test(EBO, jSO,
+#                                         rope.min = -10, rope.max = 10)
+#plot(bst.results, num.points = 10000) +
+#  ggplot2::labs(x = "jSO", z = "EBO")
+
+#results <- b_sign_test(df= test_benchmark_small, 
+#                      problemset = 'problem_a', 
+#                      learner_a = 'algo_1', learner_b = 'algo_2')
+#plot()
+#plot(results, num.points = 10000) +
+#  ggplot2::labs(x = "EBO", z = "jSO")
 
 
 # posterior Triangles 
@@ -130,10 +130,10 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
 }
 ## oder soll der Plot lieber direkt auf ein Ergebnis angewendet werden? 
 ## bzw. die Plots sollten halt einheitlich von der Eingabe gehalten werden 
-plot_cd(test_benchmark)
+#plot_cd(test_benchmark)
 
-EBO <- unlist(select(filter(cec17.final, Algorithm == "EBO", Dimension == 10), Result), use.names = F)
-jSO <- unlist(select(filter(cec17.final, Algorithm == "jSO", Dimension == 10), Result), use.names = F)
+#EBO <- unlist(select(filter(cec17.final, Algorithm == "EBO", Dimension == 10), Result), use.names = F)
+#jSO <- unlist(select(filter(cec17.final, Algorithm == "jSO", Dimension == 10), Result), use.names = F)
 
 
 
@@ -141,25 +141,25 @@ jSO <- unlist(select(filter(cec17.final, Algorithm == "jSO", Dimension == 10), R
 
 ## alle Plots von scmamp testen 
 
-algorithms <- names(data.kcv.example)[4:7]
-db <- 5
-plotDensities (data=data.kcv.example[data.kcv.example$DB==db, algorithms], size=1.1)
+#algorithms <- names(data.kcv.example)[4:7]
+#db <- 5
+#plotDensities (data=data.kcv.example[data.kcv.example$DB==db, algorithms], size=1.1)
 
 
-db <- 5
-sample.a <- data.kcv.example[data.kcv.example$DB==db, "AlgA"]
-sample.b <- data.kcv.example[data.kcv.example$DB==db, "AlgB"]
-results <- bCorrelatedTtest(x=sample.a, y=sample.b, rho=0.1, rope=c(-0.01, 0.01))
-results$posterior.probabilities
-plotPosterior(results, plot.rope=TRUE)
+#db <- 5
+#sample.a <- data.kcv.example[data.kcv.example$DB==db, "AlgA"]
+#sample.b <- data.kcv.example[data.kcv.example$DB==db, "AlgB"]
+#results <- bCorrelatedTtest(x=sample.a, y=sample.b, rho=0.1, rope=c(-0.01, 0.01))
+#results$posterior.probabilities
+#plotPosterior(results, plot.rope=TRUE)
 
 
-db <- 5
-summarized.data <- aggregate(data.kcv.example[, algorithms], 
-                             by=data.kcv.example[, 1:2], FUN=mean)
-sample.a <- summarized.data[summarized.data$DB==db, "AlgC"]
-sample.b <- summarized.data[summarized.data$DB==db, "AlgD"]
+#db <- 5
+#summarized.data <- aggregate(data.kcv.example[, algorithms], 
+#                             by=data.kcv.example[, 1:2], FUN=mean)
+#sample.a <- summarized.data[summarized.data$DB==db, "AlgC"]
+#sample.b <- summarized.data[summarized.data$DB==db, "AlgD"]
 
-results <- bSignedRankTest(x=sample.a, y=sample.b,rope=c(-0.01, 0.01))
-results$posterior.probabilities
-plotSimplex(results, A="Algorithm C", B="Algorithm D")
+#results <- bSignedRankTest(x=sample.a, y=sample.b,rope=c(-0.01, 0.01))
+#results$posterior.probabilities
+#plotSimplex(results, A="Algorithm C", B="Algorithm D")
