@@ -65,7 +65,6 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     return(result)
 }
 
-
 #' @title Bayesian Sign test 
 #' @description 
 #' This function implements the Bayesian version of the sign test. 
@@ -351,4 +350,4 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
 
 #results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
 #                               learner_b = 'algo_2', rho=0.1, 
-#                               rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
+#                                nsim=2000,  nchains=5)
