@@ -19,14 +19,14 @@
 #posterior_triangels(bst.results)
 
 
+## die Dreiecke
+plot_triangles <- function(result, points = 10000){
+  class(result) <- "PosteriorDirichlet"
+  num.points <- points
+  plot(result)
+}
 
-
-
-
-
-
-
-
+#plot_triangles(results, points = 100000000)
 
 
 
@@ -99,6 +99,12 @@ plot_posteriror <- function(results, parameter = 1, num.points = 1000, plot.rope
         ...)
 }
 
+#plot_posteriror(results)
+
+#results <- b_corr_t_test(df= test_benchmark_small, 
+#                         problemset = 'problem_a', 
+#                         learner_a = 'algo_1', learner_b = 'algo_2')
+#results
 
 
 #' @title Critical differences plot 

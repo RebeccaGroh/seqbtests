@@ -57,10 +57,10 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     result$method <- b_corr$method
     result$posteriror_probabilities <- b_corr$posterior.probabilities
     # needed for plotting 
-    # result$approximate <- b_corr$approximate 
-    # result$posterior <- b_corr$posterior 
-    # result$additional <- b_corr$additional 
-    # result$parameters <- b_corr$parameters
+    result$approximate <- b_corr$approximate 
+    result$posterior <- b_corr$posterior 
+    result$additional <- b_corr$additional 
+    result$parameters <- b_corr$parameters
     return(result)
 }
 
@@ -144,7 +144,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     result$measure <- measure
     result$method <- b_sign$method
     result$posteriror_probabilities <- b_sign$probabilities
-    #result$sample <- b_sign$sample
+    result$sample <- b_sign$sample
     return(result)
 }
 
