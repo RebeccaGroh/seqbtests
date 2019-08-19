@@ -51,7 +51,7 @@ b_corr_t_test <- function(df, problemset, baseline, learner_b = NULL, measure = 
       threshold <- b_corr$posterior.probabilities[2] + 
         b_corr$posterior.probabilities[3]
     } 
-    if (threshold > 0.95 & i >=4) {
+    if (threshold > 0.95) {
       result[k, "significance_appears"] <- TRUE
     } else {
       result[k, "significance_appears"] <- FALSE

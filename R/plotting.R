@@ -1,53 +1,96 @@
 
 
 
+### plot posterior for bayesian correlated t test 
 
-
-
-
-
-
-
-#posterior_triangels <- function(results, num_points = nrow(results$sample),...) {
-#  x <- results
-#  num.points <- num_points 
-#  # plot.PosteriorDirichlet from rNPBST
-#  rNPBST::plot.PosteriorDirichlet(x, num.points,....)
-#}
-
-
-#posterior_triangels(bst.results)
-
-
-## die Dreiecke
-plot_triangles <- function(result, points = 10000){
-  class(result) <- "PosteriorDirichlet"
+plot_posterior <- function(df, problemset, learner_a, learner_b, measure = NULL, 
+                           parameter_algorithm = NULL, rho = 0.1, 
+                           rope = c(-0.01, 0.01), parameter=1, points=1000, 
+                           plot_rope=TRUE, plot_samples=TRUE, alpha=NULL) {
+  checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, 
+                                     measure = NULL, 
+                                     parameter_algorithm = NULL))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  }
+  # define samples
+  x <- df[df[["problem"]] == problemset 
+          & df[["algorithm"]] == learner_a, measure]
+  y <- df[df[["problem"]] == problemset 
+          & df[["algorithm"]] == learner_b, measure]
+  # check numbers in sample
+  checkmate::assert_true(get_replications_count(x, y))
+  # Bayesian correlated t Test
+  results <- scmamp::bCorrelatedTtest(x, y, rho, rope)
   num.points <- points
-  plot(result)
+  plot.rope <- plot_rope
+  plot.samples <- plot_samples
+  scmamp::plotPosterior(results)
 }
 
-#plot_triangles(results, points = 100000000)
+#plot_posterior(df= test_benchmark_small, problemset = 'problem_c', 
+#               learner_a = 'algo_1', learner_b = 'algo_2')
 
 
 
+#------------------------------------------------------------------------------#
+
+## plot posterior triangles for bayesian sign and signed rank test 
+# Triangles for Sign and Signed Rank test 
+plot_triangles <- function(df, method = "Sign", problemset = NULL, learner_a, learner_b, 
+                           measure = NULL, parameter_algorithm = NULL, 
+                           s = 0.5, z_0 = 0, weights = NULL, 
+                           mc_samples = 1e+05, rope = c(-0.01, 0.01), points = 10000) {
+  if (rope[2] < rope[1]) {
+    warning("The rope paremeter has to contain the ordered limits of the rope 
+            (min, max), but the values are not orderd. They will be swapped to
+            follow with the procedure")
+    rope <- sort(rope)
+  }
+  rope.min <- rope[1]
+  rope.max <- rope[2]
+  checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, problemset = NULL, learner_a, 
+                                     learner_b, measure = NULL, 
+                                     parameter_algorithm = NULL))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  }
+  # define samples when testing on multiple datasets
+  if (is.null(problemset)) {
+    data_wide <- tidyr::spread(df, algorithm, measure)
+    sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], 
+                          by = list(data_wide[["problem"]]), FUN = mean)
+    x <- sum_data[, learner_a]
+    y <- sum_data[, learner_b]
+  } else {
+    # define samples when testing on a single dataset
+    x <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == learner_a, measure]
+    y <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == learner_b, measure]
+  }
+  if (method == "sign" || is.null(method)) {
+    n.samples <- mc_samples
+    # Bayesian Sign Test
+    results <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max, 
+                                         weights, n.samples)
+  } else if (method == "signed_rank") {
+    mc.samples <- mc_samples
+    # Bayesian signed rank test
+    results <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, 
+                                               rope.min, rope.max, 
+                                               weights, mc.samples)
+  }
+  num.points <- points
+  plot(results)
+}
+
+#plot_triangles(df= test_benchmark_small, learner_a = 'algo_1', learner_b = 'algo_2')
 
 
 
-#bst.results <- rNPBST::bayesianSign.test(EBO, jSO,
-#                                         rope.min = -10, rope.max = 10)
-#plot(bst.results, num.points = 10000) +
-#  ggplot2::labs(x = "jSO", z = "EBO")
-
-#results <- b_sign_test(df= test_benchmark_small, 
-#                      problemset = 'problem_a', 
-#                      learner_a = 'algo_1', learner_b = 'algo_2')
-#plot()
-#plot(results, num.points = 10000) +
-#  ggplot2::labs(x = "EBO", z = "jSO")
-
-
-# posterior Triangles 
-# from rnpsbt 
 
 
 #------------------------------------------------------------------------------#
@@ -66,6 +109,8 @@ box_plot <- function(df, measure = NULL) {
     facet_wrap(. ~ problem)
 }
 #box_plot(df = test_benchmark_small)
+
+
 
 #' @title Posterior densities plot 
 #' @description This function plots, univariately, the posterior densities 
@@ -93,18 +138,6 @@ box_plot <- function(df, measure = NULL) {
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
-plot_posteriror <- function(results, parameter = 1, num.points = 1000, plot.rope = TRUE, plot.samples = TRUE, alpha = NULL, 
-    ...) {
-    scmamp::plotPosterior(results, parameter = 1, num.points = 1000, plot.rope = TRUE, plot.samples = TRUE, alpha = NULL, 
-        ...)
-}
-
-#plot_posteriror(results)
-
-#results <- b_corr_t_test(df= test_benchmark_small, 
-#                         problemset = 'problem_a', 
-#                         learner_a = 'algo_1', learner_b = 'algo_2')
-#results
 
 
 #' @title Critical differences plot 
@@ -134,38 +167,3 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
     # plot CD
     scmamp::plotCD(results.matrix, alpha, cex)
 }
-## oder soll der Plot lieber direkt auf ein Ergebnis angewendet werden? 
-## bzw. die Plots sollten halt einheitlich von der Eingabe gehalten werden 
-#plot_cd(test_benchmark)
-
-#EBO <- unlist(select(filter(cec17.final, Algorithm == "EBO", Dimension == 10), Result), use.names = F)
-#jSO <- unlist(select(filter(cec17.final, Algorithm == "jSO", Dimension == 10), Result), use.names = F)
-
-
-
-
-
-## alle Plots von scmamp testen 
-
-#algorithms <- names(data.kcv.example)[4:7]
-#db <- 5
-#plotDensities (data=data.kcv.example[data.kcv.example$DB==db, algorithms], size=1.1)
-
-
-#db <- 5
-#sample.a <- data.kcv.example[data.kcv.example$DB==db, "AlgA"]
-#sample.b <- data.kcv.example[data.kcv.example$DB==db, "AlgB"]
-#results <- bCorrelatedTtest(x=sample.a, y=sample.b, rho=0.1, rope=c(-0.01, 0.01))
-#results$posterior.probabilities
-#plotPosterior(results, plot.rope=TRUE)
-
-
-#db <- 5
-#summarized.data <- aggregate(data.kcv.example[, algorithms], 
-#                             by=data.kcv.example[, 1:2], FUN=mean)
-#sample.a <- summarized.data[summarized.data$DB==db, "AlgC"]
-#sample.b <- summarized.data[summarized.data$DB==db, "AlgD"]
-
-#results <- bSignedRankTest(x=sample.a, y=sample.b,rope=c(-0.01, 0.01))
-#results$posterior.probabilities
-#plotSimplex(results, A="Algorithm C", B="Algorithm D")

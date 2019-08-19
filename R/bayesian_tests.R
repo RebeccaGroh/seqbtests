@@ -57,10 +57,11 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     result$method <- b_corr$method
     result$posteriror_probabilities <- b_corr$posterior.probabilities
     # needed for plotting 
-    result$approximate <- b_corr$approximate 
-    result$posterior <- b_corr$posterior 
-    result$additional <- b_corr$additional 
-    result$parameters <- b_corr$parameters
+    #result$approximate <- b_corr$approximate 
+    #result$posterior <- b_corr$posterior 
+    #result$additional <- b_corr$additional 
+    #result$parameters <- b_corr$parameters
+    #df <- subset(result, select = -c(parameters))
     return(result)
 }
 
@@ -347,3 +348,7 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
     return(result)
 }
 
+
+#results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
+#                               learner_b = 'algo_2', rho=0.1, 
+#                               rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
