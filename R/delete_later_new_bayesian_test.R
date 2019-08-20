@@ -119,10 +119,10 @@ b_sign_test <- function(df, problemset, baseline, learner_b = NULL, measure = NU
 }
 
 
-results <- b_sign_test(df= test_benchmark_small, 
-                       problemset = 'problem_a', 
-                       baseline = 'algo_1', learner_b = 'algo_3')
-results
+#results <- b_sign_test(df= test_benchmark_small, 
+#                       problemset = 'problem_a', 
+#                       baseline = 'algo_1', learner_b = 'algo_3')
+#results
 
 
 #------------------------------------------------------------------------------#
@@ -196,10 +196,10 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, learner_b = NULL
   return(result)
 }
 
-results <- b_signed_rank_test(df= test_benchmark_small, 
-                       problemset = 'problem_a', 
-                       baseline = 'algo_1')
-results
+#results <- b_signed_rank_test(df= test_benchmark_small, 
+#                       problemset = 'problem_a', 
+#                       baseline = 'algo_1')
+#results
  
 #------------------------------------------------------------------------------#
 
@@ -262,7 +262,7 @@ b_hierarchical_test <- function(df, baseline, learner_b = NULL,  measure = NULL,
 }
 
 
-results <- b_hierarchical_test(df= test_benchmark_small, baseline = 'algo_1', 
-                               learner_b = 'algo_2', rho=0.1, rope = c(-0.1, 0.1), 
-                                nsim=2000,  nchains=5)
-results
+#results <- b_hierarchical_test(df= test_benchmark_small, baseline = 'algo_1', 
+#                               learner_b = 'algo_2', rho=0.1, rope = c(-0.1, 0.1), 
+#                                nsim=2000,  nchains=5)
+#results
