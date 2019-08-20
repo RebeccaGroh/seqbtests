@@ -233,8 +233,10 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b,
     result$posteriror_probabilities <- b_signed_rank$probabilities
     return(result)
 }
-
-
+results <- b_signed_rank_test(df= test_benchmark_small, problemset = 'problem_a', 
+                              learner_a = 'algo_1', 
+                              learner_b = 'algo_3')
+results
 
 #' @title Bayesian hierarchical correlated t-test
 #' @description 
@@ -310,7 +312,7 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
                                 std.upper = 1000, d0.lower = NULL, 
                                 d0.upper = NULL, alpha.lower = 0.5, 
                                 alpha.upper = 5, beta.lower = 0.05, 
-                                beta.upper = 0.15, rope = c(-0.01, 0.01), 
+                                beta.upper = 0.15, rope = c(-0.01, 0.01),
                                 nsim = 2000, nchains = 8, parallel = TRUE, 
                                 stan.output.file = NULL, 
                                 seed = as.numeric(Sys.time()), ...) {
@@ -334,12 +336,10 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
     # check numbers in sample
     checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
     # Bayesian correlated t Test
-    b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, rope,  
-                                                std.upper, d0.lower, d0.upper, 
-                                                alpha.lower, alpha.upper, 
-                                                beta.lower, beta.upper, nsim, 
-                                                nchains, parallel, 
-                                                stan.output.file, seed)
+    b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, std.upper, d0.lower, d0.upper, 
+                                                alpha.lower, alpha.upper, beta.lower, beta.upper, 
+                                                rope, nsim, nchains, parallel, stan.output.file,
+                                                seed)
     result <- list()
     result$measure <- measure
     result$method <- b_hierarchical$method
@@ -348,6 +348,7 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
 }
 
 
-#results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
-#                               learner_b = 'algo_2', rho=0.1, 
-#                                nsim=2000,  nchains=5)
+results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
+                               learner_b = 'algo_2', rho=0.1, 
+                                nsim=2000,  nchains=5)
+results
