@@ -1,10 +1,10 @@
 #' @title Sequential bayesian correlated t test 
 #' @description 
-#' This function implements a sequential approach to compare the performance of 
-#' machine learning algorithms to one another. Sample size is not fixed in 
-#' adavnce, data are evaluated as they are collected. Further sampling is 
-#' stopped in accordance with a pre-defined stopping rule as soon as significant 
-#' results are obtained.  
+#' This function implements a sequential approach of the bayesian correlated 
+#' t test to compare the performance of machine learning algorithms to one 
+#' another. Sample size is not fixed in advance, data are evaluated as they are 
+#' collected. Further sampling is stopped in accordance with a pre-defined 
+#' stopping rule as soon as significant results are obtained.  
 #' @param problemset Problemset on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param learner_b Second algorithm. If not defined, every algorithm will be 

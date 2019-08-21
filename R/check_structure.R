@@ -71,3 +71,45 @@ check_structure <- function(df) {
     return(TRUE)
 }
 
+
+### --> get new data frame  ( BEschreibung anpassen)
+#------------------------------------------------------------------------------#
+#' @title Paste algorithm and parameter
+#' @description 
+#' If there is a parameter additional to the algorithm, both can be combined, 
+#' when using this function. 
+#' @param algorithm Algorithm in data frame.
+#' @param parameter_algorithm Algorithm parameter in data frame. 
+#' @return New algorithm name, combining algorithm and its parameter. 
+paste_algo_pars <- function(df, parameter_algo = NULL) {
+  df[["algorithm"]] <- 
+    paste(df[["algorithm"]], df[["parameter_algorithm"]], sep = "_")
+  if (!is.null(parameter_algo)) {
+    df <- subset(df, df[["parameter_algorithm"]] == parameter_algo , 
+                 select = -c(parameter_algorithm))
+  } else {
+    df <- subset(df, select = -c(parameter_algorithm))  
+  }
+}
+
+
+#------------------------------------------------------------------------------#
+
+get_test_results <- function(baseline, method, measure, data, extra) {
+  output <- list(baseline = baseline, 
+                 methode = method, 
+                 measure = measure, 
+                 data = data, 
+                 extra = extra)
+  class(output) = "btest"
+}
+
+print.btest <- function(x,...) {
+  print("Result of Bayesian Test")
+  resut <- x[[-"extra"]]
+  print(result)
+}
+
+## muss dann trotzdem vorher das eine als datensatz oder das andere als Liste bereitgestellt werden? 
+
+## prüfen ob das klappt 

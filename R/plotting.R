@@ -22,7 +22,7 @@ plot_densities <- function(df, measure = NULL) {
   # plot densities 
   scmamp::plotDensities(results_matrix)
 }
-plot_densities(test_benchmark_small)
+#plot_densities(test_benchmark_small)
 
 
 #------------------------------------------------------------------------------#

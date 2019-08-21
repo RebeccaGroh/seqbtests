@@ -233,10 +233,10 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b,
     result$posteriror_probabilities <- b_signed_rank$probabilities
     return(result)
 }
-results <- b_signed_rank_test(df= test_benchmark_small, problemset = 'problem_a', 
-                              learner_a = 'algo_1', 
-                              learner_b = 'algo_3')
-results
+#results <- b_signed_rank_test(df= test_benchmark_small, problemset = 'problem_a', 
+#                              learner_a = 'algo_1', 
+#                              learner_b = 'algo_3')
+#results
 
 #' @title Bayesian hierarchical correlated t-test
 #' @description 
@@ -348,7 +348,7 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
 }
 
 
-results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
-                               learner_b = 'algo_2', rho=0.1, 
-                                nsim=2000,  nchains=5)
-results
+#results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
+#                               learner_b = 'algo_2', rho=0.1, 
+#                                nsim=2000,  nchains=5)
+#results

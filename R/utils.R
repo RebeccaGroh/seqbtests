@@ -82,19 +82,6 @@ get_replications_count <- function(x, y) {
     checkmate::assert_true(length(x) == length(y))
 }
 
-
-#' @title Paste algorithm and parameter
-#' @description 
-#' If there is a parameter additional to the algorithm, both can be combined, 
-#' when using this function. 
-#' @param algorithm Algorithm in data frame.
-#' @param parameter_algorithm Algorithm parameter in data frame. 
-#' @return New algorithm name, combining algorithm and its parameter. 
-paste_algo_pars <- function(algorithm, parameter_algorithm) {
-    algorithm <- paste(algorithm, parameter_algorithm, sep = "_")
-}
-
-
 #' @title Data transformation
 #' @description Extract a data matrix out of the original dataset. The matrix 
 #' contains all observations for each replication in each problemset. 
@@ -118,69 +105,3 @@ data_transformation <- function(df, algo, measure) {
 
 
 
-#------------------------------------------------------------------------------#
-
-# Ausgabe der Ergebnisse 
-
-#mean <- function (x, ...) {
-#    UseMethod("mean", x)
-#}#
-
-#test_to_tex <- function(test){
-#    UseMethod("test_to_tex")
-#}
-
-## für die Bayesianischen Tests 
-#test_to_tex.bayesian <- function(test) {
-#    
-#    
-#}
-
-
-
-
-
-#\begin{center}
-#\begin{tabular}{ c c c }
-#cell1 & cell2 & cell3 \\ 
-#cell4 & cell5 & cell6 \\  
-#cell7 & cell8 & cell9    
-#\end{tabular}
-#\end{center}
-
-
-
-## wie sieht der Test von rNPBST aus? 
-
-#library(rNPBST)
-#htest2Tex(cd.test(results))
-
-## und wie sieht die Ausgabe dann tatsächlich aus? 
-
-
-#EBO <- unlist(select(filter(cec17.final, Algorithm == "EBO", Dimension == 10), Result), use.names = F)
-#jSO <- unlist(select(filter(cec17.final, Algorithm == "jSO", Dimension == 10), Result), use.names = F)
-
-
-#sign.results <- rNPBST::binomialSign.test(cbind(EBO, jSO))
-#wilcoxon.results <- rNPBST::wilcoxon.test(cbind(EBO, jSO))
-#wilcoxon.results
-
-
-#jso <- filter(cec17.final, Algorithm == "jSO", Dimension == 10) %>%
-#    select(Result) %>% unlist()
-#ebo <- filter(cec17.final, Algorithm == "EBO", Dimension == 10) %>%
-#    select(Result) %>% unlist()
-#bst.results <- rNPBST::bayesianSign.test(ebo, jso,
-#                                         rope.min = -10, rope.max = 10)
-#bst.results
-
-
-#print.btest = function(x, ...) {print("Hi"); print(x[[1]])}
-#print.btest
-#a = list("b")
-#class(a) = "btest"
-#a
-
-
-#?print.htest
