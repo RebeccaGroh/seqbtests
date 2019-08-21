@@ -49,9 +49,9 @@ b_corr_t_test <- function(df, problemset, baseline, learner_b = NULL, measure = 
   return(output)
 }
 
-results <- b_corr_t_test(df = test_benchmark_small, rho=0.1, rope=c(-0.01, 0.01),
-                         problemset = 'problem_e', baseline = 'algo_1')
-results
+#results <- b_corr_t_test(df = test_benchmark_small, rho=0.1, rope=c(-0.01, 0.01),
+#                         problemset = 'problem_e', baseline = 'algo_1')
+#results
 
 
 #------------------------------------------------------------------------------#
