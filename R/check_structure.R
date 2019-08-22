@@ -95,20 +95,14 @@ paste_algo_pars <- function(df, parameter_algo = NULL) {
 
 #------------------------------------------------------------------------------#
 
-get_test_results <- function(baseline, method, measure, data, extra) {
-  output <- list(baseline = baseline, 
-                 methode = method, 
-                 measure = measure, 
-                 data = data, 
-                 extra = extra)
-  class(output) = "btest"
-}
-
-print.btest <- function(x,...) {
-  print("Result of Bayesian Test")
-  resut <- x[[-"extra"]]
-  print(result)
-}
+#get_test_results <- function(baseline, method, measure, data, extra) {
+#  output <- list(baseline = baseline, 
+#                 methode = method, 
+#                 measure = measure, 
+#                 data = data, 
+#                 extra = extra)
+#  class(output) = "btest"
+#}
 
 ## muss dann trotzdem vorher das eine als datensatz oder das andere als Liste bereitgestellt werden? 
 
