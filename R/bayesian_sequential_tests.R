@@ -84,7 +84,7 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL,
         threshold <- b_test$posterior.probabilities[2] + 
           b_test$posterior.probabilities[3]
       } 
-      if (threshold > 0.95) {
+      if (threshold > 0.95 & i >= 5) {
         result[k, "significance_appears"] <- TRUE
       } else {
         result[k, "significance_appears"] <- FALSE
@@ -92,7 +92,7 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL,
       liste <-  rownames(result[result[["significance_appears"]] == TRUE, ])
     }
     if (!is.null(learner_b)) {
-      if (threshold > 0.95) {
+      if (threshold > 0.95 & i >= 5) {
         break 
       }
     }
