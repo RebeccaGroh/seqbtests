@@ -62,16 +62,16 @@ b_corr_t_test <- function(df, problemset, baseline, learner_b = NULL, measure = 
 ## dieser Test sollte den alten ersetzen (bzw. alle anderen bayesianischen Tests 
 ## sollten wenn möglich an die Form angepasst werden) --> gibt die Ergebnisse auch 
 ## beim Vergleich von nur 2 Algorithmen an 
-results <- b_corr_t_test(df = test_benchmark_small, rho=0.1, rope=c(-0.01, 0.01),
-                             problemset = 'problem_b', baseline = 'algo_1')
-results
+#results <- b_corr_t_test(df = test_benchmark_small, rho=0.1, rope=c(-0.01, 0.01),
+#                             problemset = 'problem_b', baseline = 'algo_1')
+#results
 
 
 # jetzt können die Ergebnisse des normalen und sequentiellen Tests direkt verglichen werden 
 
-results_seq <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1, max_repls = 10,
-                                 problemset = 'problem_b', baseline = 'algo_1', rope=c(-0.01, 0.01))
-results_seq
+#results_seq <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1, max_repls = 10,
+#                                 problemset = 'problem_b', baseline = 'algo_1', rope=c(-0.01, 0.01))
+#results_seq
 
 
 ## es treten unterschiede in den Ergebnissen auf!! Teilweise wird zu früh abgebrochen 
