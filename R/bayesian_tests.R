@@ -1,21 +1,23 @@
 #' @title Bayesian correlated T test 
 #' @description 
-#' This function implements the Bayesian version of the correlated t-test. 
+#' This function implements the Bayesian version of the correlated t-test. The 
+#' performance of one baseline algorithm on one data set is compared to either 
+#' one or multiple algorithms.  
 #' @param df Input data frame. 
 #' @param problemset Problemset on which the test should be performed. 
-#' @param learner_a First algorithm.
-#' @param learner_b Second algorithm. 
+#' @param baseline First algorithm. 
+#' @param algorithm Algorithm to be compared. If no algorithm is defined, the 
+#' baseline is compared to every algorithm in the data frame. 
 #' @param measure Measure column. 
-#' @param parameter_algorithm Specifies parameters concerning the corresponding 
-#' algorithm. 
 #' @param rho Correlation factor. 
 #' @param rope Region of practical equivalence. 
 #' @return A list containing the following components:
 #' \item{code{measure}}{a string with the name of the measure column used}
 #' \item{code{method}}{a string with the name of the method used}
-#' \item{code{posteriror_probabilities}}{a vector with the left, rope and right 
-#' probabilities}
-#' @details 
+#' \item{code{posteriror_probabilities}}{a dataframe with one row for every 
+#' algorithm that is compared to the baseline. The columns show the posterior 
+#' probabilities and whether significance appears.} 
+#' @details
 #' The test has first been implemented in scmamp. 
 #' Note that the default value for measure is the first measure column in the 
 #' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
@@ -23,47 +25,59 @@
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example results <- b_corr_t_test(df= test_benchmark_small, 
 #'                                   problemset = 'problem_a', 
-#'                                   learner_a = 'algo_1', learner_b = 'algo_2')
+#'                                   learner_a = 'algo_1', algorithm = 'algo_2')
 #' @export
-b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
-                          parameter_algorithm = NULL, rho = 0.1, 
+b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL, 
+                          measure = NULL, compare = NULL, rho = 0.1, 
                           rope = c(-0.01, 0.01)) {
+    result <- data.frame()
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, 
-                                       measure = NULL, 
-                                       parameter_algorithm = NULL))
+    checkmate::assert_true(check_names(df, problemset, baseline, 
+                                       algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
-    ## oder der User gibt direkt den richtigen Namen für learner_a/_b an.
-    if (!is.null(parameter_algorithm)) {
-        learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
-        learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
-        df[["algorithm"]] <- 
-          paste_algo_pars(algorithm = df[["algorithm"]], 
-                          parameter_algorithm = df[["parameter_algorithm"]])
-    }
     # define samples
     x <- df[df[["problem"]] == problemset 
-            & df[["algorithm"]] == learner_a, measure]
-    y <- df[df[["problem"]] == problemset 
-            & df[["algorithm"]] == learner_b, measure]
-    # check numbers in sample
-    checkmate::assert_true(get_replications_count(x, y))
-    # Bayesian correlated t Test
-    b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
-    result <- list()
-    result$measure <- measure
-    result$method <- b_corr$method
-    result$posteriror_probabilities <- b_corr$posterior.probabilities
-    # needed for plotting 
-    #result$approximate <- b_corr$approximate 
-    #result$posterior <- b_corr$posterior 
-    #result$additional <- b_corr$additional 
-    #result$parameters <- b_corr$parameters
-    #df <- subset(result, select = -c(parameters))
-    return(result)
+            & df[["algorithm"]] == baseline, measure]
+    algorithms <- unique(df[["algorithm"]])
+    for (k in algorithms[algorithms != baseline]) {
+        if (!is.null(algorithm)) {
+            k <- algorithm
+            y <- df[df[["problem"]] == problemset 
+                    & df[["algorithm"]] == k, measure]
+        } else {
+            y <- df[df[["problem"]] == problemset 
+                    & df[["algorithm"]] == k, measure]
+        }
+        # Bayesian correlated t Test
+        b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
+        # results
+        result[k, "algorithm"] <- k
+        result[k, "left"] <- b_corr$posterior.probabilities[1]
+        result[k, "rope"] <- b_corr$posterior.probabilities[2]
+        result[k, "right"] <- b_corr$posterior.probabilities[3]
+        if (is.null(compare)) {compare <- "better"}
+        if (compare == "better") { 
+            threshold <- b_corr$posterior.probabilities[3]
+        } else if (compare == "equal") {
+            threshold <- b_corr$posterior.probabilities[2] + 
+                b_corr$posterior.probabilities[3]
+        } 
+        if (threshold > 0.95) {
+            result[k, "significance"] <- TRUE
+        } else {
+            result[k, "significance"] <- FALSE
+        }
+    }
+    output_test <- get_results(baseline, measure, method = b_corr$method, 
+                               data = result, 
+                               extra = list(b_corr$additional, b_corr$approximate, 
+                                            b_corr$parameters, b_corr$posterior))
+    return_test <- format_test(output_test)
+    return(return_test)
 }
+
 
 #' @title Bayesian Sign test 
 #' @description 
@@ -71,7 +85,7 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' @param df Input data frame. 
 #' @param problemset Problemset on which the test should be performed. 
 #' @param learner_a First algorithm.
-#' @param learner_b Second algorithm. 
+#' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @param parameter_algorithm Specifies parameters concerning the corresponding 
 #' algorithm. 
@@ -94,9 +108,9 @@ b_corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example results <- b_sign_test(df= test_benchmark_small, 
 #'                                 problemset = 'problem_a', 
-#'                                 learner_a = 'algo_1', learner_b = 'algo_2')
+#'                                 learner_a = 'algo_1', algorithm = 'algo_2')
 #' @export
-b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL, 
+b_sign_test <- function(df, problemset, learner_a, algorithm, measure = NULL, 
                         parameter_algorithm = NULL, s = 1, z_0 = 0, 
                         weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05, 
                         rope = c(-0.01, 0.01)) {
@@ -109,7 +123,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     rope.min <- rope[1]
     rope.max <- rope[2]
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, 
+    checkmate::assert_true(check_names(df, problemset, learner_a, algorithm, 
                                        measure = NULL, parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
@@ -117,7 +131,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     ## oder der User gibt direkt den richtigen Namen für learner_a/_b an.
     if (!is.null(parameter_algorithm)) {
         learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
-        learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
+        algorithm <- paste_algo_pars(algorithm = algorithm, parameter_algorithm)
         df[["algorithm"]] <- 
           paste_algo_pars(algorithm = df[["algorithm"]], 
                           parameter_algorithm = df[["parameter_algorithm"]])
@@ -125,16 +139,16 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
     # define samples when testing on multiple datasets
     if (is.null(problemset)) {
         data_wide <- tidyr::spread(df, algorithm, measure)
-        sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], 
+        sum_data <- aggregate(data_wide[, c(learner_a, algorithm)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, learner_a]
-        y <- sum_data[, learner_b]
+        y <- sum_data[, algorithm]
     } else {
         # define samples when testing on a single dataset
         x <- df[df[["problem"]] == problemset 
                 & df[["algorithm"]] == learner_a, measure]
         y <- df[df[["problem"]] == problemset 
-                & df[["algorithm"]] == learner_b, measure]
+                & df[["algorithm"]] == algorithm, measure]
     }
     n.samples <- mc_samples
     # Bayesian Sign Test
@@ -156,7 +170,7 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' @param df Input data frame. 
 #' @param problemset Problemset on which the test should be performed. 
 #' @param learner_a First algorithm.
-#' @param learner_b Second algorithm. 
+#' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @param parameter_algorithm Specifies parameters concerning the corresponding 
 #' algorithm. 
@@ -179,9 +193,9 @@ b_sign_test <- function(df, problemset, learner_a, learner_b, measure = NULL,
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example results <- b_signed_rank_test(df= test_benchmark_small, 
 #'                                        learner_a = 'algo_1', 
-#'                                        learner_b = 'algo_2')
+#'                                        algorithm = 'algo_2')
 #' @export
-b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b, 
+b_signed_rank_test <- function(df, problemset = NULL, learner_a, algorithm, 
                                measure = NULL, parameter_algorithm = NULL, 
                                s = 0.5, z_0 = 0, weights = NULL, 
                                mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
@@ -195,7 +209,7 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, learner_b,
     rope.max <- rope[2]
     checkmate::assert_true(check_structure(df))
     checkmate::assert_true(check_names(df, problemset = NULL, learner_a, 
-                                       learner_b, measure = NULL, 
+                                       algorithm, measure = NULL, 
                                        parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]

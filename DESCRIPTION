@@ -1,10 +1,20 @@
 Package: seqbtests
 Type: Package
-Title: A Sequential Bayesian Approach for Performance Comparison of Machine Learning Algorithms. 
+Title: Sequential Bayesian Comparison of ML Algorithm Performances
 Version: 0.1.0
 Author: person("Rebecca", "Groh", email = "rebeccagroh@hotmail.de",
                   role = c("aut", "cre"))
-Description: The package uses statistical tests to asses the performance of Machine Learning Algorithms. 
+Description: This package implements different Bayesian tests to compare the 
+    performance of Machine Learning Algorithms. The performance of the 
+    algorithms to be compared can be built up within the packages by a function 
+    written by the user and can be directly compared within the tests. For this 
+    purpose, the sequential Bayesian tests are provided, in which the number of 
+    generated performance values does not have to be fixed at the beginning. 
+    Instead, after each replication it is checked whether there is a 95% 
+    probability to determine which algorithm performs better. If this threshold 
+    is reached, the build-up of replications is stopped early, which can result 
+    in significant time savings. These tests work either on a single or multiple
+    data sets. Further, some standard Hypothesis tests are provided. 
 License: GPL-3
 Depends: R (>= 3.0.2)
 Encoding: UTF-8

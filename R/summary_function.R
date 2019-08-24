@@ -1,10 +1,9 @@
 
 #' @title Summary
-#' @description 
-#'   Short summary of the data frame, 
-#'   including the columns names and number of rows
-#' @param df input data frame
-#' @return A vector containing the columns names and number of rows
+#' @description Short summary of the data frame, 
+#'     including the columns names and number of rows
+#' @param df Input data frame.
+#' @return A vector containing the columns names and number of rows.
 #' @export
 data_summary <- function(df) {
     rows <- nrow(df)
@@ -14,19 +13,21 @@ data_summary <- function(df) {
 
 
 #' @title NA Check
-#' @description 
-#' Check if the measure column is complete. For values of one of the other 
-#' columns this function shows the Ratio of NAs existing in the measure column. 
-#' If there are any NAs the User can decide to drop all observations for that 
-#' specific value, since the data frame needs to be complete for testing. 
-#' @param df input data frame 
-#' @param measure Measure column 
-#' @param check_var Column in data frame used to check for NAs
-#' @return List of Cases, NAs and the NA ratio according to the check_var values. 
+#' @description Check if the measure column is complete. 
+#' For the problem sets and all algorithms present in the data frame, this 
+#' function specifies the ratio of the NAs present. If there are any NAs the 
+#' User can decide to drop all observations for that specific value, since the
+#' data frame needs to be complete for testing. 
+#' @param df Input data frame.
+#' @param measure Measure column.
+#' @param check_var Column in data frame used to check for NAs. Either 
+#' "problemsets" or "algorithm".
+#' @return List of Cases, NAs and the NA ratio according to check_var. 
 #' @export 
 na_check <- function(df, measure, check_var) {
   if (!requireNamespace("dplyr", quietly=TRUE)) {
-    stop("This function requires the dplyr package. Please install it.", call.=FALSE)
+    stop("This function requires the dplyr package. Please install it.", 
+         call.=FALSE)
   }
     if (any(is.na(df))) {
         # incomplete columns
@@ -39,11 +40,13 @@ na_check <- function(df, measure, check_var) {
         measure <- enquo(measure)
         print(measure)
         # Share of NAs in Measure Columns
-        count <- df %>% group_by(!!check_var) %>% summarise(na_count = sum(is.na(!!measure)), cases_count = n())
+        count <- df %>% group_by(!!check_var) %>% 
+          summarise(na_count = sum(is.na(!!measure)), cases_count = n())
         na_dataframe <- data.frame(count)
         # na_dataframe$cases_count <- col_count$cases_count
         ratio <- (na_dataframe$na_count/na_dataframe$cases_count)
-        na_dataframe$na_ratio <- paste0(round(ratio * 100, digits = 2), "%", sep = "")
+        na_dataframe$na_ratio <- paste0(round(ratio * 100, digits = 2), 
+                                        "%", sep = "")
         result <- na_dataframe
     } else {
         result <- "data complete"
@@ -51,12 +54,14 @@ na_check <- function(df, measure, check_var) {
     return(result)
 }
 
+
 #' @title Drop NAs by groups 
-#' @description 
-#'   Drop rows that contain any NA depending on values of check_var
-#' @param df input data frame 
-#' @param measure Measure column 
-#' @param check_var Column in data frame used to check for NAs
+#' @description Drop group of rows that contain any NA depending on values of 
+#' check_var. 
+#' @param df Input data frame.
+#' @param measure Measure column.
+#' @param check_var Column in data frame used to check for NAs. Either 
+#' "problemsets" or "algorithm".
 #' @return New data frame without NAs. 
 #' @export 
 na_drop <- function(df, check_var, measure) {
