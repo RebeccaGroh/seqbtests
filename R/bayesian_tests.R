@@ -25,7 +25,7 @@
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example results <- b_corr_t_test(df= test_benchmark_small, 
 #'                                   problemset = 'problem_a', 
-#'                                   learner_a = 'algo_1', algorithm = 'algo_2')
+#'                                   baseline = 'algo_1', algorithm = 'algo_2')
 #' @export
 b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL, 
                           measure = NULL, compare = NULL, rho = 0.1, 
