@@ -4,7 +4,7 @@
 #' performance of one baseline algorithm on one data set is compared to either 
 #' one or multiple algorithms.  
 #' @param df Input data frame. 
-#' @param problemset Problemset on which the test should be performed. 
+#' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm. 
 #' @param algorithm Algorithm to be compared. If no algorithm is defined, the 
 #' baseline is compared to every algorithm in the data frame. 
@@ -12,20 +12,22 @@
 #' @param rho Correlation factor. 
 #' @param rope Region of practical equivalence. 
 #' @return A list containing the following components:
-#' \item{code{measure}}{a string with the name of the measure column used}
-#' \item{code{method}}{a string with the name of the method used}
-#' \item{code{posteriror_probabilities}}{a dataframe with one row for every 
+#' \item{code{measure}}{A string with the name of the measure column used.}
+#' \item{code{method}}{A string with the name of the method used.}
+#' \item{code{baseline}{A string with the name of the baseline algorithm.}
+#' \item{code{posteriror_probabilities}}{A dataframe with one row for every 
 #' algorithm that is compared to the baseline. The columns show the posterior 
 #' probabilities and whether significance appears.} 
 #' @details
 #' The test has first been implemented in scmamp. 
 #' Note that the default value for measure is the first measure column in the 
 #' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
-#' in the equivalent of the standard t test    
+#' in the equivalent of the standard t test.   
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example results <- b_corr_t_test(df= test_benchmark_small, 
-#'                                   problemset = 'problem_a', 
-#'                                   baseline = 'algo_1', algorithm = 'algo_2')
+#' @example 
+#' results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
+#'                          baseline = "algo_1", algorithm = "algo_2")
+
 #' @export
 b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL, 
                           measure = NULL, compare = NULL, rho = 0.1, 
@@ -65,9 +67,9 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
                 b_corr$posterior.probabilities[3]
         } 
         if (threshold > 0.95) {
-            result[k, "significance"] <- TRUE
+            result[k, "significant"] <- TRUE
         } else {
-            result[k, "significance"] <- FALSE
+            result[k, "significant"] <- FALSE
         }
     }
     output_test <- get_results(baseline, measure, method = b_corr$method, 
@@ -79,12 +81,13 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 }
 
 
+
 #' @title Bayesian Sign test 
 #' @description 
 #' This function implements the Bayesian version of the sign test. 
 #' @param df Input data frame. 
 #' @param problemset Problemset on which the test should be performed. 
-#' @param learner_a First algorithm.
+#' @param baseline First algorithm.
 #' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @param parameter_algorithm Specifies parameters concerning the corresponding 
@@ -108,9 +111,9 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example results <- b_sign_test(df= test_benchmark_small, 
 #'                                 problemset = 'problem_a', 
-#'                                 learner_a = 'algo_1', algorithm = 'algo_2')
+#'                                 baseline = 'algo_1', algorithm = 'algo_2')
 #' @export
-b_sign_test <- function(df, problemset, learner_a, algorithm, measure = NULL, 
+b_sign_test <- function(df, problemset, baseline, algorithm, measure = NULL, 
                         parameter_algorithm = NULL, s = 1, z_0 = 0, 
                         weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05, 
                         rope = c(-0.01, 0.01)) {
@@ -123,14 +126,14 @@ b_sign_test <- function(df, problemset, learner_a, algorithm, measure = NULL,
     rope.min <- rope[1]
     rope.max <- rope[2]
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset, learner_a, algorithm, 
+    checkmate::assert_true(check_names(df, problemset, baseline, algorithm, 
                                        measure = NULL, parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
-    ## oder der User gibt direkt den richtigen Namen für learner_a/_b an.
+    ## oder der User gibt direkt den richtigen Namen für baseline/_b an.
     if (!is.null(parameter_algorithm)) {
-        learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
+        baseline <- paste_algo_pars(algorithm = baseline, parameter_algorithm)
         algorithm <- paste_algo_pars(algorithm = algorithm, parameter_algorithm)
         df[["algorithm"]] <- 
           paste_algo_pars(algorithm = df[["algorithm"]], 
@@ -139,14 +142,14 @@ b_sign_test <- function(df, problemset, learner_a, algorithm, measure = NULL,
     # define samples when testing on multiple datasets
     if (is.null(problemset)) {
         data_wide <- tidyr::spread(df, algorithm, measure)
-        sum_data <- aggregate(data_wide[, c(learner_a, algorithm)], 
+        sum_data <- aggregate(data_wide[, c(baseline, algorithm)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
-        x <- sum_data[, learner_a]
+        x <- sum_data[, baseline]
         y <- sum_data[, algorithm]
     } else {
         # define samples when testing on a single dataset
         x <- df[df[["problem"]] == problemset 
-                & df[["algorithm"]] == learner_a, measure]
+                & df[["algorithm"]] == baseline, measure]
         y <- df[df[["problem"]] == problemset 
                 & df[["algorithm"]] == algorithm, measure]
     }
@@ -169,7 +172,7 @@ b_sign_test <- function(df, problemset, learner_a, algorithm, measure = NULL,
 #' This function implements the Bayesian version of the signed rank test. 
 #' @param df Input data frame. 
 #' @param problemset Problemset on which the test should be performed. 
-#' @param learner_a First algorithm.
+#' @param baseline First algorithm.
 #' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @param parameter_algorithm Specifies parameters concerning the corresponding 
@@ -192,10 +195,10 @@ b_sign_test <- function(df, problemset, learner_a, algorithm, measure = NULL,
 #' data frame.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example results <- b_signed_rank_test(df= test_benchmark_small, 
-#'                                        learner_a = 'algo_1', 
+#'                                        baseline = 'algo_1', 
 #'                                        algorithm = 'algo_2')
 #' @export
-b_signed_rank_test <- function(df, problemset = NULL, learner_a, algorithm, 
+b_signed_rank_test <- function(df, problemset = NULL, baseline, algorithm, 
                                measure = NULL, parameter_algorithm = NULL, 
                                s = 0.5, z_0 = 0, weights = NULL, 
                                mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
@@ -208,16 +211,16 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, algorithm,
     rope.min <- rope[1]
     rope.max <- rope[2]
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset = NULL, learner_a, 
+    checkmate::assert_true(check_names(df, problemset = NULL, baseline, 
                                        algorithm, measure = NULL, 
                                        parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
-    ## oder der User gibt direkt den richtigen Namen für learner_a/_b an.
+    ## oder der User gibt direkt den richtigen Namen für baseline/_b an.
     if (!is.null(parameter_algorithm)) {
-        learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
-        learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
+        baseline <- paste_algo_pars(algorithm = baseline, parameter_algorithm)
+        algorithm <- paste_algo_pars(algorithm = algorithm, parameter_algorithm)
         df[["algorithm"]] <- 
           paste_algo_pars(algorithm = df[["algorithm"]], 
                           parameter_algorithm = df[["parameter_algorithm"]])
@@ -225,16 +228,16 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, algorithm,
     # define samples when testing on multiple datasets
     if (is.null(problemset)) {
         data_wide <- tidyr::spread(df, algorithm, measure)
-        sum_data <- aggregate(data_wide[, c(learner_a, learner_b)], 
+        sum_data <- aggregate(data_wide[, c(baseline, algorithm)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
-        x <- sum_data[, learner_a]
-        y <- sum_data[, learner_b]
+        x <- sum_data[, baseline]
+        y <- sum_data[, algorithm]
     } else {
         # define samples when testing on a single dataset
         x <- df[df[["problem"]] == problemset 
-                & df[["algorithm"]] == learner_a, measure]
+                & df[["algorithm"]] == baseline, measure]
         y <- df[df[["problem"]] == problemset 
-                & df[["algorithm"]] == learner_b, measure]
+                & df[["algorithm"]] == algorithm, measure]
     }
     mc.samples <- mc_samples
     # Bayesian signed rank test
@@ -248,16 +251,16 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, algorithm,
     return(result)
 }
 #results <- b_signed_rank_test(df= test_benchmark_small, problemset = 'problem_a', 
-#                              learner_a = 'algo_1', 
-#                              learner_b = 'algo_3')
+#                              baseline = 'algo_1', 
+#                              algorithm = 'algo_3')
 #results
 
 #' @title Bayesian hierarchical correlated t-test
 #' @description 
 #' This function implements a Bayesian hierarchical test.
 #' @param df Input data frame. 
-#' @param learner_a First algorithm.
-#' @param learner_b Second algorithm. 
+#' @param baseline First algorithm.
+#' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @param parameter_algorithm Specifies parameters concerning the corresponding 
 #' algorithm. 
@@ -315,13 +318,13 @@ b_signed_rank_test <- function(df, problemset = NULL, learner_a, algorithm,
 #' of mu_0, which are set to the maximum and minimum values observed in the 
 #' sample. You should not modify them unless you know what you are doing.
 #' @example results <- b_hierarchical_test(df= test_benchmark_small, 
-#'                                         learner_a = 'algo_1', 
-#'                                         learner_b = 'algo_2', 
+#'                                         baseline = 'algo_1', 
+#'                                         algorithm = 'algo_2', 
 #'                                         rho=0.1, rope=c(-0.01, 0.01), 
 #'                                         nsim=2000,  nchains=5)
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
-b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL, 
+b_hierarchical_test <- function(df, baseline, algorithm, measure = NULL, 
                                 parameter_algorithm = NULL, rho = 0.1, 
                                 std.upper = 1000, d0.lower = NULL, 
                                 d0.upper = NULL, alpha.lower = 0.5, 
@@ -331,22 +334,22 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
                                 stan.output.file = NULL, 
                                 seed = as.numeric(Sys.time()), ...) {
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset = NULL, learner_a, 
-                                       learner_b, measure = NULL, 
+    checkmate::assert_true(check_names(df, problemset = NULL, baseline, 
+                                       algorithm, measure = NULL, 
                                        parameter_algorithm = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
     if (!is.null(parameter_algorithm)) {
-        learner_a <- paste_algo_pars(algorithm = learner_a, parameter_algorithm)
-        learner_b <- paste_algo_pars(algorithm = learner_b, parameter_algorithm)
+        baseline <- paste_algo_pars(algorithm = baseline, parameter_algorithm)
+        algorithm <- paste_algo_pars(algorithm = algorithm, parameter_algorithm)
         df[["algorithm"]] <- 
           paste_algo_pars(algorithm = df[["algorithm"]], 
                           parameter_algorithm = df[["parameter_algorithm"]])
     }
     # define samples
-    x.matrix <- data_transformation(df, algo = learner_a, measure)
-    y.matrix <- data_transformation(df, algo = learner_b, measure)
+    x.matrix <- data_transformation(df, algo = baseline, measure)
+    y.matrix <- data_transformation(df, algo = algorithm, measure)
     # check numbers in sample
     checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
     # Bayesian correlated t Test
@@ -362,7 +365,7 @@ b_hierarchical_test <- function(df, learner_a, learner_b, measure = NULL,
 }
 
 
-#results <- b_hierarchical_test(df= test_benchmark_small, learner_a = 'algo_1', 
-#                               learner_b = 'algo_2', rho=0.1, 
+#results <- b_hierarchical_test(df= test_benchmark_small, baseline = 'algo_1', 
+#                               algorithm = 'algo_2', rho=0.1, 
 #                                nsim=2000,  nchains=5)
 #results

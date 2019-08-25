@@ -1,47 +1,50 @@
 #' @title Correlated t Test 
-#' @description This function implements the t-Test for paired samples. 
+#' @description This function implements a two-sided t-Test for paired samples. 
 #' @param df Input data frame. 
-#' @param problemset Problemset on which the test should be performed. 
-#' @param learner_a First algorithm.
-#' @param learner_b Second algorithm. 
+#' @param problemset Problem set on which the test should be performed. 
+#' @param baseline First algorithm.
+#' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
-#' @param rho Correlation factor. (for the case of cross validated results, the 
+#' @param rho Correlation factor. (For the case of cross validated results, the 
 #' heuristic to set the correlation is size of test set divided by total size 
-#' of the dataset) 
-#' @param alternative a character string specifying the alternative hypothesis, 
-#' must be one of 'two.sided' (default), 'greater' or 'less'. 
-#' You can specify just the initial letter.
+#' of the dataset.) 
 #' @return A list containing the following components: 
-#' \item{code{measure}}{a string with the name of the measure column used}
-#' \item{code{method}}{a string with the name of the method used}
-#' \item{code{statistic}}{the value of the statistic used in the test}
-#' \item{code{p_value}}{the p-value for the test}
+#' \item{code{measure}}{A string with the name of the measure column used.}
+#' \item{code{method}}{A string with the name of the method used.}
+#' \item{code{statistic}}{The value of the statistic used in the test.}
+#' \item{code{p_value}}{The p-value for the test.}
 #' @details The test has first been implemented in scmamp.
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example results <- corr_t_test(df= test_benchmark_small, problemset = 'problem_a', learner_a = 'algo_1', learner_b = 'algo_2')
+#' @example 
+#' results <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
+#'                        baseline = "algo_1", algorithm = "algo_2")
 #' @export
-corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, rho = 0.01, alternative = "two.sided") {
+corr_t_test <- function(df, problemset, baseline, algorithm, measure = NULL, 
+                        rho = 0.01) {
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, measure = NULL))
+    checkmate::assert_true(check_names(df, problemset, baseline, 
+                                       algorithm, measure = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
     # define samples
-    x <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_a, measure]
-    y <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_b, measure]
+    x <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == baseline, measure]
+    y <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == algorithm, measure]
     # Correlated t Test
     corr_test <- scmamp::correlatedTtest(x, y, rho, alternative = "two.sided")
     ## return results
     result <- list()
     result$measure <- measure
-    test <- list(method = corr_test$method, statistic = corr_test$statistic, p.value = corr_test$p.value)
+    test <- list(method = corr_test$method, statistic = corr_test$statistic, 
+                 p.value = corr_test$p.value)
     class(test) <- "htest"
     result$teststatistic <- test
     return(result)
 }
-
 
 
 #' @title Friedman's test 
@@ -51,10 +54,10 @@ corr_t_test <- function(df, problemset, learner_a, learner_b, measure = NULL, rh
 #' @param df Input data frame.
 #' @param measure Measure column. 
 #' @return A list containing the following components: 
-#' \item{code{measure}}{a string with the name of the measure column used}
-#' \item{code{method}}{a string with the name of the method used}
-#' \item{code{statistic}}{the value of the statistic used in the test}
-#' \item{code{p_value}}{the p-value for the test}
+#' \item{code{measure}}{A string with the name of the measure column used.}
+#' \item{code{method}}{A string with the name of the method used.}
+#' \item{code{statistic}}{The value of the statistic used in the test.}
+#' \item{code{p_value}}{The p-value for the test.}
 #' @details The test has first been implemented in scmamp.
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
@@ -68,8 +71,9 @@ friedman_test <- function(df, measure = NULL) {
         measure <- get_measure_columns(df)[1]
     }
     algo_names <- unique(df$algorithm)
-    data_wide <- spread(df, algorithm, measure)
-    sum_data <- aggregate(data_wide[, algo_names], by = list(data_wide[["problem"]]), FUN = mean)
+    data_wide <- tidyr::spread(df, algorithm, measure)
+    sum_data <- aggregate(data_wide[, algo_names], 
+                          by = list(data_wide[["problem"]]), FUN = mean)
     # define dataset
     data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
     # Friedman Test
@@ -87,34 +91,41 @@ friedman_test <- function(df, measure = NULL) {
 #' @title Wilcoxon signed-rank test 
 #' @description 
 #' This function implements the paired Wilcoxon signed-rank test. A 
-#' non-parametric statistical hypothesis test sed to compare the means of two 
+#' non-parametric statistical hypothesis test to compare the means of two 
 #' paired samples. 
 #' @param df Input data frame. 
-#' @param problemset Problemset on which the test should be performed. 
-#' @param learner_a First algorithm.
-#' @param learner_b Second algorithm. 
+#' @param problemset Problem set on which the test should be performed. 
+#' @param baseline First algorithm.
+#' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @return A list containing the following components: 
-#' \item{code{measure}}{a string with the name of the measure column used}
-#' \item{code{method}}{a string with the name of the method used}
-#' \item{code{statistic}}{the value of the statistic used in the test}
-#' \item{code{p_value}}{the p-value for the test}
+#' \item{code{measure}}{A string with the name of the measure column used.}
+#' \item{code{method}}{A string with the name of the method used.}
+#' \item{code{statistic}}{The value of the statistic used in the test.}
+#' \item{code{p_value}}{The p-value for the test.}
 #' @details 
 #' The test has first been implemented in scmamp.
 #' Note that the default value for measure is the first measure column in the 
 #' data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example results <- wilcoxon_signed_test(df = test_benchmark, problemset = 'problem_a', learner_a = 'algo_1', learner_b = 'algo_2')  
+#' @example 
+#' results <- wilcoxon_signed_test(df = test_benchmark, 
+#'                                 problemset = "problem_a", 
+#'                                 baseline = "algo_1", algorithm = "algo_2")  
 #' @export
-wilcoxon_signed_test <- function(df, problemset, learner_a, learner_b, measure = NULL) {
-    checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, measure = NULL))
+wilcoxon_signed_test <- function(df, problemset, baseline, algorithm, 
+                                 measure = NULL) {
+    checkmate::assert_true(check_names(df, problemset, baseline, algorithm, 
+                                       measure = NULL))
     checkmate::assert_true(check_names(df))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
     # define samples
-    x <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_a, measure]
-    y <- df[df[["problem"]] == problemset & df[["algorithm"]] == learner_b, measure]
+    x <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == baseline, measure]
+    y <- df[df[["problem"]] == problemset 
+            & df[["algorithm"]] == algorithm, measure]
     # Wilcoxon signed rank test
     w_test <- scmamp::wilcoxonSignedTest(x, y)
     ## return results return results

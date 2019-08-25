@@ -92,7 +92,7 @@ format_test <- function(test) {
 }
 
 
-#' @title Table test results
+#' @title Table test results (Bayesian tests)
 #' @description Create a list containing the Bayesian test results based on a 
 #'     generic function. 
 format_test.btest <- function(test) {
@@ -105,3 +105,4 @@ format_test.btest <- function(test) {
   output_data <- test$data_frame
   return(list(text, output_data))
 }
+

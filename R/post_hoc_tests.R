@@ -4,13 +4,16 @@
 #' @param measure Measure column. 
 #' @param alpha Significance level.
 #' @return A list containing the following components: 
-#' \item{code{measure}}{a string with the name of the measure column used}
-#' \item{code{method}}{a string with the name of the method used}
-#' \item{code{statistic}}{the value of the statistic used in the test}
-#' \item{code{p_value}}{the p-value for the test}
-#' \item{code{diff_matrix}}{a matrix with all the pairwise differences of average rankings}
-#' \item{code{significance}}{a matrix with all the pairwise comparisons showing if there are significant differences among the algorithms}
-#' @details The test has first been implemented in scmamp. Note that the default value for measure is the first measure column in the data frame.
+#' \item{code{measure}}{A string with the name of the measure column used.}
+#' \item{code{method}}{A string with the name of the method used.}
+#' \item{code{statistic}}{The value of the statistic used in the test.}
+#' \item{code{p_value}}{The p-value for the test.}
+#' \item{code{diff_matrix}}{A matrix with all the pair wise differences of 
+#' average rankings.}
+#' \item{code{significance}}{A matrix with all the pair wise comparisons showing 
+#' if there are significant differences among the algorithms}
+#' @details The test has first been implemented in scmamp. Note that the default
+#' value for measure is the first measure column in the data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example nemenyi_test(test_benchmark)
 #' @export
@@ -21,8 +24,9 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
         measure <- get_measure_columns(df)[1]
     }
     algo_names <- unique(df[["algorithm"]])
-    data_wide <- spread(df, algorithm, measure)
-    sum_data <- aggregate(data_wide[, algo_names], by = list(data_wide[["problem"]]), FUN = mean)
+    data_wide <- tidyr::spread(df, algorithm, measure)
+    sum_data <- aggregate(data_wide[, algo_names], 
+                          by = list(data_wide[["problem"]]), FUN = mean)
     # define dataset
     data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
     # Nemenyi post hoc test
@@ -38,6 +42,7 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 }
 
 
+
 #' @title Friedman's post hoc test 
 #' @description This function implements a Friedman post hoc test. It computes 
 #' the raw p-values for the post hoc based on Friedman's test. 
@@ -45,8 +50,9 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 #' @param measure Measure column.
 #' @param control The name of the control algorithm. If this parameter is not 
 #' provided, all algorithms are compared against each other. 
-#' @return A matrix with all the pairwise raw p-values. 
-#' @details The test has first been implemented in scmamp. Note that the default value for measure is the first measure column in the data frame.
+#' @return A matrix with all the pair wise raw p-values. 
+#' @details The test has first been implemented in scmamp. Note that the default
+#' value for measure is the first measure column in the data frame.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example friedman_post(test_benchmark)
 #' @export
@@ -57,8 +63,9 @@ friedman_post <- function(df, measure = NULL, control = NULL) {
         measure <- get_measure_columns(df)[1]
     }
     algo_names <- unique(df[["algorithm"]])
-    data_wide <- spread(df, algorithm, measure)
-    sum_data <- aggregate(data_wide[, algo_names], by = list(data_wide[["problem"]]), FUN = mean)
+    data_wide <- tidyr::spread(df, algorithm, measure)
+    sum_data <- aggregate(data_wide[, algo_names], 
+                          by = list(data_wide[["problem"]]), FUN = mean)
     # define dataset
     data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
     # Friedman post hoc test
