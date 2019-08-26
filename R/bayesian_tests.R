@@ -264,9 +264,9 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
         b_signed_rank$probabilities[3]
     } 
     if (threshold > 0.95) {
-      result[k, "significance_appears"] <- TRUE
+      result[k, "significanct"] <- TRUE
     } else {
-      result[k, "significance_appears"] <- FALSE
+      result[k, "significanct"] <- FALSE
     }
   }
   output_test <- get_results(baseline, measure, method = b_signed_rank$method, 
@@ -392,14 +392,13 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
         b_hierarchical$posterior.probabilities[3]
     } 
     if (threshold > 0.95) {
-      result[k, "significance_appears"] <- TRUE
+      result[k, "significanct"] <- TRUE
     } else {
-      result[k, "significance_appears"] <- FALSE
+      result[k, "significanct"] <- FALSE
     }
   }
   output_test <- get_results(baseline, measure, method = b_hierarchical$method, 
-                             data = result, 
-                             extra = list(b_hierarchical$sample))
+                             data = result, replications = i)
   return_test <- format_test(output_test)
   return(return_test)
 }

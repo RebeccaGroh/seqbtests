@@ -7,7 +7,7 @@
 #' stopping rule as soon as significant results are obtained.  
 #' @param problemset Problemset on which the test should be performed. 
 #' @param baseline First algorithm.
-#' @param learner_b Second algorithm. If not defined, every algorithm will be 
+#' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #' tested against baseline. 
 #' @param measure Measure column. 
 #' @param compare Defines whether the performances should be tested for either 
@@ -32,33 +32,32 @@
 #' in the equivalent of the standard t test. 
 #' @example results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
 #'                                       problemset = 'problem_a', 
-#'                                       baseline = 'algo_1', test = 'equal', 
+#'                                       baseline = 'algo_1', compare = 'equal', 
 #'                                       max_repls = 10,  rope=c(-0.01, 0.01))
 #' @export
-seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL, 
+seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL, 
                               measure = NULL, compare = NULL, rho = 0.1, 
                               rope = c(-0.01, 0.01), max_repls = 20, ...) {
   result = data.frame()
-  for (i in 2:max_repls) {
+  for (i in 5:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problemset, baseline, 
-                                       learner_b = NULL, measure = NULL, 
-                                       parameter_algorithm = NULL))
+                                       algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
     # define samples
     x <- data[data[["problem"]] == problemset & data[["algorithm"]] == baseline, measure]
     algorithms <- unique(data[["algorithm"]])
-    if (i == 2) {
+    if (i == 5) {
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
     for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(learner_b)) {
-        k <- learner_b
+      if (!is.null(algorithm)) {
+        k <- algorithm
         y <- data[data[["problem"]] == problemset 
                   & data[["algorithm"]] == k, measure]
       } else {
@@ -70,9 +69,7 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL,
       #if (b_test$posterior.probabilities[3] > 0.95) {
       #  break
       #}
-      result[k, "baseline"] <- baseline
-      result[k, "method"] <- b_test$method
-      result[k, "measure"] <- measure
+      result[k, "algorithm"] <- k
       result[k, "left"] <- b_test$posterior.probabilities[1]
       result[k, "rope"] <- b_test$posterior.probabilities[2]
       result[k, "right"] <- b_test$posterior.probabilities[3]
@@ -84,27 +81,37 @@ seq_b_corr_t_test <- function(problemset, baseline, learner_b = NULL,
         threshold <- b_test$posterior.probabilities[2] + 
           b_test$posterior.probabilities[3]
       } 
-      if (threshold > 0.95 & i >= 5) {
-        result[k, "significance_appears"] <- TRUE
+      if (threshold > 0.95) {
+        result[k, "significanct"] <- TRUE
       } else {
-        result[k, "significance_appears"] <- FALSE
+        result[k, "significanct"] <- FALSE
       }
-      liste <-  rownames(result[result[["significance_appears"]] == TRUE, ])
+      liste <-  rownames(result[result[["significanct"]] == TRUE, ])
     }
-    if (!is.null(learner_b)) {
-      if (threshold > 0.95 & i >= 5) {
+    if (!is.null(algorithm)) {
+      if (threshold > 0.95) {
         break 
       }
     }
   }
-  return(result)
+  output_test <- get_results(baseline, measure, method = b_test$method, 
+                             data = result)
+  return_test <- format_test(output_test)
+  return(return_test)
 }
+
+#results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+#                             problemset = 'problem_b', 
+#                             baseline = 'algo_1', compare = 'equal', 
+#                             max_repls = 10,  rope=c(-0.01, 0.01))
+#results
+
 
 #------------------------------------------------------------------------------#
 #----------------------------- Bayesian Sign Test -----------------------------# 
 
 
-seq_b_sign_test <- function(problemset = NULL, baseline, learner_b = NULL, 
+seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL, 
                             measure = NULL, compare = NULL, s = 1, z_0 = 0,
                             weights = c(s/2, rep(1, length(x))), 
                             mc_samples = 1e+05, rope = c(-0.01, 0.01), 
@@ -118,25 +125,24 @@ seq_b_sign_test <- function(problemset = NULL, baseline, learner_b = NULL,
   rope.min <- rope[1]
   rope.max <- rope[2]
   result = data.frame()
-  for (i in 2:max_repls) {
+  for (i in 5:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problemset = NULL, baseline, 
-                                       learner_b = NULL, measure = NULL, 
-                                       parameter_algorithm = NULL))
+                                       algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
-    ## alle "learner_b" mit k ersetzen? 
+    ## alle "algorithm" mit k ersetzen? 
     algorithms <- unique(data[["algorithm"]])
-    if (i == 2) {
+    if (i == 5) {
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
     for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(learner_b)) {
-        k <- learner_b
+      if (!is.null(algorithm)) {
+        k <- algorithm
       }
       # define samples when testing on multiple datasets
       if (is.null(problemset)) {
@@ -157,9 +163,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, learner_b = NULL,
       b_sign <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max, 
                                           weights, n.samples)
       
-      result[k, "baseline"] <- baseline
-      result[k, "method"] <- b_sign$method
-      result[k, "measure"] <- measure
+      result[k, "algorithm"] <- k
       result[k, "left"] <- b_sign$probabilities[1]
       result[k, "rope"] <- b_sign$probabilities[2]
       result[k, "right"] <- b_sign$probabilities[3]
@@ -172,29 +176,33 @@ seq_b_sign_test <- function(problemset = NULL, baseline, learner_b = NULL,
           b_sign$probabilities[3]
       } 
       if (threshold > 0.95) {
-        result[k, "significance_appears"] <- TRUE
+        result[k, "significanct"] <- TRUE
       } else {
-        result[k, "significance_appears"] <- FALSE
+        result[k, "significanct"] <- FALSE
       }
-      liste <-  rownames(result[result[["significance_appears"]] == TRUE, ])
+      liste <-  rownames(result[result[["significanct"]] == TRUE, ])
     }
-    if (!is.null(learner_b)) {
+    if (!is.null(algorithm)) {
       if (threshold > 0.95) {
         break 
       }
     }
   }
-  return(result)
+  output_test <- get_results(baseline, measure, method = b_sign$method, 
+                             data = result)
+  return_test <- format_test(output_test)
+  return(return_test)
 }
-
-
+#results <- seq_b_sign_test(df = test_benchmark_small, baseline = 'algo_1', 
+#                           max_repls = 10)
+#results
 
 
 #------------------------------------------------------------------------------#
 #-------------------------- Bayesian Signed Rank Test -------------------------# 
 
 
-seq_b_signed_rank_test <- function(problemset = NULL, baseline, learner_b = NULL, 
+seq_b_signed_rank_test <- function(problemset = NULL, baseline, algorithm = NULL, 
                                    measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
                                    weights = NULL, mc_samples = 1e+05, 
                                    rope = c(-0.01, 0.01), max_repls = 20, ...) {
@@ -207,25 +215,24 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline, learner_b = NULL
   rope.min <- rope[1]
   rope.max <- rope[2]
   result = data.frame()
-  for (i in 2:max_repls) {
+  for (i in 5:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problemset = NULL, baseline, 
-                                       learner_b = NULL, measure = NULL, 
-                                       parameter_algorithm = NULL))
+                                       algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
-    ## alle "learner_b" mit k ersetzen? 
+    ## alle "algorithm" mit k ersetzen? 
     algorithms <- unique(data[["algorithm"]])
-    if (i == 2) {
+    if (i == 5) {
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
     for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(learner_b)) {
-        k <- learner_b
+      if (!is.null(algorithm)) {
+        k <- algorithm
       }
       # define samples when testing on multiple datasets
       if (is.null(problemset)) {
@@ -243,43 +250,47 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline, learner_b = NULL
       }
       mc.samples <- mc_samples
       # Bayesian Sign Test
-      b_sign <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, rope.min, rope.max, weights, mc.samples)
-      result[k, "baseline"] <- baseline
-      result[k, "method"] <- b_sign$method
-      result[k, "measure"] <- measure
-      result[k, "left"] <- b_sign$probabilities[1]
-      result[k, "rope"] <- b_sign$probabilities[2]
-      result[k, "right"] <- b_sign$probabilities[3]
+      b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, rope.min, rope.max, weights, mc.samples)
+      result[k, "algorithm"] <- k
+      result[k, "left"] <- b_signed_rank$probabilities[1]
+      result[k, "rope"] <- b_signed_rank$probabilities[2]
+      result[k, "right"] <- b_signed_rank$probabilities[3]
       result[k, "repls"] <- i
       if (is.null(compare)) {compare <- "better"}
       if (compare == "better") { 
-        threshold <- b_sign$probabilities[3]
+        threshold <- b_signed_rank$probabilities[3]
       } else if (compare == "equal") {
-        threshold <- b_sign$probabilities[2] + 
-          b_sign$probabilities[3]
+        threshold <- b_signed_rank$probabilities[2] + 
+          b_signed_rank$probabilities[3]
       } 
       if (threshold > 0.95) {
-        result[k, "significance_appears"] <- TRUE
+        result[k, "significanct"] <- TRUE
       } else {
-        result[k, "significance_appears"] <- FALSE
+        result[k, "significanct"] <- FALSE
       }
-      liste <-  rownames(result[result[["significance_appears"]] == TRUE, ])
+      liste <-  rownames(result[result[["significanct"]] == TRUE, ])
     }
-    if (!is.null(learner_b)) {
+    if (!is.null(algorithm)) {
       if (threshold > 0.95) {
         break 
       }
     }
   }
-  return(result)
+  output_test <- get_results(baseline, measure, method = b_signed_rank$method, 
+                             data = result)
+  return_test <- format_test(output_test)
+  return(return_test)
 }
 
+#results <- seq_b_signed_rank_test(df = test_benchmark_small, baseline = 'algo_1', 
+#                                  max_repls = 10)
+#results
 
 
 #------------------------------------------------------------------------------#
 #------------------ Bayesian hierarchical correlated t-test -------------------# 
 
-seq_b_hierarchical_test <- function(baseline, learner_b = NULL, measure = NULL, 
+seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL, 
                                     compare = NULL, rho = 0.1, max_repls = 20, 
                                     rope = c(-0.01, 0.01), std.upper = 1000,
                                     d0.lower = NULL, d0.upper = NULL,
@@ -289,25 +300,25 @@ seq_b_hierarchical_test <- function(baseline, learner_b = NULL, measure = NULL,
                                     stan.output.file = NULL, 
                                     seed = as.numeric(Sys.time()), ...) {
   result = data.frame()
-  for (i in 2:max_repls) {
+  for (i in 5:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
-    checkmate::assert_true(check_names(df = data, baseline, learner_b = NULL,
+    checkmate::assert_true(check_names(df = data, baseline, algorithm = NULL,
                                        measure = NULL, problemset = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
     algorithms <- unique(data[["algorithm"]])
-    if (i == 2) {
+    if (i == 5) {
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
     # define samples
     x.matrix <- data_transformation(data, algo = baseline, measure)
     for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(learner_b)) {
-        k <- learner_b
+      if (!is.null(algorithm)) {
+        k <- algorithm
         y.matrix <- data_transformation(data, algo = k, measure)
       } else {
         y.matrix <- data_transformation(data, algo = k, measure)
@@ -322,9 +333,7 @@ seq_b_hierarchical_test <- function(baseline, learner_b = NULL, measure = NULL,
                                                   beta.upper, rope, nsim,
                                                   nchains, parallel, 
                                                   stan.output.file, seed)
-      result[k, "baseline"] <- baseline
-      result[k, "method"] <- b_hierarchical$method
-      result[k, "measure"] <- measure
+      result[k, "algorithm"] <- k
       result[k, "left"] <- b_hierarchical$posterior.probabilities[1]
       result[k, "rope"] <- b_hierarchical$posterior.probabilities[2]
       result[k, "right"] <- b_hierarchical$posterior.probabilities[3]
@@ -339,19 +348,24 @@ seq_b_hierarchical_test <- function(baseline, learner_b = NULL, measure = NULL,
           b_hierarchical$posterior.probabilities[3]
       }
       if (threshold > 0.95) {
-        result[k, "significance_appears"] <- TRUE
+        result[k, "significanct"] <- TRUE
       } else {
-        result[k, "significance_appears"] <- FALSE
+        result[k, "significanct"] <- FALSE
       }
-      liste <- rownames(result[result[["significance_appears"]] == TRUE,])
+      liste <- rownames(result[result[["significanct"]] == TRUE,])
     }
-    if (!is.null(learner_b)) {
+    if (!is.null(algorithm)) {
       if (threshold > 0.95) {
         break
       }
     }
   }
-  return(result)
+  output_test <- get_results(baseline, measure, method = b_hierarchical$method, 
+                             data = result)
+  return_test <- format_test(output_test)
+  return(return_test)
 }
 
-
+#results <- seq_b_hierarchical_test(df = test_benchmark_small, baseline = 'algo_1', 
+#                                   max_repls = 10)
+#results
