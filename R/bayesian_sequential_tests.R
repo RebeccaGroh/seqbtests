@@ -66,9 +66,6 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
       }
       # Bayesian correlated t Test
       b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)
-      #if (b_test$posterior.probabilities[3] > 0.95) {
-      #  break
-      #}
       result[k, "algorithm"] <- k
       result[k, "left"] <- b_test$posterior.probabilities[1]
       result[k, "rope"] <- b_test$posterior.probabilities[2]

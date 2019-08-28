@@ -17,3 +17,31 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(seqbtests)
 ```
+
+This Vignette is supposed to give you a short an easy introduction to the 
+seqbtest package. 
+The purpose of the package is to provide a flexible and simple to use framework 
+to evaluate the performance of benchmark results.
+
+# Introduction 
+
+This package implements different Bayesian tests to compare the performance of 
+Machine Learning Algorithms. The performance of the algorithms to be compared 
+can be built up within the packages by a function written by the user and can be
+directly compared within the tests. For this purpose, the sequential Bayesian 
+tests are provided, in which the number of generated performance values does not
+have to be fixed at the beginning. Instead, after each replication it is checked 
+whether there is a 95% probability to determine which algorithm performs better. 
+If this threshold is reached, the build-up of replications is stopped early, 
+which can result in significant time savings. These tests work either on a 
+single or multiple data sets. Further, some standard Hypothesis tests are 
+provided. 
+
+
+
+```{r}
+plot_boxplot(df = test_benchmark_small)
+
+```
+
+
