@@ -83,11 +83,11 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
     return(output_test)
 }
 
-# results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a",
-#                           baseline = "algo_1", algorithm = "algo_2")
-# results
+results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a",
+                       baseline = "algo_1")
+results
 
-#' @title Bayesian sign test 
+#' @title Bayesian Sign test 
 #' @description 
 #'     This function implements the Bayesian version of the sign test. The 
 #'     performance of one baseline algorithm on one or multiple data sets is 
@@ -95,7 +95,8 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 #' @param df Input data frame. 
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
-#' @param algorithm Second algorithm. 
+#' @param algorithm Second algorithm. If not defined, every algorithm will be 
+#'     tested against baseline. 
 #' @param measure Measure column. 
 #' @param z_0 Prior pseudo-observation. 
 #' @param s Prior pseudo-observation probability. 
@@ -197,7 +198,8 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
 #' @param df Input data frame. 
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
-#' @param algorithm Second algorithm. 
+#' @param algorithm Second algorithm. If not defined, every algorithm will be 
+#'     tested against baseline. 
 #' @param measure Measure column. 
 #' @param z_0 Prior pseudo-observation. 
 #' @param s Prior pseudo-observation probability. 
@@ -299,7 +301,8 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
 #'     multiple algorithms.  
 #' @param df Input data frame. 
 #' @param baseline First algorithm.
-#' @param algorithm Second algorithm. 
+#' @param algorithm Second algorithm. If not defined, every algorithm will be 
+#'     tested against baseline. 
 #' @param measure Measure column. 
 #' @param rho Correlation factor. 
 #' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0.
@@ -328,7 +331,7 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
 #'     parallel.
 #' @param stan.output.file String containing the base name for the output files 
 #'     produced by Stan. If \code{NULL}, no files are stored.
-#' @param seed Optional parameter used to fix the random seed
+#' @param seed Optional parameter used to fix the random seed.
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.

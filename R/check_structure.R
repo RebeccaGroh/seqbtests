@@ -86,20 +86,16 @@ paste_algo_pars <- function(df, parameter_algo = NULL) {
 }
 
 
-#' @title Create generic function
-format_test <- function(test) {
-  UseMethod("format_test")
-}
-
 
 #' @title Table test results (Bayesian tests)
 #' @description Create a list containing the Bayesian test results based on a 
 #'     generic function.
 print.btest <- function(x, ...) {
-  cat(sprintf("Results of the %s\n", x$method))
-  cat(sprintf("Measure column = %s", x$measure))
-  cat(sprintf("Baseline algorithm = %s", x$baseline))
+  cat( "\n", "Results of the", x$method, "\n", 
+      "Measure column =", x$measure, "\n", 
+      "Baseline algorithm = ", x$baseline, "\n", "\n" )
   row.names(x$data_frame) <- NULL
   output_data <- x$data_frame
-  print(output_data)}
+  print(output_data)
+}
 

@@ -30,14 +30,15 @@
 #' \item{code{repls}} Number of the considered replications.
 #' }
 #' @details 
-#'     The basic for this test has first been implemented in scmamp. 
+#'     The basis for this test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used. The default of rho is 
 #'     0.1. 
-#' @example results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-#'                                       problemset = "problem_a", 
-#'                                       baseline = "algo_1", compare = "equal", 
-#'                                       max_repls = 10,  rope=c(-0.01, 0.01))
+#' @references \url{https://github.com/b0rxa/scmamp}
+#' @example 
+#' results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+#'                              problemset = "problem_a", baseline = "algo_1", 
+#'                              compare = "equal", max_repls = 10)
 #' @export
 seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL, 
                               measure = NULL, compare = NULL, rho = 0.1, 
@@ -103,16 +104,54 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
 }
 
 
-
-#------------------------------------------------------------------------------#
-#----------------------------- Bayesian Sign Test -----------------------------# 
-
-
+#' @title Sequential Bayesian Sign test 
+#' @description 
+#'     This function implements a sequential approach of the Bayesian version of
+#'     the sign test to compare the performance of machine learning algorithms 
+#'     to one another. Sample size is not fixed in advance, data are evaluated 
+#'     as they are collected. Further sampling is stopped in accordance with a 
+#'     pre-defined stopping rule as soon as significant results are obtained. 
+#' @param problemset Problem set on which the test should be performed. 
+#' @param baseline First algorithm.
+#' @param algorithm Second algorithm. If not defined, every algorithm will be 
+#'     tested against baseline.  
+#' @param measure Measure column. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms. If not defined, the default is to test for 'better'.
+#' @param z_0 Prior pseudo-observation. 
+#' @param s Prior pseudo-observation probability. 
+#' @param weights A-priori weights. 
+#' @param mc_samples Number of samples of the distribution. 
+#' @param rope Region of practical equivalence. 
+#' @param max_repls Maximum number of replications that should be build in 
+#'     get_replications. Or maximum number of replications in data frame, if 
+#'     a data frame that has already been built is being used.  
+#' @return A list containing the following components:
+#' \itemize{
+#' \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{baseline} A string with the name of the baseline algorithm.
+#' \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'     algorithm that is compared to the baseline. The columns show the 
+#'     posterior probabilities and whether significance appears.
+#' \item{code{repls}} Number of the considered replications.
+#' }
+#' @details 
+#'     The basis for this test has first been implemented in rNPBST. For testing
+#'     over multiple datasets, don´t specify the problem set argument in the 
+#'     function. Note that if no measure column is defined per default the first
+#'     column defined as measure_* in the data frame is used. 
+#' @references \url{https://github.com/JacintoCC/rNPBST}
+#' @example     
+#' results <- seq_b_sign_test(df = test_benchmark_small, baseline = "algo_1", 
+#'                             max_repls = 10)
+#' @export
 seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL, 
                             measure = NULL, compare = NULL, s = 1, z_0 = 0,
                             weights = c(s/2, rep(1, length(x))), 
                             mc_samples = 1e+05, rope = c(-0.01, 0.01), 
-                            max_repls = 20, ...) {
+                            max_repls = 20) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -190,19 +229,56 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
   return_test <- format_test(output_test)
   return(return_test)
 }
-#results <- seq_b_sign_test(df = test_benchmark_small, baseline = 'algo_1', 
-#                           max_repls = 10)
-#results
 
 
-#------------------------------------------------------------------------------#
-#-------------------------- Bayesian Signed Rank Test -------------------------# 
-
-
-seq_b_signed_rank_test <- function(problemset = NULL, baseline, algorithm = NULL, 
-                                   measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
+#' @title Sequential Bayesian Signed Rank test 
+#' @description 
+#'     This function implements a sequential approach of the Bayesian version of
+#'     the signed rank test to compare the performance of machine learning algorithms 
+#'     to one another. Sample size is not fixed in advance, data are evaluated 
+#'     as they are collected. Further sampling is stopped in accordance with a 
+#'     pre-defined stopping rule as soon as significant results are obtained. 
+#' @param problemset Problem set on which the test should be performed. 
+#' @param baseline First algorithm.
+#' @param algorithm Second algorithm. If not defined, every algorithm will be 
+#'     tested against baseline. 
+#' @param measure Measure column. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms. If not defined, the default is to test for 'better'.
+#' @param z_0 Prior pseudo-observation. 
+#' @param s Prior pseudo-observation probability. 
+#' @param weights A-priori weights. 
+#' @param mc_samples Number of samples of the distribution. 
+#' @param rope Region of practical equivalence. 
+#' @param max_repls Maximum number of replications that should be build in 
+#'     get_replications. Or maximum number of replications in data frame, if 
+#'     a data frame that has already been built is being used.  
+#' @return A list containing the following components:
+#' \itemize{
+#' \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{baseline} A string with the name of the baseline algorithm.
+#' \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'     algorithm that is compared to the baseline. The columns show the 
+#'     posterior probabilities and whether significance appears.
+#' \item{code{repls}} Number of the considered replications.
+#' }
+#' @details 
+#'     The basis for this test has first been implemented in rNPBST. For testing
+#'     over multiple datasets, don´t specify the problem set argument in the 
+#'     function. Note that if no measure column is defined per default the first
+#'     column defined as measure_* in the data frame is used. 
+#' @references \url{https://github.com/JacintoCC/rNPBST}
+#' @example     
+#' results <- seq_b_signed_rank_test(df = test_benchmark_small, 
+#'                                   baseline = 'algo_1', max_repls = 10)
+#' @export
+seq_b_signed_rank_test <- function(problemset = NULL, baseline, 
+                                   algorithm = NULL, measure = NULL, 
+                                   compare = NULL, s = 0.5, z_0 = 0,
                                    weights = NULL, mc_samples = 1e+05, 
-                                   rope = c(-0.01, 0.01), max_repls = 20, ...) {
+                                   rope = c(-0.01, 0.01), max_repls = 20) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -247,7 +323,9 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline, algorithm = NULL
       }
       mc.samples <- mc_samples
       # Bayesian Sign Test
-      b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, rope.min, rope.max, weights, mc.samples)
+      b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, 
+                                                       rope.min, rope.max, 
+                                                       weights, mc.samples)
       result[k, "algorithm"] <- k
       result[k, "left"] <- b_signed_rank$probabilities[1]
       result[k, "rope"] <- b_signed_rank$probabilities[2]
@@ -279,14 +357,76 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline, algorithm = NULL
   return(return_test)
 }
 
-#results <- seq_b_signed_rank_test(df = test_benchmark_small, baseline = 'algo_1', 
-#                                  max_repls = 10)
-#results
 
 
-#------------------------------------------------------------------------------#
-#------------------ Bayesian hierarchical correlated t-test -------------------# 
 
+#' @title Sequential Bayesian hierarchical correlated t-test
+#' @description 
+#'     This function implements a sequential approach of the Bayesian 
+#'     hierarchical test to compare the performance of machine learning 
+#'     algorithms to one another. Sample size is not fixed in advance, data are 
+#'     evaluated as they are collected. Further sampling is stopped in 
+#'     accordance with a pre-defined stopping rule as soon as significant 
+#'     results are obtained. 
+#' @param baseline First algorithm.
+#' @param algorithm Second algorithm. If not defined, every algorithm will be 
+#'     tested against baseline. 
+#' @param measure Measure column. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms. If not defined, the default is to test for 'better'.
+#' @param rho Correlation factor. 
+#' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0.
+#' @param d0.lower Lower bound for the prior for mu_0. If not provided, 
+#'     the smallest observed difference is used.
+#' @param d0.upper Upper bound for the prior for mu_0. If not provided, 
+#'     the biggest observed difference is used.
+#' @param alpha.lower Lower bound for the (uniform) prior for the alpha 
+#'     hyperparameter. Default value set at 0.5.
+#' @param alpha.upper Upper bound for the (uniform) prior for the alpha 
+#'     hyperparameter. Default value set at 0.5.
+#' @param beta.lower Lower bound for the (uniform) prior for the beta 
+#'     hyperparameter. Default value set at 0.5.
+#' @param beta.lower Upper bound for the (uniform) prior for the beta 
+#'     hyperparameter. Default value set at 0.5.
+#' @param z0 Position of the pseudo-observation associated to the prior 
+#'     Dirichlet Process. The default value is set to 0 (inside the rope).
+#' @param rope Interval for the difference considered as 'irrelevant'.
+#' @param nsim Number of samples (per chain) used to estimate the posterior 
+#'     distribution. Note that, by default, half the simulations are used for 
+#'     the burn-in.
+#' @param nchain Number of MC chains to be simulated. As half the simulations 
+#'     are used for the warm-up, the total number of simulations will 
+#'     be \code{nchain}*\code{nsim}/2.
+#' @param parallel Logical value. If \code{true}, Stan code is executed in 
+#'     parallel.
+#' @param stan.output.file String containing the base name for the output files 
+#'     produced by Stan. If \code{NULL}, no files are stored.
+#' @param seed Optional parameter used to fix the random seed
+#' @param max_repls Maximum number of replications that should be build in 
+#'     get_replications. Or maximum number of replications in data frame, if 
+#'     a data frame that has already been built is being used.  
+#' @param rope Region of practical equivalence. 
+#' @return A list containing the following components:
+#' \itemize{
+#' \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{baseline} A string with the name of the baseline algorithm.
+#' \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'     algorithm that is compared to the baseline. The columns show the 
+#'     posterior probabilities and whether significance appears.
+#' \item{code{repls}} Number of the considered replications.
+#' }
+#' @details 
+#'     The basis for this test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used. The default of rho is 
+#'     0.1. 
+#' @references \url{https://github.com/b0rxa/scmamp}
+#' @example 
+#' results <- seq_b_hierarchical_test(df = test_benchmark_small, 
+#'                                    baseline = 'algo_1', max_repls = 10)
+#' @export
 seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL, 
                                     compare = NULL, rho = 0.1, max_repls = 20, 
                                     rope = c(-0.01, 0.01), std.upper = 1000,
@@ -363,6 +503,4 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
   return(return_test)
 }
 
-#results <- seq_b_hierarchical_test(df = test_benchmark_small, baseline = 'algo_1', 
-#                                   max_repls = 10)
-#results
+
