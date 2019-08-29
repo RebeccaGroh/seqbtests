@@ -42,7 +42,7 @@
 #' @export
 seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL, 
                               measure = NULL, compare = NULL, rho = 0.1, 
-                              rope = c(-0.01, 0.01), max_repls = 20) {
+                              rope = c(-0.01, 0.01), max_repls = 20, ...) {
   result = data.frame()
   for (i in 5:max_repls) {
     data <- get_replications(i, ...)
@@ -61,15 +61,12 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
+    if (!is.null(algorithm)) {
+      algorithms <- algorithm
+    }
     for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(algorithm)) {
-        k <- algorithm
         y <- data[data[["problem"]] == problemset 
                   & data[["algorithm"]] == k, measure]
-      } else {
-        y <- data[data[["problem"]] == problemset 
-                  & data[["algorithm"]] == k, measure]
-      }
       # Bayesian correlated t Test
       b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)
       result[k, "algorithm"] <- k
@@ -79,10 +76,10 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
       result[k, "repls"] <- i
       if (is.null(compare)) {compare <- "better"}
       if (compare == "better") { 
-        threshold <- b_test$posterior.probabilities[3]
+        threshold <- b_test$posterior.probabilities[1]
       } else if (compare == "equal") {
         threshold <- b_test$posterior.probabilities[2] + 
-          b_test$posterior.probabilities[3]
+          b_test$posterior.probabilities[1]
       } 
       if (threshold > 0.95) {
         result[k, "significanct"] <- TRUE
@@ -97,10 +94,9 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
       }
     }
   }
-  output_test <- get_results(baseline, measure, method = b_test$method, 
+  output <- get_results(baseline, measure, method = b_test$method, 
                              data = result)
-  return_test <- format_test(output_test)
-  return(return_test)
+  return(output)
 }
 
 
@@ -151,7 +147,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
                             measure = NULL, compare = NULL, s = 1, z_0 = 0,
                             weights = c(s/2, rep(1, length(x))), 
                             mc_samples = 1e+05, rope = c(-0.01, 0.01), 
-                            max_repls = 20) {
+                            max_repls = 20, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -176,10 +172,10 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
+    if (!is.null(algorithm)) {
+      algorithms <- algorithm
+    }
     for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(algorithm)) {
-        k <- algorithm
-      }
       # define samples when testing on multiple datasets
       if (is.null(problemset)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
@@ -206,10 +202,10 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
       result[k, "repls"] <- i
       if (is.null(compare)) {compare <- "better"}
       if (compare == "better") { 
-        threshold <- b_sign$probabilities[3]
+        threshold <- b_sign$probabilities[1]
       } else if (compare == "equal") {
         threshold <- b_sign$probabilities[2] + 
-          b_sign$probabilities[3]
+          b_sign$probabilities[1]
       } 
       if (threshold > 0.95) {
         result[k, "significanct"] <- TRUE
@@ -224,10 +220,9 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
       }
     }
   }
-  output_test <- get_results(baseline, measure, method = b_sign$method, 
+  output <- get_results(baseline, measure, method = b_sign$method, 
                              data = result)
-  return_test <- format_test(output_test)
-  return(return_test)
+  return(output)
 }
 
 
@@ -278,7 +273,7 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
                                    algorithm = NULL, measure = NULL, 
                                    compare = NULL, s = 0.5, z_0 = 0,
                                    weights = NULL, mc_samples = 1e+05, 
-                                   rope = c(-0.01, 0.01), max_repls = 20) {
+                                   rope = c(-0.01, 0.01), max_repls = 20, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -303,10 +298,10 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
+    if (!is.null(algorithm)) {
+      algorithms <- algorithm
+    }
     for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(algorithm)) {
-        k <- algorithm
-      }
       # define samples when testing on multiple datasets
       if (is.null(problemset)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
@@ -333,10 +328,10 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
       result[k, "repls"] <- i
       if (is.null(compare)) {compare <- "better"}
       if (compare == "better") { 
-        threshold <- b_signed_rank$probabilities[3]
+        threshold <- b_signed_rank$probabilities[1]
       } else if (compare == "equal") {
         threshold <- b_signed_rank$probabilities[2] + 
-          b_signed_rank$probabilities[3]
+          b_signed_rank$probabilities[1]
       } 
       if (threshold > 0.95) {
         result[k, "significanct"] <- TRUE
@@ -351,13 +346,10 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
       }
     }
   }
-  output_test <- get_results(baseline, measure, method = b_signed_rank$method, 
+  output <- get_results(baseline, measure, method = b_signed_rank$method, 
                              data = result)
-  return_test <- format_test(output_test)
-  return(return_test)
+  return(output)
 }
-
-
 
 
 #' @title Sequential Bayesian hierarchical correlated t-test
@@ -451,15 +443,13 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
+    if (!is.null(algorithm)) {
+      algorithms <- algorithm
+    }
     # define samples
     x.matrix <- data_transformation(data, algo = baseline, measure)
     for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(algorithm)) {
-        k <- algorithm
         y.matrix <- data_transformation(data, algo = k, measure)
-      } else {
-        y.matrix <- data_transformation(data, algo = k, measure)
-      }
       # check numbers in sample
       checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
       # Bayesian correlated t Test
@@ -479,10 +469,10 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
         compare <- "better"
       }
       if (compare == "better") {
-        threshold <- b_hierarchical$posterior.probabilities[3]
+        threshold <- b_hierarchical$posterior.probabilities[1]
       } else if (compare == "equal") {
         threshold <- b_hierarchical$posterior.probabilities[2] +
-          b_hierarchical$posterior.probabilities[3]
+          b_hierarchical$posterior.probabilities[1]
       }
       if (threshold > 0.95) {
         result[k, "significanct"] <- TRUE
@@ -497,10 +487,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       }
     }
   }
-  output_test <- get_results(baseline, measure, method = b_hierarchical$method, 
+  output <- get_results(baseline, measure, method = b_hierarchical$method, 
                              data = result)
-  return_test <- format_test(output_test)
-  return(return_test)
+  return(output)
 }
-
-
