@@ -4,10 +4,10 @@
 \alias{check_names}
 \title{Check column names}
 \usage{
-check_names(df, problemset = NULL, baseline = NULL, learner_a = NULL,
-  learner_b = NULL, measure = NULL, parameter_algorithm = NULL)
+check_names(df, problemset = NULL, baseline = NULL, algorithm = NULL,
+  measure = NULL)
 }
 \description{
-Check if column names that were passed by User
-  are contained in the data frame.
+Check if column names that were passed by User are contained 
+    in the data frame.
 }

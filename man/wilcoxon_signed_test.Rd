@@ -4,30 +4,29 @@
 \alias{wilcoxon_signed_test}
 \title{Wilcoxon signed-rank test}
 \usage{
-wilcoxon_signed_test(df, problemset, learner_a, learner_b,
-  measure = NULL)
+wilcoxon_signed_test(df, problemset, baseline, algorithm, measure = NULL)
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{problemset}{Problemset on which the test should be performed.}
+\item{problemset}{Problem set on which the test should be performed.}
 
-\item{learner_a}{First algorithm.}
+\item{baseline}{First algorithm.}
 
-\item{learner_b}{Second algorithm.}
+\item{algorithm}{Second algorithm.}
 
 \item{measure}{Measure column.}
 }
 \value{
 A list containing the following components: 
-\item{code{measure}}{a string with the name of the measure column used}
-\item{code{method}}{a string with the name of the method used}
-\item{code{statistic}}{the value of the statistic used in the test}
-\item{code{p_value}}{the p-value for the test}
+\item{code{measure}}{A string with the name of the measure column used.}
+\item{code{method}}{A string with the name of the method used.}
+\item{code{statistic}}{The value of the statistic used in the test.}
+\item{code{p_value}}{The p-value for the test.}
 }
 \description{
 This function implements the paired Wilcoxon signed-rank test. A 
-non-parametric statistical hypothesis test sed to compare the means of two 
+non-parametric statistical hypothesis test to compare the means of two 
 paired samples.
 }
 \details{

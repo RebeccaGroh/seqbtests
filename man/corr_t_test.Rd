@@ -4,37 +4,33 @@
 \alias{corr_t_test}
 \title{Correlated t Test}
 \usage{
-corr_t_test(df, problemset, learner_a, learner_b, measure = NULL,
-  rho = 0.01, alternative = "two.sided")
+corr_t_test(df, problemset, baseline, algorithm, measure = NULL,
+  rho = 0.01)
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{problemset}{Problemset on which the test should be performed.}
+\item{problemset}{Problem set on which the test should be performed.}
 
-\item{learner_a}{First algorithm.}
+\item{baseline}{First algorithm.}
 
-\item{learner_b}{Second algorithm.}
+\item{algorithm}{Second algorithm.}
 
 \item{measure}{Measure column.}
 
-\item{rho}{Correlation factor. (for the case of cross validated results, the 
+\item{rho}{Correlation factor. (For the case of cross validated results, the 
 heuristic to set the correlation is size of test set divided by total size 
-of the dataset)}
-
-\item{alternative}{a character string specifying the alternative hypothesis, 
-must be one of 'two.sided' (default), 'greater' or 'less'. 
-You can specify just the initial letter.}
+of the dataset.)}
 }
 \value{
 A list containing the following components: 
-\item{code{measure}}{a string with the name of the measure column used}
-\item{code{method}}{a string with the name of the method used}
-\item{code{statistic}}{the value of the statistic used in the test}
-\item{code{p_value}}{the p-value for the test}
+\item{code{measure}}{A string with the name of the measure column used.}
+\item{code{method}}{A string with the name of the method used.}
+\item{code{statistic}}{The value of the statistic used in the test.}
+\item{code{p_value}}{The p-value for the test.}
 }
 \description{
-This function implements the t-Test for paired samples.
+This function implements a two-sided t-Test for paired samples.
 }
 \details{
 The test has first been implemented in scmamp.

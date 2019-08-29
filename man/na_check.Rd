@@ -7,18 +7,20 @@
 na_check(df, measure, check_var)
 }
 \arguments{
-\item{df}{input data frame}
+\item{df}{Input data frame.}
 
-\item{measure}{Measure column}
+\item{measure}{Measure column.}
 
-\item{check_var}{Column in data frame used to check for NAs}
+\item{check_var}{Column in data frame used to check for NAs. Either 
+"problemsets" or "algorithm".}
 }
 \value{
-List of Cases, NAs and the NA ratio according to the check_var values.
+List of Cases, NAs and the NA ratio according to check_var.
 }
 \description{
-Check if the measure column is complete. For values of one of the other 
-columns this function shows the Ratio of NAs existing in the measure column. 
-If there are any NAs the User can decide to drop all observations for that 
-specific value, since the data frame needs to be complete for testing.
+Check if the measure column is complete. 
+For the problem sets and all algorithms present in the data frame, this 
+function specifies the ratio of the NAs present. If there are any NAs the 
+User can decide to drop all observations for that specific value, since the
+data frame needs to be complete for testing.
 }

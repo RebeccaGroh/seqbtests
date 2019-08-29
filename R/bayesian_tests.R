@@ -77,10 +77,8 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
                                             b_corr$approximate, 
                                             b_corr$parameters, 
                                             b_corr$posterior))
-    return_test <- format_test(output_test)
-    return(return_test)
+    return(output_test)
 }
-
 
 #' @title Bayesian sign test 
 #' @description 

@@ -13,10 +13,10 @@ friedman_test(df, measure = NULL)
 }
 \value{
 A list containing the following components: 
-\item{code{measure}}{a string with the name of the measure column used}
-\item{code{method}}{a string with the name of the method used}
-\item{code{statistic}}{the value of the statistic used in the test}
-\item{code{p_value}}{the p-value for the test}
+\item{code{measure}}{A string with the name of the measure column used.}
+\item{code{method}}{A string with the name of the method used.}
+\item{code{statistic}}{The value of the statistic used in the test.}
+\item{code{p_value}}{The p-value for the test.}
 }
 \description{
 This function implements the Friedman's test for multiple 

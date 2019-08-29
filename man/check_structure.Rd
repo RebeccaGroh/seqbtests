@@ -7,11 +7,12 @@
 check_structure(df)
 }
 \arguments{
-\item{df}{input data frame}
+\item{df}{Input data frame,}
 }
 \value{
-TRUE if test was successful
+TRUE if test was successful.
 }
 \description{
-Check if the structure of the data frame satisfies the requirements.
+Check if the structure of the data frame satisfies the 
+    requirements.
 }

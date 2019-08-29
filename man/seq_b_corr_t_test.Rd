@@ -4,7 +4,7 @@
 \alias{seq_b_corr_t_test}
 \title{Sequential bayesian correlated t test}
 \usage{
-seq_b_corr_t_test(problemset, baseline = NULL, learner_b = NULL,
+seq_b_corr_t_test(problemset, baseline, algorithm = NULL,
   measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01),
   max_repls = 20, ...)
 }
@@ -13,7 +13,7 @@ seq_b_corr_t_test(problemset, baseline = NULL, learner_b = NULL,
 
 \item{baseline}{First algorithm.}
 
-\item{learner_b}{Second algorithm. If not defined, every algorithm will be 
+\item{algorithm}{Second algorithm. If not defined, every algorithm will be 
 tested against baseline.}
 
 \item{measure}{Measure column.}
@@ -42,11 +42,11 @@ probabilities}
 \item{code{repls}}{number of the considered replications}
 }
 \description{
-This function implements a sequential approach to compare the performance of 
-machine learning algorithms to one another. Sample size is not fixed in 
-adavnce, data are evaluated as they are collected. Further sampling is 
-stopped in accordance with a pre-defined stopping rule as soon as significant 
-results are obtained.
+This function implements a sequential approach of the bayesian correlated 
+t test to compare the performance of machine learning algorithms to one 
+another. Sample size is not fixed in advance, data are evaluated as they are 
+collected. Further sampling is stopped in accordance with a pre-defined 
+stopping rule as soon as significant results are obtained.
 }
 \details{
 The basics of the test have first been implemented in scmamp. 

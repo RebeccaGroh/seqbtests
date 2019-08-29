@@ -2,25 +2,22 @@
 % Please edit documentation in R/bayesian_tests.R
 \name{b_sign_test}
 \alias{b_sign_test}
-\title{Bayesian Sign test}
+\title{Bayesian sign test}
 \usage{
-b_sign_test(df, problemset, learner_a, learner_b, measure = NULL,
-  parameter_algorithm = NULL, s = 1, z_0 = 0, weights = c(s/2,
-  rep(1, length(x))), mc_samples = 1e+05, rope = c(-0.01, 0.01))
+b_sign_test(df, problemset, baseline, algorithm = NULL, measure = NULL,
+  compare = NULL, s = 1, z_0 = 0, weights = c(s/2, rep(1,
+  length(x))), mc_samples = 1e+05, rope = c(-0.01, 0.01))
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{problemset}{Problemset on which the test should be performed.}
+\item{problemset}{Problem set on which the test should be performed.}
 
-\item{learner_a}{First algorithm.}
+\item{baseline}{First algorithm.}
 
-\item{learner_b}{Second algorithm.}
+\item{algorithm}{Second algorithm.}
 
 \item{measure}{Measure column.}
-
-\item{parameter_algorithm}{Specifies parameters concerning the corresponding 
-algorithm.}
 
 \item{s}{Prior pseudo-observation probability.}
 
@@ -34,18 +31,18 @@ algorithm.}
 }
 \value{
 A list containing the following components:
-\item{code{measure}}{a string with the name of the measure column used}
-\item{code{method}}{a string with the name of the method used}
-\item{code{posteriror_probabilities}}{a vector with the left, rope and right 
-probabilities}
+\item{code{measure}}{A string with the name of the measure column used.}
+\item{code{method}}{A string with the name of the method used.}
+\item{code{posteriror_probabilities}}{A vector with the left, rope and right 
+probabilities.}
 }
 \description{
 This function implements the Bayesian version of the sign test.
 }
 \details{
 The test has first been implemented in rNPBST.  
-For testing over multiple datasets, don´t specify the problemset argument in 
-the function. 
+For testing over multiple datasets, don´t specify the problem set argument 
+in the function. 
 Note that the default value for measure is the first measure column in the 
 data frame.
 }

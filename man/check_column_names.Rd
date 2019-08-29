@@ -2,17 +2,17 @@
 % Please edit documentation in R/check_structure.R
 \name{check_column_names}
 \alias{check_column_names}
-\title{Check Columns of Data Frame}
+\title{Check Columns of data frame}
 \usage{
 check_column_names(df)
 }
 \arguments{
-\item{df}{input data frame}
+\item{df}{Input data frame,}
 }
 \value{
-TRUE if test was successful
+TRUE if test was successful.
 }
 \description{
-Check if data frame only contains legit columns
-  and whether the compulsory columns exist.
+Check if data frame only contains legit columns and whether any
+    compulsory columns exist.
 }

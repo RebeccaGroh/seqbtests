@@ -280,61 +280,61 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
     }
   }  
 }
-    #---------------------------------------------------------------------------
-    # define samples
-    x <- data[data[["problem"]] == problemset & data[["algorithm"]] == baseline, measure]
-    algorithms <- unique(data[["algorithm"]])
-    if (i == 5) {
-      liste <- c()
-    }
-    algorithms <- setdiff(algorithms, liste)
-    for (k in algorithms[algorithms != baseline]) {
-      if (!is.null(algorithm)) {
-        k <- algorithm
-        y <- data[data[["problem"]] == problemset 
-                  & data[["algorithm"]] == k, measure]
-      } else {
-        y <- data[data[["problem"]] == problemset 
-                  & data[["algorithm"]] == k, measure]
-      }
-      # Bayesian correlated t Test
-      b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)
-      #if (b_test$posterior.probabilities[3] > 0.95) {
-      #  break
-      #}
-      result[k, "algorithm"] <- k
-      result[k, "left"] <- b_test$posterior.probabilities[1]
-      result[k, "rope"] <- b_test$posterior.probabilities[2]
-      result[k, "right"] <- b_test$posterior.probabilities[3]
-      result[k, "repls"] <- i
-      if (is.null(compare)) {compare <- "better"}
-      if (compare == "better") { 
-        threshold <- b_test$posterior.probabilities[3]
-      } else if (compare == "equal") {
-        threshold <- b_test$posterior.probabilities[2] + 
-          b_test$posterior.probabilities[3]
-      } 
-      if (threshold > 0.95) {
-        result[k, "significanct"] <- TRUE
-      } else {
-        result[k, "significanct"] <- FALSE
-      }
-      liste <-  rownames(result[result[["significanct"]] == TRUE, ])
-    }
-    if (!is.null(algorithm)) {
-      if (threshold > 0.95) {
-        break 
-      }
-    }
-  }
-  output_test <- get_results(baseline, measure, method = b_test$method, 
-                             data = result)
-  return_test <- format_test(output_test)
-  return(return_test)
-}
+#    #---------------------------------------------------------------------------
+#    # define samples
+#    x <- data[data[["problem"]] == problemset & data[["algorithm"]] == baseline, measure]
+#    algorithms <- unique(data[["algorithm"]])
+#    if (i == 5) {
+#      liste <- c()
+#    }
+#    algorithms <- setdiff(algorithms, liste)
+#    for (k in algorithms[algorithms != baseline]) {
+#      if (!is.null(algorithm)) {
+#        k <- algorithm
+#        y <- data[data[["problem"]] == problemset 
+#                  & data[["algorithm"]] == k, measure]
+#      } else {
+#        y <- data[data[["problem"]] == problemset 
+#                  & data[["algorithm"]] == k, measure]
+#      }
+#      # Bayesian correlated t Test
+#      b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)
+#      #if (b_test$posterior.probabilities[3] > 0.95) {
+#      #  break
+#      #}
+#      result[k, "algorithm"] <- k
+#      result[k, "left"] <- b_test$posterior.probabilities[1]
+#      result[k, "rope"] <- b_test$posterior.probabilities[2]
+#      result[k, "right"] <- b_test$posterior.probabilities[3]
+#      result[k, "repls"] <- i
+#      if (is.null(compare)) {compare <- "better"}
+#      if (compare == "better") { 
+#        threshold <- b_test$posterior.probabilities[3]
+#      } else if (compare == "equal") {
+#        threshold <- b_test$posterior.probabilities[2] + 
+#          b_test$posterior.probabilities[3]
+#      } 
+#      if (threshold > 0.95) {
+#        result[k, "significanct"] <- TRUE
+#      } else {
+#        result[k, "significanct"] <- FALSE
+#      }
+#      liste <-  rownames(result[result[["significanct"]] == TRUE, ])
+#    }
+#    if (!is.null(algorithm)) {
+#      if (threshold > 0.95) {
+#        break 
+#      }
+#    }
+#  }
+#  output_test <- get_results(baseline, measure, method = b_test$method, 
+#                             data = result)
+#  return_test <- format_test(output_test)
+#  return(return_test)
+#}
 
-results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-                             problemset = 'problem_b', 
-                             baseline = 'algo_1', compare = 'equal', 
-                             max_repls = 10,  rope=c(-0.01, 0.01))
-results
+#results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+#                             problemset = 'problem_b', 
+#                             baseline = 'algo_1', compare = 'equal', 
+#                             max_repls = 10,  rope=c(-0.01, 0.01))
+#results

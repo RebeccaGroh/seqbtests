@@ -4,24 +4,21 @@
 \alias{b_hierarchical_test}
 \title{Bayesian hierarchical correlated t-test}
 \usage{
-b_hierarchical_test(df, learner_a, learner_b, measure = NULL,
-  parameter_algorithm = NULL, rho = 0.1, std.upper = 1000,
-  d0.lower = NULL, d0.upper = NULL, alpha.lower = 0.5,
-  alpha.upper = 5, beta.lower = 0.05, beta.upper = 0.15,
-  rope = c(-0.01, 0.01), nsim = 2000, nchains = 8, parallel = TRUE,
-  stan.output.file = NULL, seed = as.numeric(Sys.time()), ...)
+b_hierarchical_test(df, baseline, algorithm = NULL, measure = NULL,
+  rho = 0.1, compare = NULL, std.upper = 1000, d0.lower = NULL,
+  d0.upper = NULL, alpha.lower = 0.5, alpha.upper = 5,
+  beta.lower = 0.05, beta.upper = 0.15, rope = c(-0.01, 0.01),
+  nsim = 2000, parallel = TRUE, stan.output.file = NULL,
+  nchains = 8, seed = as.numeric(Sys.time()))
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{learner_a}{First algorithm.}
+\item{baseline}{First algorithm.}
 
-\item{learner_b}{Second algorithm.}
+\item{algorithm}{Second algorithm.}
 
 \item{measure}{Measure column.}
-
-\item{parameter_algorithm}{Specifies parameters concerning the corresponding 
-algorithm.}
 
 \item{rho}{Correlation factor.}
 
@@ -49,16 +46,16 @@ Default value set at 0.05, as in the original paper}
 \item{rope}{Interval for the difference considered as 'irrelevant'}
 
 \item{nsim}{Number of samples (per chain) used to estimate the posterior 
-distribution. Note that, by default, half the simulations are used for the burn-in}
+distribution. Note that, by default, half the simulations are used for the 
+burn-in}
 
-\item{parallel}{Logical value. If \code{true}, Stan code is executed in parallel}
+\item{parallel}{Logical value. If \code{true}, Stan code is executed in 
+parallel}
 
 \item{stan.output.file}{String containing the base name for the output files 
 produced by Stan. If \code{NULL}, no files are stored.}
 
 \item{seed}{Optional parameter used to fix the random seed}
-
-\item{...}{Additional arguments for the rstan::stan function that runs the analysis}
 
 \item{beta.lower}{Upper bound for the (uniform) prior for the beta 
 hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
@@ -70,20 +67,24 @@ Dirichlet Process. The default value is set to 0 (inside the rope)}
 \item{nchain}{Number of MC chains to be simulated. As half the simulations 
 are used for the warm-up, the total number of simulations will 
 be \code{nchain}*\code{nsim}/2}
+
+\item{...}{Additional arguments for the rstan::stan function that runs the 
+analysis}
 }
 \value{
 A list with the following elements: 
 \item{\code{method}}{a string with the name of the method used}
 \item{\code{parameters}}{parameters used by the method}
-\item{\code{posterior.probabilities}}{a vector with the left, rope and right probabilities}
+\item{\code{posterior.probabilities}}{a vector with the left, rope and right 
+probabilities}
 \item{\code{approximated}}{a logical value, \code{TRUE} if the posterior 
 distribution is approximated (sampled) and \code{FALSE} if it is exact}
 \item{\code{posterior}}{Sampled probabilities (see details)}
 \item{\code{additional}}{Additional information provided by the model. 
 This includes:\code{per.dataset}, the results per dataset (left, rope and 
 right probabilities together with the expected mean value); \code{global.sin} 
-sampled probabilities of mu_0 being positive or negative and \code{stan.results}, 
-the complete set of results produced by Stan program}
+sampled probabilities of mu_0 being positive or negative and 
+\code{stan.results}, the complete set of results produced by Stan program}
 }
 \description{
 This function implements a Bayesian hierarchical test.

@@ -15,14 +15,15 @@ friedman_post(df, measure = NULL, control = NULL)
 provided, all algorithms are compared against each other.}
 }
 \value{
-A matrix with all the pairwise raw p-values.
+A matrix with all the pair wise raw p-values.
 }
 \description{
 This function implements a Friedman post hoc test. It computes 
 the raw p-values for the post hoc based on Friedman's test.
 }
 \details{
-The test has first been implemented in scmamp. Note that the default value for measure is the first measure column in the data frame.
+The test has first been implemented in scmamp. Note that the default
+value for measure is the first measure column in the data frame.
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

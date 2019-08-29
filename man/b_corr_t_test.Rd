@@ -2,44 +2,37 @@
 % Please edit documentation in R/bayesian_tests.R
 \name{b_corr_t_test}
 \alias{b_corr_t_test}
-\title{Bayesian correlated T test}
+\title{Bayesian correlated t test}
 \usage{
-b_corr_t_test(df, problemset, learner_a, learner_b, measure = NULL,
-  parameter_algorithm = NULL, rho = 0.1, rope = c(-0.01, 0.01))
+b_corr_t_test(df, problemset, baseline, learner_b = NULL,
+  measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01))
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{problemset}{Problemset on which the test should be performed.}
+\item{problemset}{Problem set on which the test should be performed.}
 
-\item{learner_a}{First algorithm.}
-
-\item{learner_b}{Second algorithm.}
+\item{baseline}{First algorithm.}
 
 \item{measure}{Measure column.}
-
-\item{parameter_algorithm}{Specifies parameters concerning the corresponding 
-algorithm.}
 
 \item{rho}{Correlation factor.}
 
 \item{rope}{Region of practical equivalence.}
-}
-\value{
-A list containing the following components:
-\item{code{measure}}{a string with the name of the measure column used}
-\item{code{method}}{a string with the name of the method used}
-\item{code{posteriror_probabilities}}{a vector with the left, rope and right 
-probabilities}
+
+\item{algorithm}{Algorithm to be compared. If no algorithm is defined, the 
+baseline is compared to every algorithm in the data frame.}
 }
 \description{
-This function implements the Bayesian version of the correlated t-test.
+This function implements the Bayesian version of the correlated t-test. The 
+performance of one baseline algorithm on one data set is compared to either 
+one or multiple algorithms.
 }
 \details{
 The test has first been implemented in scmamp. 
 Note that the default value for measure is the first measure column in the 
 data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
-in the equivalent of the standard t test
+in the equivalent of the standard t test.
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

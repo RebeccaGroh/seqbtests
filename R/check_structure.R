@@ -94,15 +94,13 @@ format_test <- function(test) {
 
 #' @title Table test results (Bayesian tests)
 #' @description Create a list containing the Bayesian test results based on a 
-#'     generic function. 
-format_test.btest <- function(test) {
-  text1 <- sprintf("Results of the %s", test$method)
-  text2 <- sprintf("Measure column = %s", test$measure)
-  text3 <- sprintf("Baseline algorithm = %s", test$baseline)
-  text <- rbind(text1, text2, text3)
-  row.names(text) <- NULL
-  row.names(test$data_frame) <- NULL
-  output_data <- test$data_frame
-  return(list(text, output_data))
-}
+#'     generic function.
+#' @exportMethod
+print.btest <- function(x, ...) {
+  cat(sprintf("Results of the %s\n", x$method))
+  cat(sprintf("Measure column = %s", x$measure))
+  cat(sprintf("Baseline algorithm = %s", x$baseline))
+  row.names(x$data_frame) <- NULL
+  output_data <- x$data_frame
+  print(output_data)}
 

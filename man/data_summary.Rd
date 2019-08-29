@@ -7,12 +7,12 @@
 data_summary(df)
 }
 \arguments{
-\item{df}{input data frame}
+\item{df}{Input data frame.}
 }
 \value{
-A vector containing the columns names and number of rows
+A vector containing the columns names and number of rows.
 }
 \description{
 Short summary of the data frame, 
-  including the columns names and number of rows
+    including the columns names and number of rows
 }

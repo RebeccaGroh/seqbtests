@@ -7,15 +7,17 @@
 na_drop(df, check_var, measure)
 }
 \arguments{
-\item{df}{input data frame}
+\item{df}{Input data frame.}
 
-\item{check_var}{Column in data frame used to check for NAs}
+\item{check_var}{Column in data frame used to check for NAs. Either 
+"problemsets" or "algorithm".}
 
-\item{measure}{Measure column}
+\item{measure}{Measure column.}
 }
 \value{
 New data frame without NAs.
 }
 \description{
-Drop rows that contain any NA depending on values of check_var
+Drop group of rows that contain any NA depending on values of 
+check_var.
 }
