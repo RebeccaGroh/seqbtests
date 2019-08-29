@@ -4,7 +4,7 @@
 \alias{b_corr_t_test}
 \title{Bayesian correlated t test}
 \usage{
-b_corr_t_test(df, problemset, baseline, learner_b = NULL,
+b_corr_t_test(df, problemset, baseline, algorithm = NULL,
   measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01))
 }
 \arguments{
@@ -14,14 +14,14 @@ b_corr_t_test(df, problemset, baseline, learner_b = NULL,
 
 \item{baseline}{First algorithm.}
 
+\item{algorithm}{Algorithm to be compared. If no algorithm is defined, the 
+baseline is compared to every algorithm in the data frame.}
+
 \item{measure}{Measure column.}
 
 \item{rho}{Correlation factor.}
 
 \item{rope}{Region of practical equivalence.}
-
-\item{algorithm}{Algorithm to be compared. If no algorithm is defined, the 
-baseline is compared to every algorithm in the data frame.}
 }
 \description{
 This function implements the Bayesian version of the correlated t-test. The 

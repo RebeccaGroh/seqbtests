@@ -1,43 +1,47 @@
-#' @title Sequential bayesian correlated t test 
+#' @title Sequential Bayesian correlated t test 
 #' @description 
-#' This function implements a sequential approach of the bayesian correlated 
-#' t test to compare the performance of machine learning algorithms to one 
-#' another. Sample size is not fixed in advance, data are evaluated as they are 
-#' collected. Further sampling is stopped in accordance with a pre-defined 
-#' stopping rule as soon as significant results are obtained.  
-#' @param problemset Problemset on which the test should be performed. 
+#'     This function implements a sequential approach of the Bayesian correlated 
+#'     t test to compare the performance of machine learning algorithms to one 
+#'     another. Sample size is not fixed in advance, data are evaluated as they 
+#'     are collected. Further sampling is stopped in accordance with a 
+#'     pre-defined stopping rule as soon as significant results are obtained.  
+#' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #' tested against baseline. 
 #' @param measure Measure column. 
-#' @param compare Defines whether the performances should be tested for either 
-#' being better ('better') or being just as good ('equal'). If not defined, the 
-#' default is to test for 'better'.
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms. If not defined, the default is to test for 'better'.
 #' @param rho Correlation factor. 
 #' @param rope Region of practical equivalence. 
-#' @param max_repls maximum number of replications that should be build in 
-#' get_replications, or maximum number of replications in data frame, if 
-#' complete data frame is being used.  
+#' @param max_repls Maximum number of replications that should be build in 
+#'     get_replications. Or maximum number of replications in data frame, if 
+#'     a data frame that has already been built is being used.  
 #' @param rope Region of practical equivalence. 
-#' @return A data frame with one row for each considered algorithm that is 
-#' tested against the baseline, containing the following components:
-#' \item{code{measure}}{a string with the name of the measure column used}
-#' \item{code{method}}{a string with the name of the method used}
-#' \item{code{posteriror_probabilities}}{a vector with the left, rope and right 
-#' probabilities}
-#' \item{code{repls}}{number of the considered replications}
-#' @details The basics of the test have first been implemented in scmamp. 
-#' Note that the default value for measure is the first measure column in the 
-#' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
-#' in the equivalent of the standard t test. 
+#' @return A list containing the following components:
+#' \itemize{
+#' \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{baseline} A string with the name of the baseline algorithm.
+#' \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'     algorithm that is compared to the baseline. The columns show the 
+#'     posterior probabilities and whether significance appears.
+#' \item{code{repls}} Number of the considered replications.
+#' }
+#' @details 
+#'     The basic for this test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used. The default of rho is 
+#'     0.1. 
 #' @example results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-#'                                       problemset = 'problem_a', 
-#'                                       baseline = 'algo_1', compare = 'equal', 
+#'                                       problemset = "problem_a", 
+#'                                       baseline = "algo_1", compare = "equal", 
 #'                                       max_repls = 10,  rope=c(-0.01, 0.01))
 #' @export
 seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL, 
                               measure = NULL, compare = NULL, rho = 0.1, 
-                              rope = c(-0.01, 0.01), max_repls = 20, ...) {
+                              rope = c(-0.01, 0.01), max_repls = 20) {
   result = data.frame()
   for (i in 5:max_repls) {
     data <- get_replications(i, ...)
@@ -49,7 +53,8 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
       measure <- get_measure_columns(data)[1]
     }
     # define samples
-    x <- data[data[["problem"]] == problemset & data[["algorithm"]] == baseline, measure]
+    x <- data[data[["problem"]] == problemset 
+              & data[["algorithm"]] == baseline, measure]
     algorithms <- unique(data[["algorithm"]])
     if (i == 5) {
       liste <- c()
@@ -97,11 +102,6 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
   return(return_test)
 }
 
-#results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-#                             problemset = 'problem_b', 
-#                             baseline = 'algo_1', compare = 'equal', 
-#                             max_repls = 10,  rope=c(-0.01, 0.01))
-#results
 
 
 #------------------------------------------------------------------------------#

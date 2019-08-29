@@ -95,7 +95,6 @@ format_test <- function(test) {
 #' @title Table test results (Bayesian tests)
 #' @description Create a list containing the Bayesian test results based on a 
 #'     generic function.
-#' @exportMethod
 print.btest <- function(x, ...) {
   cat(sprintf("Results of the %s\n", x$method))
   cat(sprintf("Measure column = %s", x$measure))

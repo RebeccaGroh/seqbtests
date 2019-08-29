@@ -1,28 +1,31 @@
 #' @title Bayesian correlated t test 
 #' @description 
-#' This function implements the Bayesian version of the correlated t-test. The 
-#' performance of one baseline algorithm on one data set is compared to either 
-#' one or multiple algorithms.  
+#'     This function implements the Bayesian version of the correlated t-test. 
+#'     The performance of one baseline algorithm on one data set is compared to 
+#'     either one or multiple algorithms.  
 #' @param df Input data frame. 
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm. 
 #' @param algorithm Algorithm to be compared. If no algorithm is defined, the 
-#' baseline is compared to every algorithm in the data frame. 
+#'     baseline is compared to every algorithm in the data frame. 
 #' @param measure Measure column. 
 #' @param rho Correlation factor. 
 #' @param rope Region of practical equivalence. 
 #' @return A list containing the following components:
-#' \item{code{measure}}{A string with the name of the measure column used.}
-#' \item{code{method}}{A string with the name of the method used.}
-#' \item{code{baseline}{A string with the name of the baseline algorithm.}
-#' \item{code{posteriror_probabilities}}{A data frame with one row for every 
-#' algorithm that is compared to the baseline. The columns show the posterior 
-#' probabilities and whether significance appears.} 
+#' \itemize{
+#' \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{baseline} A string with the name of the baseline algorithm.
+#' \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'     algorithm that is compared to the baseline. The columns show the 
+#'     posterior probabilities and whether significance appears.
+#' }
 #' @details
-#' The test has first been implemented in scmamp. 
-#' Note that the default value for measure is the first measure column in the 
-#' data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
-#' in the equivalent of the standard t test.   
+#'     The test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used. The default of rho is 
+#'     0.1. If rho equals 0 this converts the test in the equivalent of the 
+#'     standard t test.   
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
 #' results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
@@ -80,9 +83,15 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
     return(output_test)
 }
 
+# results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a",
+#                           baseline = "algo_1", algorithm = "algo_2")
+# results
+
 #' @title Bayesian sign test 
 #' @description 
-#' This function implements the Bayesian version of the sign test. 
+#'     This function implements the Bayesian version of the sign test. The 
+#'     performance of one baseline algorithm on one or multiple data sets is 
+#'     compared to either one or multiple algorithms.   
 #' @param df Input data frame. 
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
@@ -94,16 +103,19 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 #' @param mc_samples Number of samples of the distribution. 
 #' @param rope Region of practical equivalence. 
 #' @return A list containing the following components:
-#' \item{code{measure}}{A string with the name of the measure column used.}
-#' \item{code{method}}{A string with the name of the method used.}
-#' \item{code{posteriror_probabilities}}{A vector with the left, rope and right 
-#' probabilities.}
+#' \itemize{
+#' \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{baseline} A string with the name of the baseline algorithm.
+#' \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'     algorithm that is compared to the baseline. The columns show the 
+#'     posterior probabilities and whether significance appears.
+#' }
 #' @details 
-#' The test has first been implemented in rNPBST.  
-#' For testing over multiple datasets, don´t specify the problem set argument 
-#' in the function. 
-#' Note that the default value for measure is the first measure column in the 
-#' data frame.
+#'     The test has first been implemented in rNPBST. For testing over multiple 
+#'     datasets, don´t specify the problem set argument in the function. Note 
+#'     that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example 
 #' results <- b_sign_test(df= test_benchmark_small, problemset = "problem_a", 
@@ -179,7 +191,9 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
 
 #' @title Bayesian Signed Rank test 
 #' @description 
-#' This function implements the Bayesian version of the signed rank test. 
+#'     This function implements the Bayesian version of the signed rank test. 
+#'     The performance of one baseline algorithm on one or multiple data sets is 
+#'     compared to either one or multiple algorithms.    
 #' @param df Input data frame. 
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
@@ -191,16 +205,19 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
 #' @param mc_samples Number of samples of the distribution. 
 #' @param rope Region of practical equivalence. 
 #' @return A list containing the following components:
-#' \item{code{measure}}{A string with the name of the measure column used.}
-#' \item{code{method}}{A string with the name of the method used.}
-#' \item{code{posteriror_probabilities}}{A vector with the left, rope and right 
-#' probabilities.}
+#' \itemize{
+#' \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{baseline} A string with the name of the baseline algorithm.
+#' \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'     algorithm that is compared to the baseline. The columns show the 
+#'     posterior probabilities and whether significance appears.
+#' }
 #' @details 
-#' The test has first been implemented in rNPBST. 
-#' For testing over multiple datasets, don't specify the problem set argument 
-#' in the function. 
-#' Note that the default value for measure is the first measure column in the 
-#' data frame.
+#'     The test has first been implemented in rNPBST. For testing over multiple 
+#'     datasets, don´t specify the problem set argument in the function. Note 
+#'     that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example 
 #' results <- b_signed_rank_test(df= test_benchmark_small, 
@@ -277,71 +294,58 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
 
 #' @title Bayesian hierarchical correlated t-test
 #' @description 
-#' This function implements a Bayesian hierarchical test.
+#'     This function implements a Bayesian hierarchical test. The performance of 
+#'     one baseline algorithm on multiple data set is compared to either one or
+#'     multiple algorithms.  
 #' @param df Input data frame. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @param rho Correlation factor. 
-#' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0 
-#' (see Benavoli \emph{et al.} 2017 for more details)
+#' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0.
 #' @param d0.lower Lower bound for the prior for mu_0. If not provided, 
-#' the smallest observed difference is used
+#'     the smallest observed difference is used.
 #' @param d0.upper Upper bound for the prior for mu_0. If not provided, 
-#' the biggest observed difference is used
+#'     the biggest observed difference is used.
 #' @param alpha.lower Lower bound for the (uniform) prior for the alpha 
-#' hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
-#' Default value set at 0.5, as in the original paper
+#'     hyperparameter. Default value set at 0.5.
 #' @param alpha.upper Upper bound for the (uniform) prior for the alpha 
-#' hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
-#' Default value set at 5, as in the original paper
+#'     hyperparameter. Default value set at 0.5.
 #' @param beta.lower Lower bound for the (uniform) prior for the beta 
-#' hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
-#' Default value set at 0.05, as in the original paper
+#'     hyperparameter. Default value set at 0.5.
 #' @param beta.lower Upper bound for the (uniform) prior for the beta 
-#' hyperparameter (see Benavoli \emph{et al.} 2017 for more details). 
-#' Default value set at 0.15, as in the original paper
+#'     hyperparameter. Default value set at 0.5.
 #' @param z0 Position of the pseudo-observation associated to the prior 
-#' Dirichlet Process. The default value is set to 0 (inside the rope)
-#' @param rope Interval for the difference considered as 'irrelevant'
+#'     Dirichlet Process. The default value is set to 0 (inside the rope).
+#' @param rope Interval for the difference considered as 'irrelevant'.
 #' @param nsim Number of samples (per chain) used to estimate the posterior 
-#' distribution. Note that, by default, half the simulations are used for the 
-#' burn-in
+#'     distribution. Note that, by default, half the simulations are used for 
+#'     the burn-in.
 #' @param nchain Number of MC chains to be simulated. As half the simulations 
-#' are used for the warm-up, the total number of simulations will 
-#' be \code{nchain}*\code{nsim}/2
+#'     are used for the warm-up, the total number of simulations will 
+#'     be \code{nchain}*\code{nsim}/2.
 #' @param parallel Logical value. If \code{true}, Stan code is executed in 
-#' parallel
+#'     parallel.
 #' @param stan.output.file String containing the base name for the output files 
-#' produced by Stan. If \code{NULL}, no files are stored.
+#'     produced by Stan. If \code{NULL}, no files are stored.
 #' @param seed Optional parameter used to fix the random seed
-#' @param ... Additional arguments for the rstan::stan function that runs the 
-#' analysis 
-#' @return A list with the following elements: 
-#' \item{\code{method}}{a string with the name of the method used}
-#' \item{\code{parameters}}{parameters used by the method}
-#' \item{\code{posterior.probabilities}}{a vector with the left, rope and right 
-#' probabilities}
-#' \item{\code{approximated}}{a logical value, \code{TRUE} if the posterior 
-#' distribution is approximated (sampled) and \code{FALSE} if it is exact}
-#' \item{\code{posterior}}{Sampled probabilities (see details)}
-#' \item{\code{additional}}{Additional information provided by the model. 
-#' This includes:\code{per.dataset}, the results per dataset (left, rope and 
-#' right probabilities together with the expected mean value); \code{global.sin} 
-#' sampled probabilities of mu_0 being positive or negative and 
-#' \code{stan.results}, the complete set of results produced by Stan program}
+#' @return A list containing the following components:
+#' \itemize{
+#' \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{baseline} A string with the name of the baseline algorithm.
+#' \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'     algorithm that is compared to the baseline. The columns show the 
+#'     posterior probabilities and whether significance appears.
+#' }
 #' @details 
-#' The results includes the typical information relative to the three areas of 
-#' the posterior density (left, right and rope probabilities), both global and
-#' per dataset (in the additional information). Also, the simulation results are 
-#' included.
-#' As for the prior parameters, they are set to the default values indicated in 
-#' Benavoli \emph{et al.} 2017, except for the bound for the prior distribution 
-#' of mu_0, which are set to the maximum and minimum values observed in the 
-#' sample. You should not modify them unless you know what you are doing.
+#'     The test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used. The default of rho is 
+#'     0.1. 
 #' @example results <- b_hierarchical_test(df= test_benchmark_small, 
-#'                                         baseline = 'algo_1', 
-#'                                         algorithm = 'algo_2', 
+#'                                         baseline = "algo_1", 
+#'                                         algorithm = "algo_2", 
 #'                                         rho=0.1, rope=c(-0.01, 0.01), 
 #'                                         nsim=2000,  nchains=5)
 #' @references \url{https://github.com/b0rxa/scmamp}
