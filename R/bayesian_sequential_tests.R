@@ -18,7 +18,9 @@
 #' @param max_repls Maximum number of replications that should be build in 
 #'     get_replications. Or maximum number of replications in data frame, if 
 #'     a data frame that has already been built is being used.  
-#' @param rope Region of practical equivalence. 
+#' @param rope Region of practical equivalence.
+#' @param ... Additional arguments. When already built dataset is used the User 
+#'     can define it with code{df}.  
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -123,6 +125,8 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
 #' @param max_repls Maximum number of replications that should be build in 
 #'     get_replications. Or maximum number of replications in data frame, if 
 #'     a data frame that has already been built is being used.  
+#' @param ... Additional arguments. When already built dataset is used the User 
+#'     can define it with code{df}.
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -249,6 +253,8 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
 #' @param max_repls Maximum number of replications that should be build in 
 #'     get_replications. Or maximum number of replications in data frame, if 
 #'     a data frame that has already been built is being used.  
+#' @param ... Additional arguments. When already built dataset is used the User 
+#'     can define it with code{df}.
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -399,6 +405,8 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
 #'     get_replications. Or maximum number of replications in data frame, if 
 #'     a data frame that has already been built is being used.  
 #' @param rope Region of practical equivalence. 
+#' @param ... Additional arguments. When already built dataset is used the User 
+#'     can define it with code{df}.
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.

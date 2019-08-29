@@ -398,7 +398,11 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
     }
   }
   output <- get_results(baseline, measure, method = b_hierarchical$method, 
-                             data = result, replications = i)
+                        data = result, 
+                        extra = list(b_hierarchical$additional, 
+                                     b_hierarchical$approximate, 
+                                     b_hierarchical$parameters, 
+                                     b_hierarchical$posterior))
   return(output)
 }
 
