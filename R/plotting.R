@@ -134,12 +134,11 @@ plot_posterior <- function(results, method, points = 1000){
     test[["posterior"]] <- dpos
     scmamp::plotPosterior(results = test, num.points = points, plot.rope = TRUE, 
                           plot.samples = TRUE, alpha)
-  }
-  if (method == "b_sign_test" | method == "b_signed_rank_test") {
+  } else if (method == "b_sign_test" | method == "b_signed_rank_test") {
+    test <- list()
     test[["sample"]] <- as.data.frame(results[["extra"]])
     plot_triangles(x  = test, num.points = points )
-  }
-  if (method == "b_hierarchical_test") {
+  } else if (method == "b_hierarchical_test") {
     results[["sample"]] <- as.data.frame(results[["extra"]][4])
     plot_triangles(x  = results, num.points = points )
   } else {
