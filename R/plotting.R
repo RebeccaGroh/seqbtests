@@ -174,17 +174,15 @@ plot_posterior <- function(results, method, points = 1000,
     scmamp::plotPosterior(results = test, num.points = points,  plot.rope = TRUE, 
                           plot.samples = plot_samples, alpha)
   }
-  # if (method == "b_sign_test") {
-  #   
-  # }
-  # if (method == "b_signed_rank_test") {
-  #   
-  # }
-  # if (method == "b_hierarchical_test") {
-  #   
-  # }
+  if (method == "b_sign_test" | method == "b_signed_rank_test") {
+    test[["sample"]] <- as.data.frame(results[["extra"]])
+    plot_triangles(x  = test, num.points = points )
+  }
+  if (method == "b_hierarchical_test") {
+    results[["sample"]] <- as.data.frame(results[["extra"]][4])
+    plot_triangles(x  = results, num.points = points )
+  }
 }
-## working for b_corr_t_test 
 
 #' @title Critical differences plot 
 #' @description This function plots the critical differences plot. 

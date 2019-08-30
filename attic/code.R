@@ -29,7 +29,7 @@ jso <- unlist(select(filter(cec17.final, Algorithm == "jSO", Dimension == 10), R
 
 bst.results <- rNPBST::bayesianSign.test(ebo, jso,
                                          rope.min = -10, rope.max = 10)
-bst.results
+bst.results$sample
 plot(bst.results, num.points = 10000) +
   ggplot2::labs(x = "jSO", z = "EBO")
 
@@ -44,10 +44,15 @@ plot(bst.results, num.points = 10000) +
  # relevante Variable heißt "sample" und es ist ein Datensatz mit 3 Zeilen für left rope right 
  # und vielen Zeilen 
 # in scmamp heißt die Variable $posterior --> kann man das einfach so übernehmen ? 
-results_test <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_b", 
-                         baseline = "algo_1", algorithm = "algo_4")
+results_test <- b_hierarchical_test(df= test_benchmark_small, 
+                               baseline = "algo_1", 
+                               algorithm = "algo_2", 
+                               rho=0.1, rope=c(-0.01, 0.01), 
+                               nsim=2000,  nchains=5)
 results_test
-plot_posterior(results = results_test, method = "b_corr_t_test")
+results_test[["sample"]] <- as.data.frame(results_test[["extra"]][4])
+
+plot_posterior(results = results_test, method = "b_hierarchical_test")
 
 
 plot_posterior <- function(results, method, points = 1000,  
@@ -81,18 +86,19 @@ plot_posterior <- function(results, method, points = 1000,
     scmamp::plotPosterior(results = test, num.points = points,  plot.rope = TRUE, 
                           plot.samples = plot_samples, alpha)
   }
-  # if (method == "b_sign_test") {
-  #   
-  # }
-  # if (method == "b_signed_rank_test") {
-  #   
-  # }
-  # if (method == "b_hierarchical_test") {
-  #   
-  # }
+  if (method == "b_sign_test" | method == "b_signed_rank_test") {
+    test[["sample"]] <- as.data.frame(results[["extra"]])
+    plot_triangles(x  = test, num.points = points )
+  }
+  if (method == "b_hierarchical_test") {
+    results[["sample"]] <- as.data.frame(results[["extra"]][4])
+    plot_triangles(x  = results, num.points = points )
+  }
 }
+## muss selbst ausgeführt werden, weil das nur als generische FUnktion exportiert wurde 
 
 
+#-------------------------------------------------------------------------------
 method <- "b_corr_t_test"
 if (method == "b_corr_t_test") {
   test <- list()
