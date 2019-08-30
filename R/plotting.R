@@ -6,7 +6,8 @@
 #' @return A \code{\linkS4class{ggplot}} object.
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example plot_densities(test_benchmark_small)
+#' @example 
+#'     plot_densities(test_benchmark_small)
 #' @export
 plot_densities <- function(df, measure = NULL) {
   checkmate::assert_true(check_structure(df))
@@ -33,7 +34,8 @@ plot_densities <- function(df, measure = NULL) {
 #' @return A \code{\linkS4class{ggplot}} object.
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example plot_boxplot(df = test_benchmark_small)
+#' @example 
+#'     plot_boxplot(df = test_benchmark_small)
 #' @export
 plot_boxplot <- function(df, measure = NULL) {
   if (is.null(measure)) {
@@ -64,8 +66,8 @@ plot_boxplot <- function(df, measure = NULL) {
 #'     defined as measure_* in the data frame is used. By default, the alpha 
 #'     value is 0.05 and the default for cex is 0.75.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @9examples
-#' plot_cd(test_benchmark)
+#' @examples 
+#'     plot_cd(test_benchmark)
 #' @export
 plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
   checkmate::assert_true(check_structure(df))

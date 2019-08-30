@@ -13,9 +13,9 @@ paste_algo_pars(df, parameter_algo = NULL)
 }
 \value{
 New data frame, where the algorithm and parameter_algorithm column, 
-as well as the value names are combined.
+    as well as the value names are combined.
 }
 \description{
 If there is a parameter additional to the algorithm, both can 
-be combined, when using this function.
+    be combined, when using this function.
 }

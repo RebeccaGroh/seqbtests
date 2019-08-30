@@ -19,20 +19,22 @@ wilcoxon_signed_test(df, problemset, baseline, algorithm, measure = NULL)
 }
 \value{
 A list containing the following components: 
-\item{code{measure}}{A string with the name of the measure column used.}
-\item{code{method}}{A string with the name of the method used.}
-\item{code{statistic}}{The value of the statistic used in the test.}
-\item{code{p_value}}{The p-value for the test.}
+\itemize{
+ \item{code{measure}} A string with the name of the measure column used.
+\item{code{method}} A string with the name of the method used.
+\item{code{statistic}} The value of the statistic used in the test.
+\item{code{p_value}} The p-value for the test.
+}
 }
 \description{
 This function implements the paired Wilcoxon signed-rank test. A 
-non-parametric statistical hypothesis test to compare the means of two 
-paired samples.
+    non-parametric statistical hypothesis test to compare the means of two 
+    paired samples.
 }
 \details{
-The test has first been implemented in scmamp.
-Note that the default value for measure is the first measure column in the 
-data frame.
+The test has first been implemented in scmamp. 
+    Note that if no measure column is defined per default the first column 
+    defined as measure_* in the data frame is used.
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

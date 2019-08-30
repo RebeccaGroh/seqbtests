@@ -121,8 +121,8 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 #'     defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example 
-#' results <- b_sign_test(df= test_benchmark_small, problemset = "problem_a", 
-#'                        baseline = "algo_1", algorithm = "algo_2")
+#'     results <- b_sign_test(df= test_benchmark_small, 
+#'     problemset = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 #' @export
 b_sign_test <- function(df, problemset, baseline, algorithm = NULL, 
                         measure = NULL, compare = NULL, 
@@ -223,8 +223,8 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
 #'     defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example 
-#' results <- b_signed_rank_test(df= test_benchmark_small, 
-#'                               baseline = "algo_1", algorithm = "algo_2")
+#'     results <- b_signed_rank_test(df= test_benchmark_small,
+#'     baseline = "algo_1", algorithm = "algo_2")
 #' @export
 b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
                                algorithm = NULL, measure = NULL, 
@@ -346,11 +346,10 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used. The default of rho is 
 #'     0.1. 
-#' @example results <- b_hierarchical_test(df= test_benchmark_small, 
-#'                                         baseline = "algo_1", 
-#'                                         algorithm = "algo_2", 
-#'                                         rho=0.1, rope=c(-0.01, 0.01), 
-#'                                         nsim=2000,  nchains=5)
+#' @example 
+#'     results <- b_hierarchical_test(df= test_benchmark_small, 
+#'     baseline = "algo_1", algorithm = "algo_2",  rho=0.1, 
+#'     rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
 b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL, 

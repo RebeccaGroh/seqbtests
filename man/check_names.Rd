@@ -7,6 +7,18 @@
 check_names(df, problemset = NULL, baseline = NULL, algorithm = NULL,
   measure = NULL)
 }
+\arguments{
+\item{df}{Input data frame.}
+
+\item{problemset}{Problem set on which the test should be performed.}
+
+\item{baseline}{First algorithm.}
+
+\item{algorithm}{Second algorithm. If not defined, every algorithm will be 
+tested against baseline.}
+
+\item{measure}{Measure column.}
+}
 \description{
 Check if column names that were passed by User are contained 
     in the data frame.

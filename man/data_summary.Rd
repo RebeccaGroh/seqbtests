@@ -14,5 +14,5 @@ A vector containing the columns names and number of rows.
 }
 \description{
 Short summary of the data frame, 
-    including the columns names and number of rows
+    including the columns names and number of rows.
 }

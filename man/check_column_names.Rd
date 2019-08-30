@@ -7,7 +7,7 @@
 check_column_names(df)
 }
 \arguments{
-\item{df}{Input data frame,}
+\item{df}{Input data frame.}
 }
 \value{
 TRUE if test was successful.

@@ -19,8 +19,8 @@ List of Cases, NAs and the NA ratio according to check_var.
 }
 \description{
 Check if the measure column is complete. 
-For the problem sets and all algorithms present in the data frame, this 
-function specifies the ratio of the NAs present. If there are any NAs the 
-User can decide to drop all observations for that specific value, since the
-data frame needs to be complete for testing.
+    For the problem sets and all algorithms present in the data frame, this 
+    function specifies the ratio of existing NAs. If there are any NAs the 
+    User can decide to drop all observations for that specific value, since 
+    the data frame needs to be complete for testing.
 }

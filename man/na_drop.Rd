@@ -18,6 +18,5 @@ na_drop(df, check_var, measure)
 New data frame without NAs.
 }
 \description{
-Drop group of rows that contain any NA depending on values of 
-check_var.
+Drop group of rows that contain any NA depending on values of check_var.
 }

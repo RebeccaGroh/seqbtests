@@ -38,9 +38,9 @@
 #'     0.1. 
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
-#' results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-#'                              problemset = "problem_a", baseline = "algo_1", 
-#'                              compare = "equal", max_repls = 10)
+#'     results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+#'     problemset = "problem_a", baseline = "algo_1", 
+#'     compare = "equal", max_repls = 10)
 #' @export
 seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL, 
                               measure = NULL, compare = NULL, rho = 0.1, 
@@ -144,8 +144,8 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
 #'     column defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example     
-#' results <- seq_b_sign_test(df = test_benchmark_small, baseline = "algo_1", 
-#'                             max_repls = 10)
+#'     results <- seq_b_sign_test(df = test_benchmark_small, 
+#'     baseline = "algo_1", max_repls = 10)
 #' @export
 seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL, 
                             measure = NULL, compare = NULL, s = 1, z_0 = 0,
@@ -273,8 +273,8 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
 #'     column defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example     
-#' results <- seq_b_signed_rank_test(df = test_benchmark_small, 
-#'                                   baseline = 'algo_1', max_repls = 10)
+#'     results <- seq_b_signed_rank_test(df = test_benchmark_small, 
+#'     baseline = 'algo_1', max_repls = 10)
 #' @export
 seq_b_signed_rank_test <- function(problemset = NULL, baseline, 
                                    algorithm = NULL, measure = NULL, 
@@ -425,8 +425,8 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
 #'     0.1. 
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
-#' results <- seq_b_hierarchical_test(df = test_benchmark_small, 
-#'                                    baseline = 'algo_1', max_repls = 10)
+#'     results <- seq_b_hierarchical_test(df = test_benchmark_small,
+#'     baseline = 'algo_1', max_repls = 10)
 #' @export
 seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL, 
                                     compare = NULL, rho = 0.1, max_repls = 20, 

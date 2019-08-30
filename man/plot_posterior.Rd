@@ -2,56 +2,35 @@
 % Please edit documentation in R/plotting.R
 \name{plot_posterior}
 \alias{plot_posterior}
-\title{Posterior densities plot}
+\title{Plotting the posterior densities in Bayesian analyses}
 \usage{
-plot_posterior(df, problemset, learner_a, learner_b, measure = NULL,
-  rho = 0.1, rope = c(-0.01, 0.01), parameter = 1, points = 1000,
-  plot_rope = TRUE, plot_samples = TRUE, alpha = NULL)
+plot_posterior(results, method, points = 1000)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{results}{Results of the Bayesian analysis performed before.}
 
-\item{problemset}{Problemset on which the test should be performed.}
+\item{method}{The Bayesian test that has been performed. Either
+"b_corr_t_test", b_sign_test", "b_signed_rank_test" or 
+"b_hierarchical_test".}
 
-\item{learner_a}{First algorithm.}
-
-\item{learner_b}{Second algorithm.}
-
-\item{measure}{Measure column.}
-
-\item{rho}{Correlation factor.}
-
-\item{rope}{Region of practical equivalence.}
-
-\item{parameter}{Either a string or a number indicating, in case the 
-posterior is approximated, the parameter to be plotted (i.e., the name or the 
-index of a column in the sample matrix)}
-
-\item{points}{Number of points used to plot the functions}
-
-\item{plot_rope}{A logical value indicating whether the rope has to be 
-plotted or not. Note that not for all
-parameter the rope makes sense}
-
-\item{plot_samples}{A logical value. If true, the samples are plotted (only 
-when the posterior is approximate)}
-
-\item{alpha}{Numeric value for the transparency of the points, only 
-applicable if \code{plot.samples} is true}
-
-\item{...}{Additional parameters to the Rgraphviz function. This is mainly 
-to change the layout of the graph}
+\item{points}{Number of points used to plot the function.}
 }
 \value{
-An object of class \linkS4class{ggplot} with the plot
+A \code{\linkS4class{ggplot}} object.
 }
 \description{
-This function plots, univariately, the posterior densities 
-obtained in Bayesian analyses.
+This function plots the posterior densities obtained in Bayesian 
+    analyses. It plots either univariately the posterior densities obtained 
+    via Bayesian correlated t tests. Or, if either a Bayesian Sign, Signed 
+    Rank or Hierarchical correlated t test have been used, it plots the 
+    projection of 3-simplex points into a 2D triangle.
 }
 \details{
-The test has first been implemented in scmamp.
+The plot for Bayesian correlated t tests has first been implemented in 
+    scmamp. The plots for the other Bayesian tests have first been 
+    implemented in rNPBST.
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}
+    \url{https://github.com/JacintoCC/rNPBST}
 }

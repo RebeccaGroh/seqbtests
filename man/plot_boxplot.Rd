@@ -12,11 +12,11 @@ plot_boxplot(df, measure = NULL)
 \item{measure}{Measure column.}
 }
 \value{
-An object of class \linkS4class{ggplot} with the plot
+A \code{\linkS4class{ggplot}} object.
 }
 \description{
-This function plots the performance of all algorithms in the 
-data frame as boxplots
+This function plots the performance of every algorithm in each 
+    data frame in boxplots.
 }
 \details{
 The test has first been implemented in scmamp.

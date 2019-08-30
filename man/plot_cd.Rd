@@ -15,14 +15,21 @@ plot_cd(df, measure = NULL, alpha = 0.05, cex = 0.75, ...)
 
 \item{cex}{Numeric value to control the size of the font.}
 }
+\value{
+A \code{\linkS4class{ggplot}} object.
+}
 \description{
-This function plots the critical differences plot.
+This function implements the critical difference plots 
+    introduced in Demsar (2006).
 }
 \details{
-The test has first been implemented in scmamp.
-Note that the default value for measure is the first measure column in the 
-data frame. By default, the alpha value is 0.05 and the default for cex is 
-0.75.
+The test has first been implemented in scmamp. 
+    Note that if no measure column is defined per default the first column 
+    defined as measure_* in the data frame is used. By default, the alpha 
+    value is 0.05 and the default for cex is 0.75.
+}
+\examples{
+    plot_cd(test_benchmark)
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

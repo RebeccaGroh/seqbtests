@@ -19,7 +19,8 @@
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example nemenyi_test(test_benchmark)
+#' @example 
+#'     nemenyi_test(test_benchmark)
 #' @export
 nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
     checkmate::assert_true(check_names(df, measure = NULL))
@@ -64,7 +65,8 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example friedman_post(test_benchmark)
+#' @example 
+#'     friedman_post(test_benchmark)
 #' @export
 friedman_post <- function(df, measure = NULL, control = NULL) {
     checkmate::assert_true(check_names(df, measure = NULL))

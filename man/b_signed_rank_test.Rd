@@ -15,7 +15,8 @@ b_signed_rank_test(df, problemset = NULL, baseline, compare = NULL,
 
 \item{baseline}{First algorithm.}
 
-\item{algorithm}{Second algorithm.}
+\item{algorithm}{Second algorithm. If not defined, every algorithm will be 
+tested against baseline.}
 
 \item{measure}{Measure column.}
 
@@ -29,22 +30,16 @@ b_signed_rank_test(df, problemset = NULL, baseline, compare = NULL,
 
 \item{rope}{Region of practical equivalence.}
 }
-\value{
-A list containing the following components:
-\item{code{measure}}{A string with the name of the measure column used.}
-\item{code{method}}{A string with the name of the method used.}
-\item{code{posteriror_probabilities}}{A vector with the left, rope and right 
-probabilities.}
-}
 \description{
-This function implements the Bayesian version of the signed rank test.
+This function implements the Bayesian version of the signed rank test. 
+    The performance of one baseline algorithm on one or multiple data sets is 
+    compared to either one or multiple algorithms.
 }
 \details{
-The test has first been implemented in rNPBST. 
-For testing over multiple datasets, don't specify the problem set argument 
-in the function. 
-Note that the default value for measure is the first measure column in the 
-data frame.
+The test has first been implemented in rNPBST. For testing over multiple 
+    datasets, don´t specify the problem set argument in the function. Note 
+    that if no measure column is defined per default the first column 
+    defined as measure_* in the data frame is used.
 }
 \references{
 \url{https://github.com/JacintoCC/rNPBST}

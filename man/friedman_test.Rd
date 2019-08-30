@@ -13,20 +13,22 @@ friedman_test(df, measure = NULL)
 }
 \value{
 A list containing the following components: 
-\item{code{measure}}{A string with the name of the measure column used.}
-\item{code{method}}{A string with the name of the method used.}
-\item{code{statistic}}{The value of the statistic used in the test.}
-\item{code{p_value}}{The p-value for the test.}
+\itemize{
+ \item{code{measure}} A string with the name of the measure column used.
+\item{code{method}} A string with the name of the method used.
+\item{code{statistic}} The value of the statistic used in the test.
+\item{code{p_value}} The p-value for the test.
+}
 }
 \description{
 This function implements the Friedman's test for multiple 
-comparisons. A non-parametric statistical test to detect differences in 
-in algorithms performances over multiple datasets.
+    comparisons. A non-parametric statistical test to detect differences in 
+    in algorithms performances over multiple datasets.
 }
 \details{
-The test has first been implemented in scmamp.
-Note that the default value for measure is the first measure column in the 
-data frame.
+The test has first been implemented in scmamp. 
+    Note that if no measure column is defined per default the first column 
+    defined as measure_* in the data frame is used.
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

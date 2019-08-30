@@ -21,8 +21,8 @@
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
-#' results <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
-#'                        baseline = "algo_1", algorithm = "algo_2")
+#'     results <- corr_t_test(df= test_benchmark_small, 
+#'     problemset = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 #' @export
 corr_t_test <- function(df, problemset, baseline, algorithm, measure = NULL, 
                         rho = 0.01) {
@@ -68,7 +68,8 @@ corr_t_test <- function(df, problemset, baseline, algorithm, measure = NULL,
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example results <- friedman_test(test_benchmark) 
+#' @example 
+#'     results <- friedman_test(test_benchmark) 
 #' @export
 friedman_test <- function(df, measure = NULL) {
     checkmate::assert_true(check_structure(df))
@@ -117,9 +118,8 @@ friedman_test <- function(df, measure = NULL) {
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
-#' results <- wilcoxon_signed_test(df = test_benchmark, 
-#'                                 problemset = "problem_a", 
-#'                                 baseline = "algo_1", algorithm = "algo_2")  
+#'     results <- wilcoxon_signed_test(df = test_benchmark, baseline = "algo_1",
+#'     algorithm = "algo_2", problemset = "problem_a")  
 #' @export
 wilcoxon_signed_test <- function(df, problemset, baseline, algorithm, 
                                  measure = NULL) {

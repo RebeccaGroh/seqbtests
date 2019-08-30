@@ -2,14 +2,14 @@
 % Please edit documentation in R/bayesian_sequential_tests.R
 \name{seq_b_corr_t_test}
 \alias{seq_b_corr_t_test}
-\title{Sequential bayesian correlated t test}
+\title{Sequential Bayesian correlated t test}
 \usage{
 seq_b_corr_t_test(problemset, baseline, algorithm = NULL,
   measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01),
   max_repls = 20, ...)
 }
 \arguments{
-\item{problemset}{Problemset on which the test should be performed.}
+\item{problemset}{Problem set on which the test should be performed.}
 
 \item{baseline}{First algorithm.}
 
@@ -18,39 +18,36 @@ tested against baseline.}
 
 \item{measure}{Measure column.}
 
-\item{compare}{Defines whether the performances should be tested for either 
-being better ('better') or being just as good ('equal'). If not defined, the 
-default is to test for 'better'.}
+\item{compare}{Defines whether the baseline should be tested for either 
+being better ('better') or being just as good ('equal') as the other 
+algorithms. If not defined, the default is to test for 'better'.}
 
 \item{rho}{Correlation factor.}
 
 \item{rope}{Region of practical equivalence.}
 
-\item{max_repls}{maximum number of replications that should be build in 
-get_replications, or maximum number of replications in data frame, if 
-complete data frame is being used.}
+\item{max_repls}{Maximum number of replications that should be build in 
+get_replications. Or maximum number of replications in data frame, if 
+a data frame that has already been built is being used.}
+
+\item{...}{Additional arguments. When already built dataset is used the User 
+can define it with code{df}.}
 
 \item{rope}{Region of practical equivalence.}
 }
-\value{
-A data frame with one row for each considered algorithm that is 
-tested against the baseline, containing the following components:
-\item{code{measure}}{a string with the name of the measure column used}
-\item{code{method}}{a string with the name of the method used}
-\item{code{posteriror_probabilities}}{a vector with the left, rope and right 
-probabilities}
-\item{code{repls}}{number of the considered replications}
-}
 \description{
-This function implements a sequential approach of the bayesian correlated 
-t test to compare the performance of machine learning algorithms to one 
-another. Sample size is not fixed in advance, data are evaluated as they are 
-collected. Further sampling is stopped in accordance with a pre-defined 
-stopping rule as soon as significant results are obtained.
+This function implements a sequential approach of the Bayesian correlated 
+    t test to compare the performance of machine learning algorithms to one 
+    another. Sample size is not fixed in advance, data are evaluated as they 
+    are collected. Further sampling is stopped in accordance with a 
+    pre-defined stopping rule as soon as significant results are obtained.
 }
 \details{
-The basics of the test have first been implemented in scmamp. 
-Note that the default value for measure is the first measure column in the 
-data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
-in the equivalent of the standard t test.
+The basis for this test has first been implemented in scmamp. 
+    Note that if no measure column is defined per default the first column 
+    defined as measure_* in the data frame is used. The default of rho is 
+    0.1.
+}
+\references{
+\url{https://github.com/b0rxa/scmamp}
 }

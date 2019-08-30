@@ -2,7 +2,7 @@
 % Please edit documentation in R/frequentist_tests.R
 \name{corr_t_test}
 \alias{corr_t_test}
-\title{Correlated t Test}
+\title{Correlated t test}
 \usage{
 corr_t_test(df, problemset, baseline, algorithm, measure = NULL,
   rho = 0.01)
@@ -19,23 +19,25 @@ corr_t_test(df, problemset, baseline, algorithm, measure = NULL,
 \item{measure}{Measure column.}
 
 \item{rho}{Correlation factor. (For the case of cross validated results, the 
-heuristic to set the correlation is size of test set divided by total size 
-of the dataset.)}
+heuristic to set the correlation is size of test set divided by total 
+size of the dataset.)}
 }
 \value{
 A list containing the following components: 
-\item{code{measure}}{A string with the name of the measure column used.}
-\item{code{method}}{A string with the name of the method used.}
-\item{code{statistic}}{The value of the statistic used in the test.}
-\item{code{p_value}}{The p-value for the test.}
+\itemize{
+ \item{code{measure}} A string with the name of the measure column used.
+\item{code{method}} A string with the name of the method used.
+\item{code{statistic}} The value of the statistic used in the test.
+\item{code{p_value}} The p-value for the test.
+}
 }
 \description{
-This function implements a two-sided t-Test for paired samples.
+This function implements a two-sided t test for paired samples.
 }
 \details{
-The test has first been implemented in scmamp.
-Note that the default value for measure is the first measure column in the 
-data frame.
+The test has first been implemented in scmamp. 
+    Note that if no measure column is defined per default the first column 
+    defined as measure_* in the data frame is used.
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

@@ -24,15 +24,16 @@ baseline is compared to every algorithm in the data frame.}
 \item{rope}{Region of practical equivalence.}
 }
 \description{
-This function implements the Bayesian version of the correlated t-test. The 
-performance of one baseline algorithm on one data set is compared to either 
-one or multiple algorithms.
+This function implements the Bayesian version of the correlated t-test. 
+    The performance of one baseline algorithm on one data set is compared to 
+    either one or multiple algorithms.
 }
 \details{
 The test has first been implemented in scmamp. 
-Note that the default value for measure is the first measure column in the 
-data frame. The default of rho is 0.1. If rho equals 0 this converts the test 
-in the equivalent of the standard t test.
+    Note that if no measure column is defined per default the first column 
+    defined as measure_* in the data frame is used. The default of rho is 
+    0.1. If rho equals 0 this converts the test in the equivalent of the 
+    standard t test.
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

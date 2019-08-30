@@ -12,7 +12,7 @@ plot_densities(df, measure = NULL)
 \item{measure}{Measure column.}
 }
 \value{
-An object of class \linkS4class{ggplot} with the plot
+A \code{\linkS4class{ggplot}} object.
 }
 \description{
 This function estimates and plots the densities of the 
