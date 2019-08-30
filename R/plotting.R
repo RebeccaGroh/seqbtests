@@ -143,30 +143,48 @@ plot_boxplot <- function(df, measure = NULL) {
 #' plot_posterior(df= test_benchmark_small, problemset = 'problem_c', 
 #'                          learner_a = 'algo_1', learner_b = 'algo_2')
 #' @export
-plot_posterior <- function(df, problemset, learner_a, learner_b, measure = NULL, 
-                           rho = 0.1, rope = c(-0.01, 0.01), 
-                           parameter=1, points=1000, 
-                           plot_rope=TRUE, plot_samples=TRUE, alpha=NULL) {
-  checkmate::assert_true(check_structure(df))
-  checkmate::assert_true(check_names(df, problemset, learner_a, learner_b, 
-                                     measure = NULL))
-  if (is.null(measure)) {
-    measure <- get_measure_columns(df)[1]
+plot_posterior <- function(results, method, points = 1000,  
+                           plot_samples = TRUE, alpha = NULL){
+  if (method == "b_corr_t_test") {
+    test <- list()
+    tdist.df <- as.numeric(results[["extra"]][7])
+    tdist.mean <- as.numeric(results[["extra"]][8])
+    tdist.sd <- as.numeric(results$extra[9])
+    ppos <- function(mu) {
+      #Standarize the value and get the density
+      x <- (mu-tdist.mean)/tdist.sd
+      return(pt(x,tdist.df))
+    }
+    qpos <- function(q) {
+      return(qt(q,tdist.df) * tdist.sd + tdist.mean)
+    }
+    dpos <- function(mu) {
+      #Standarize the value and get the density
+      x <- (mu-tdist.mean)/tdist.sd
+      return(dt(x,tdist.df))
+    }
+    test[["additional"]] <- list(pposterior = ppos, 
+                                 qposterior = qpos, 
+                                 posterior.df = tdist.df,  
+                                 posterior.mean = tdist.mean, 
+                                 posterior.sd = tdist.sd)
+    test[["approximate"]] <- as.logical(results[["extra"]][2])
+    test[["parameters"]] <- as.data.frame(results[["extra"]][3])
+    test[["posterior"]] <- dpos
+    scmamp::plotPosterior(results = test, num.points = points,  plot.rope = TRUE, 
+                          plot.samples = plot_samples, alpha)
   }
-  # define samples
-  x <- df[df[["problem"]] == problemset 
-          & df[["algorithm"]] == learner_a, measure]
-  y <- df[df[["problem"]] == problemset 
-          & df[["algorithm"]] == learner_b, measure]
-  # check numbers in sample
-  checkmate::assert_true(get_replications_count(x, y))
-  # Bayesian correlated t Test
-  results <- scmamp::bCorrelatedTtest(x, y, rho, rope)
-  num.points <- points
-  plot.rope <- plot_rope
-  plot.samples <- plot_samples
-  scmamp::plotPosterior(results)
+  # if (method == "b_sign_test") {
+  #   
+  # }
+  # if (method == "b_signed_rank_test") {
+  #   
+  # }
+  # if (method == "b_hierarchical_test") {
+  #   
+  # }
 }
+## working for b_corr_t_test 
 
 #' @title Critical differences plot 
 #' @description This function plots the critical differences plot. 

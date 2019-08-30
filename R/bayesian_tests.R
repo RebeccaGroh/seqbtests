@@ -76,7 +76,12 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
                                extra = list(b_corr$additional, 
                                             b_corr$approximate, 
                                             b_corr$parameters, 
-                                            b_corr$posterior))
+                                            b_corr$posterior, 
+                                            b_corr$additional$pposterior,
+                                            b_corr$additional$qposterior,
+                                            b_corr$additional$posterior.df,
+                                            b_corr$additional$posterior.mean,
+                                            b_corr$additional$posterior.sd))
     return(output)
 }
 
