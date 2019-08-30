@@ -5,6 +5,7 @@
 #'     further use in this package. 
 #' @param x Results of a Bayesian test. 
 #' @param num.points Number of points to be shown in the plot. 
+#' @references \url{https://github.com/JacintoCC/rNPBST}
 plot_triangles <- function(x, num.points = nrow(x$sample), ...){
   sample <- x$sample
   # Reduce the number of points to plot

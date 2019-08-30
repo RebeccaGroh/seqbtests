@@ -1,7 +1,6 @@
-
 #' @title Summary
 #' @description Short summary of the data frame, 
-#'     including the columns names and number of rows
+#'     including the columns names and number of rows.
 #' @param df Input data frame.
 #' @return A vector containing the columns names and number of rows.
 #' @export
@@ -13,15 +12,16 @@ data_summary <- function(df) {
 
 
 #' @title NA Check
-#' @description Check if the measure column is complete. 
-#' For the problem sets and all algorithms present in the data frame, this 
-#' function specifies the ratio of the NAs present. If there are any NAs the 
-#' User can decide to drop all observations for that specific value, since the
-#' data frame needs to be complete for testing. 
+#' @description 
+#'     Check if the measure column is complete. 
+#'     For the problem sets and all algorithms present in the data frame, this 
+#'     function specifies the ratio of existing NAs. If there are any NAs the 
+#'     User can decide to drop all observations for that specific value, since 
+#'     the data frame needs to be complete for testing. 
 #' @param df Input data frame.
 #' @param measure Measure column.
 #' @param check_var Column in data frame used to check for NAs. Either 
-#' "problemsets" or "algorithm".
+#'     "problemsets" or "algorithm".
 #' @return List of Cases, NAs and the NA ratio according to check_var. 
 #' @export 
 na_check <- function(df, measure, check_var) {
@@ -56,12 +56,12 @@ na_check <- function(df, measure, check_var) {
 
 
 #' @title Drop NAs by groups 
-#' @description Drop group of rows that contain any NA depending on values of 
-#' check_var. 
+#' @description 
+#'     Drop group of rows that contain any NA depending on values of check_var. 
 #' @param df Input data frame.
 #' @param measure Measure column.
 #' @param check_var Column in data frame used to check for NAs. Either 
-#' "problemsets" or "algorithm".
+#'     "problemsets" or "algorithm".
 #' @return New data frame without NAs. 
 #' @export 
 na_drop <- function(df, check_var, measure) {

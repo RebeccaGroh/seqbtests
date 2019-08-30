@@ -3,11 +3,10 @@
 #' performances of each algorithm in the data frame  
 #' @param df Input data frame.
 #' @param measure Measure column. 
-#' @return An object of class \linkS4class{ggplot} with the plot
+#' @return A \code{\linkS4class{ggplot}} object.
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' plot_densities(test_benchmark_small)
+#' @example plot_densities(test_benchmark_small)
 #' @export
 plot_densities <- function(df, measure = NULL) {
   checkmate::assert_true(check_structure(df))
@@ -16,7 +15,8 @@ plot_densities <- function(df, measure = NULL) {
   }
   algo_names <- unique(df$algorithm)
   data_wide <- tidyr::spread(df, algorithm, measure)
-  sum_data <- aggregate(data_wide[, algo_names], by = list(data_wide[["problem"]]), FUN = mean)
+  sum_data <- aggregate(data_wide[, algo_names], 
+                        by = list(data_wide[["problem"]]), FUN = mean)
   # define dataset
   results_matrix <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
   # plot densities 
@@ -26,15 +26,14 @@ plot_densities <- function(df, measure = NULL) {
 
 
 #' @title Boxplot  
-#' @description This function plots the performance of all algorithms in the 
-#' data frame as boxplots 
+#' @description This function plots the performance of every algorithm in each 
+#'     data frame in boxplots.
 #' @param df Input data frame. 
 #' @param measure Measure column. 
-#' @return An object of class \linkS4class{ggplot} with the plot
+#' @return A \code{\linkS4class{ggplot}} object.
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
-#' plot_boxplot(df = test_benchmark_small)
+#' @example plot_boxplot(df = test_benchmark_small)
 #' @export
 plot_boxplot <- function(df, measure = NULL) {
   if (is.null(measure)) {
@@ -52,15 +51,18 @@ plot_boxplot <- function(df, measure = NULL) {
 
 
 #' @title Critical differences plot 
-#' @description This function plots the critical differences plot. 
+#' @description This function implements the critical difference plots 
+#'     introduced in Demsar (2006).
 #' @param df Input data frame.
 #' @param measure Measure column. 
 #' @param alpha Significance level to get the critical difference.
 #' @param cex Numeric value to control the size of the font. 
-#' @details The test has first been implemented in scmamp.
-#' Note that the default value for measure is the first measure column in the 
-#' data frame. By default, the alpha value is 0.05 and the default for cex is 
-#' 0.75.
+#' @return A \code{\linkS4class{ggplot}} object.
+#' @details 
+#'     The test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used. By default, the alpha 
+#'     value is 0.05 and the default for cex is 0.75.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @9examples
 #' plot_cd(test_benchmark)
@@ -92,9 +94,11 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
 #'     "b_corr_t_test", b_sign_test", "b_signed_rank_test" or 
 #'     "b_hierarchical_test".
 #' @param points Number of points used to plot the function. 
-#' @details The plot for Bayesian correlated t tests has first been implemented 
-#' in scmamp. The plots for the other Bayesian tests have first been implemented 
-#' in rNPBST
+#' @return A \code{\linkS4class{ggplot}} object.
+#' @details 
+#'     The plot for Bayesian correlated t tests has first been implemented in 
+#'     scmamp. The plots for the other Bayesian tests have first been 
+#'     implemented in rNPBST.
 #' @references 
 #'     \url{https://github.com/b0rxa/scmamp}
 #'     \url{https://github.com/JacintoCC/rNPBST}

@@ -4,16 +4,20 @@
 #' @param measure Measure column. 
 #' @param alpha Significance level.
 #' @return A list containing the following components: 
-#' \item{code{measure}}{A string with the name of the measure column used.}
-#' \item{code{method}}{A string with the name of the method used.}
-#' \item{code{statistic}}{The value of the statistic used in the test.}
-#' \item{code{p_value}}{The p-value for the test.}
-#' \item{code{diff_matrix}}{A matrix with all the pair wise differences of 
-#' average rankings.}
-#' \item{code{significance}}{A matrix with all the pair wise comparisons showing 
-#' if there are significant differences among the algorithms}
-#' @details The test has first been implemented in scmamp. Note that the default
-#' value for measure is the first measure column in the data frame.
+#' \itemize{
+#'  \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{statistic}} The value of the statistic used in the test.
+#' \item{code{p_value}} The p-value for the test.
+#' \item{code{diff_matrix}} A matrix with all the pair wise differences of 
+#'     average rankings.
+#' \item{code{significance}} A matrix with all the pair wise comparisons showing 
+#'     if there are significant differences among the algorithms.
+#' }
+#' @details  
+#'     The test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example nemenyi_test(test_benchmark)
 #' @export
@@ -50,9 +54,15 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 #' @param measure Measure column.
 #' @param control The name of the control algorithm. If this parameter is not 
 #' provided, all algorithms are compared against each other. 
-#' @return A matrix with all the pair wise raw p-values. 
-#' @details The test has first been implemented in scmamp. Note that the default
-#' value for measure is the first measure column in the data frame.
+#' @return A list containing the following components: 
+#' \itemize{
+#'  \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{matrix}}  A matrix with all the pair wise raw p-values. 
+#' @details  
+#'     The test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example friedman_post(test_benchmark)
 #' @export
