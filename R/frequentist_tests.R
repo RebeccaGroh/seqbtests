@@ -1,21 +1,24 @@
-#' @title Correlated t Test 
-#' @description This function implements a two-sided t-Test for paired samples. 
+#' @title Correlated t test 
+#' @description This function implements a two-sided t test for paired samples. 
 #' @param df Input data frame. 
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @param rho Correlation factor. (For the case of cross validated results, the 
-#' heuristic to set the correlation is size of test set divided by total size 
-#' of the dataset.) 
+#'     heuristic to set the correlation is size of test set divided by total 
+#'     size of the dataset.) 
 #' @return A list containing the following components: 
-#' \item{code{measure}}{A string with the name of the measure column used.}
-#' \item{code{method}}{A string with the name of the method used.}
-#' \item{code{statistic}}{The value of the statistic used in the test.}
-#' \item{code{p_value}}{The p-value for the test.}
-#' @details The test has first been implemented in scmamp.
-#' Note that the default value for measure is the first measure column in the 
-#' data frame.
+#' \itemize{
+#'  \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{statistic}} The value of the statistic used in the test.
+#' \item{code{p_value}} The p-value for the test.
+#' }
+#' @details  
+#'     The test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
 #' results <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
@@ -49,18 +52,21 @@ corr_t_test <- function(df, problemset, baseline, algorithm, measure = NULL,
 
 #' @title Friedman's test 
 #' @description This function implements the Friedman's test for multiple 
-#' comparisons. A non-parametric statistical test to detect differences in 
-#' in algorithms performances over multiple datasets. 
+#'     comparisons. A non-parametric statistical test to detect differences in 
+#'     in algorithms performances over multiple datasets. 
 #' @param df Input data frame.
 #' @param measure Measure column. 
 #' @return A list containing the following components: 
-#' \item{code{measure}}{A string with the name of the measure column used.}
-#' \item{code{method}}{A string with the name of the method used.}
-#' \item{code{statistic}}{The value of the statistic used in the test.}
-#' \item{code{p_value}}{The p-value for the test.}
-#' @details The test has first been implemented in scmamp.
-#' Note that the default value for measure is the first measure column in the 
-#' data frame.
+#' \itemize{
+#'  \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{statistic}} The value of the statistic used in the test.
+#' \item{code{p_value}} The p-value for the test.
+#' }
+#' @details  
+#'     The test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example results <- friedman_test(test_benchmark) 
 #' @export
@@ -90,23 +96,25 @@ friedman_test <- function(df, measure = NULL) {
 
 #' @title Wilcoxon signed-rank test 
 #' @description 
-#' This function implements the paired Wilcoxon signed-rank test. A 
-#' non-parametric statistical hypothesis test to compare the means of two 
-#' paired samples. 
+#'     This function implements the paired Wilcoxon signed-rank test. A 
+#'     non-parametric statistical hypothesis test to compare the means of two 
+#'     paired samples. 
 #' @param df Input data frame. 
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
 #' @return A list containing the following components: 
-#' \item{code{measure}}{A string with the name of the measure column used.}
-#' \item{code{method}}{A string with the name of the method used.}
-#' \item{code{statistic}}{The value of the statistic used in the test.}
-#' \item{code{p_value}}{The p-value for the test.}
-#' @details 
-#' The test has first been implemented in scmamp.
-#' Note that the default value for measure is the first measure column in the 
-#' data frame.
+#' \itemize{
+#'  \item{code{measure}} A string with the name of the measure column used.
+#' \item{code{method}} A string with the name of the method used.
+#' \item{code{statistic}} The value of the statistic used in the test.
+#' \item{code{p_value}} The p-value for the test.
+#' }
+#' @details  
+#'     The test has first been implemented in scmamp. 
+#'     Note that if no measure column is defined per default the first column 
+#'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
 #' results <- wilcoxon_signed_test(df = test_benchmark, 

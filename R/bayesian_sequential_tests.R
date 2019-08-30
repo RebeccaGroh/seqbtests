@@ -8,7 +8,7 @@
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
-#' tested against baseline. 
+#'     tested against baseline. 
 #' @param measure Measure column. 
 #' @param compare Defines whether the baseline should be tested for either 
 #'     being better ('better') or being just as good ('equal') as the other 
@@ -233,10 +233,11 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
 #' @title Sequential Bayesian Signed Rank test 
 #' @description 
 #'     This function implements a sequential approach of the Bayesian version of
-#'     the signed rank test to compare the performance of machine learning algorithms 
-#'     to one another. Sample size is not fixed in advance, data are evaluated 
-#'     as they are collected. Further sampling is stopped in accordance with a 
-#'     pre-defined stopping rule as soon as significant results are obtained. 
+#'     the signed rank test to compare the performance of machine learning 
+#'     algorithms to one another. Sample size is not fixed in advance, data are 
+#'     evaluated as they are collected. Further sampling is stopped in 
+#'     accordance with a pre-defined stopping rule as soon as significant 
+#'     results are obtained. 
 #' @param problemset Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 

@@ -1,6 +1,13 @@
 #' @title Check column names 
 #' @description Check if column names that were passed by User are contained 
 #'     in the data frame. 
+#' @param df Input data frame.
+#' @param problemset Problem set on which the test should be performed. 
+#' @param baseline First algorithm.
+#' @param algorithm Second algorithm. If not defined, every algorithm will be 
+#'     tested against baseline. 
+#' @param measure Measure column. 
+#' @export
 check_names <- function(df, problemset = NULL, baseline = NULL, 
                         algorithm = NULL, measure = NULL) {
     if (!is.null(problemset)) {
@@ -23,7 +30,7 @@ check_names <- function(df, problemset = NULL, baseline = NULL,
 #' @title Check Columns of data frame 
 #' @description Check if data frame only contains legit columns and whether any
 #'     compulsory columns exist. 
-#' @param df Input data frame,
+#' @param df Input data frame.
 #' @return TRUE if test was successful.
 #' @export
 check_column_names <- function(df) {
@@ -68,11 +75,11 @@ check_structure <- function(df) {
 
 #' @title Paste algorithm and parameter
 #' @description If there is a parameter additional to the algorithm, both can 
-#' be combined, when using this function. 
+#'     be combined, when using this function. 
 #' @param df Input data frame,
 #' @param parameter_algorithm Algorithm parameter in data frame. 
 #' @return New data frame, where the algorithm and parameter_algorithm column, 
-#' as well as the value names are combined. 
+#'     as well as the value names are combined. 
 #' @export 
 paste_algo_pars <- function(df, parameter_algo = NULL) {
   df[["algorithm"]] <- 
