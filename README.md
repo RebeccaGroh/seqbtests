@@ -15,15 +15,15 @@ install_github("RebeccaGroh/seqbtests")
 ```
 
 This package provides some Bayesian approaches to compare classifiers in either single or multiple datasets. 
-The tests [without any adaptions] in this package are modifications of tests provided by other packages, available at [github](https://github.com/br0rxa/scmamp), .
+The tests [without any adaptions] in this package are modifications of tests provided by other packages, available at [github](https://github.com/br0rxa/scmamp), [github](https://github.com/JacintoCC/rNPBST).
 
 ## Data Frame 
 
 
-| problem | algorithm | parameter_algorithm| replications | measure_\* |
-|:------:|:------:|:------:|:------:|:------:|
-| character | character | character | integer | numeric |
-| mandatory | mandatory | optional | mandatory | mandatory |
+| problem | algorithm | replication | measure_\* |
+|:------:|:------:|:------:|:------:|
+| character | character |  integer | numeric |
+| mandatory | mandatory |  mandatory | mandatory |
 
 
  
