@@ -118,3 +118,13 @@ get_results <- function(baseline, method, measure, data = NULL, extra = NULL) {
     class(output) <- "btest"
     return(output)
 }
+
+get_results_htest <- function(baseline = NULL, method, measure, data = NULL) {
+    output <- list(baseline = baseline, 
+                   method = method, 
+                   measure = measure, 
+                   data_frame = data)
+    return(output)
+}
+
+htest_small

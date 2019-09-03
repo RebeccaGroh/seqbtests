@@ -24,29 +24,36 @@
 #'     results <- corr_t_test(df= test_benchmark_small, 
 #'     problemset = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 #' @export
-corr_t_test <- function(df, problemset, baseline, algorithm, measure = NULL, 
-                        rho = 0.01) {
+corr_t_test <- function(df, problemset, baseline, algorithm = NULL, 
+                        measure = NULL, rho = 0.01) {
+    result <- data.frame()
     checkmate::assert_true(check_structure(df))
     checkmate::assert_true(check_names(df, problemset, baseline, 
-                                       algorithm, measure = NULL))
+                                       algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
     # define samples
     x <- df[df[["problem"]] == problemset 
             & df[["algorithm"]] == baseline, measure]
-    y <- df[df[["problem"]] == problemset 
-            & df[["algorithm"]] == algorithm, measure]
-    # Correlated t Test
-    corr_test <- scmamp::correlatedTtest(x, y, rho, alternative = "two.sided")
-    ## return results
-    result <- list()
-    result$measure <- measure
-    test <- list(method = corr_test$method, statistic = corr_test$statistic, 
-                 p.value = corr_test$p.value)
-    class(test) <- "htest"
-    result$teststatistic <- test
-    return(result)
+    algorithms <- unique(df[["algorithm"]])
+    if (!is.null(algorithm)) {
+        algorithms <- algorithm
+    }
+    for (k in algorithms[algorithms != baseline]) {
+        y <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == k, measure]
+        # Correlated t Test
+        corr_test <- scmamp::correlatedTtest(x, y, rho, alternative = "two.sided")
+        # return results 
+        result[k, "p_value"] <- corr_test$p.value
+        result[k, "test"] <- "t = "
+        result[k, "statistic"] <- corr_test$statistic
+    }
+    output <- get_results_htest(baseline = baseline, measure = measure, 
+                      method = corr_test$method, data = result)
+    class(output) <- "htest"
+    return(output)
 }
 
 
@@ -72,6 +79,7 @@ corr_t_test <- function(df, problemset, baseline, algorithm, measure = NULL,
 #'     results <- friedman_test(test_benchmark) 
 #' @export
 friedman_test <- function(df, measure = NULL) {
+    result <- data.frame()
     checkmate::assert_true(check_structure(df))
     checkmate::assert_true(check_names(df, measure = NULL))
     if (is.null(measure)) {
@@ -85,13 +93,14 @@ friedman_test <- function(df, measure = NULL) {
     data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
     # Friedman Test
     f_test <- scmamp::friedmanTest(data)
-    ## return results
-    result <- list()
-    result$measure <- measure
-    result$method <- f_test$method
-    result$statistic <- f_test$statistic
-    result$p_value <- f_test$p.value
-    return(result)
+    # return results 
+    result[1, "p_value"] <- f_test$p.value
+    result[1, "test"] <- "Friedman's chi-squared = "
+    result[1, "statistic"] <- f_test$statistic
+    output <- get_results_htest(measure = measure, 
+                            method = f_test$method, data = result)
+    class(output) <- "htest_small"
+    return(output)
 }
 
 
@@ -121,10 +130,11 @@ friedman_test <- function(df, measure = NULL) {
 #'     results <- wilcoxon_signed_test(df = test_benchmark, baseline = "algo_1",
 #'     algorithm = "algo_2", problemset = "problem_a")  
 #' @export
-wilcoxon_signed_test <- function(df, problemset, baseline, algorithm, 
+wilcoxon_signed_test <- function(df, problemset, baseline, algorithm = NULL, 
                                  measure = NULL) {
-    checkmate::assert_true(check_names(df, problemset, baseline, algorithm, 
-                                       measure = NULL))
+    result <- data.frame()
+    checkmate::assert_true(check_names(df, problemset, baseline, 
+                                       algorithm = NULL, measure = NULL))
     checkmate::assert_true(check_names(df))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
@@ -132,16 +142,23 @@ wilcoxon_signed_test <- function(df, problemset, baseline, algorithm,
     # define samples
     x <- df[df[["problem"]] == problemset 
             & df[["algorithm"]] == baseline, measure]
-    y <- df[df[["problem"]] == problemset 
-            & df[["algorithm"]] == algorithm, measure]
-    # Wilcoxon signed rank test
-    w_test <- scmamp::wilcoxonSignedTest(x, y)
-    ## return results return results
-    result <- list()
-    result$measure <- measure
-    result$method <- w_test$method
-    result$statistic <- w_test$statistic
-    result$p_value <- w_test$p.value
-    return(result)
+    algorithms <- unique(df[["algorithm"]])
+    if (!is.null(algorithm)) {
+        algorithms <- algorithm
+    }
+    for (k in algorithms[algorithms != baseline]) {
+        y <- df[df[["problem"]] == problemset 
+                & df[["algorithm"]] == k, measure]
+        # Wilcoxon signed rank test
+        w_test <- scmamp::wilcoxonSignedTest(x, y)
+        # return results 
+        result[k, "p_value"] <- w_test$p.value
+        result[k, "test"] <- "t = "
+        result[k, "statistic"] <- w_test$statistic
+    }
+    output <- get_results_htest(baseline = baseline, measure = measure, 
+                                method = w_test$method, data = result)
+    class(output) <- "htest"
+    return(output)
 }
 

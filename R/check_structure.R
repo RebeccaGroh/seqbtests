@@ -118,3 +118,15 @@ print.htest <- function(x, ...) {
   output_data <- x$data_frame
   print(output_data)
 }
+
+
+print.htest_small <- function(x, ...) {
+  cat( "\n", "Results of the", x$method, "\n", 
+       "Measure column =", x$measure, "\n", "\n" )
+  row.names(x$data_frame) <- NULL
+  output_data <- x$data_frame
+  print(output_data)
+}
+
+## in den frequentistischen Tests auch eine Baseline festlegen und alle Algorithmen 
+## können dagegen getestet werden 

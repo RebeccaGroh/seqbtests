@@ -46,7 +46,7 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
     return(result)
 }
 
-
+## muss auch noch angepasst werden 
 
 #' @title Friedman's post hoc test 
 #' @description This function implements a Friedman post hoc test. It computes 
@@ -82,10 +82,11 @@ friedman_post <- function(df, measure = NULL, control = NULL) {
     data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
     # Friedman post hoc test
     f_post <- scmamp::friedmanPost(data, control)
-    result <- list()
-    result$measure <- measure
-    result$method <- "Friedman post hoc test"
-    result$matrix <- f_post
-    return(result)
+    # return results 
+    output <- get_results_htest(measure = measure, data = f_post, 
+                                method = "Friedman post hoc test")
+    class(output) <- "htest_small"
+    return(output)
 }
 
+## funtkioniert nnoch nicht 
