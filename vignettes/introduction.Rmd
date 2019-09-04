@@ -76,17 +76,39 @@ frame.
 data_with_na <- test_benchmark_small
 data_with_na$measure_col[1] <- "NA" 
 
-
+na_check 
 
 ```
 
-To test if the data frame already is in the right format, 
+If there are NAs in the data frame, the package provides a function to drop the
+group of rows containing NAs. "check_var" allows the user to decide rather to 
+remove the specific problem set or algorithm. FOr this purpose the na_check 
+function gives important information, as you can see whether the problem set or 
+the algorithm shows a higher NA ration, i.e. which is most likely to be removed. 
 
+```{r}
+complete_data <- na_drop()
+```
+
+To test if the data frame already is in the right format, one can check the 
+strucutre. 
 
 ```{r}
 check_structure(test_benchmark_small)
 
 ```
+
+While the tests are run, the correct format and whether all necessary columns 
+are available is internally checked. 
+
+# Frequentist Hypothesis tests 
+
+To assess the statistical differences between the performance measure obtained by different algorithms the package provides several frequentist hypothesis tests. 
+
+One can differentiate parametric and non-parametric tests. 
+
+Die Tests sollten auch interpretiert werden (kurz)
+Haben wir nur non-parametrische Tests ? 
 
 
 
