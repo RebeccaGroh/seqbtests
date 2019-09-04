@@ -54,7 +54,6 @@ na_check <- function(df, measure, check_var) {
     return(result)
 }
 
-
 #' @title Drop NAs by groups 
 #' @description 
 #'     Drop group of rows that contain any NA depending on values of check_var. 
@@ -70,3 +69,4 @@ na_drop <- function(df, check_var, measure) {
     df[!(df[[x]] %in% df[[x]][is.na(df[[y]])]), ]
 }
 
+# auch nochmal anpassen 

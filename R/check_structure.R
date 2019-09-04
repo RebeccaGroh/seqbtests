@@ -128,5 +128,3 @@ print.htest_small <- function(x, ...) {
   print(output_data)
 }
 
-## in den frequentistischen Tests auch eine Baseline festlegen und alle Algorithmen 
-## können dagegen getestet werden 

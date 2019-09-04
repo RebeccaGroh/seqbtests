@@ -39,9 +39,54 @@ provided.
 
 
 
+
+# Data structure 
+
+The data needs to be in a specific form, to be used for all tests provided in 
+this package. The following table specifies the format: 
+
+| problem | algorithm | replication | measure_\* |
+|:------:|:------:|:------:|:------:|
+| character | character |  integer | numeric |
+| mandatory | mandatory |  mandatory | mandatory |
+
+There is a posibility to include more than one performance measure in the data 
+with just putting for example measure_acc and measure_f1 for the performance 
+measure accuracy and F1-Score. It is mandatory to include at least one measure 
+column along with one column defining the problem set the algorithms were tested 
+on and one column containing the name of the algorithms. For the sequential 
+tests further important is the replication column, with specifies the number of 
+evaluation runs. 
+The package has one further advantage, within the sequential tests, no data 
+frame needs to be predefined. Instead the package provides the function 
+get_replications(). This function calls the replications within the sequential 
+tests if a data frame is provided. If no data frame is provided the user can 
+define the function himself, so each run of performance evaluation is only 
+called when the predefined threshold that determines which algorithm works 
+better is not reached, and further evaluation needs to be done. This can save 
+the user some time if not all runs have to be done for evaluation.  
+
+To run the tests the records must not contain any NAs. If the User provides a 
+complete data frame, the package provides functions to delete groups containing
+NAs based on either algorithms or problem sets and gives out a complete data 
+frame.
+
+
 ```{r}
-plot_boxplot(df = test_benchmark_small)
+data_with_na <- test_benchmark_small
+data_with_na$measure_col[1] <- "NA" 
+
+
 
 ```
+
+To test if the data frame already is in the right format, 
+
+
+```{r}
+check_structure(test_benchmark_small)
+
+```
+
 
 

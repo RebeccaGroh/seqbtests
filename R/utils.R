@@ -127,4 +127,3 @@ get_results_htest <- function(baseline = NULL, method, measure, data = NULL) {
     return(output)
 }
 
-htest_small
