@@ -119,11 +119,13 @@ get_results <- function(baseline, method, measure, data = NULL, extra = NULL) {
     return(output)
 }
 
-get_results_htest <- function(baseline = NULL, method, measure, data = NULL) {
+get_results_htest <- function(baseline = NULL, method, measure, data = NULL, 
+                              matrix = NULL) {
     output <- list(baseline = baseline, 
                    method = method, 
                    measure = measure, 
-                   data_frame = data)
+                   data_frame = data, 
+                   matrix = matrix)
     return(output)
 }
 

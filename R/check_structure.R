@@ -128,3 +128,12 @@ print.htest_small <- function(x, ...) {
   print(output_data)
 }
 
+print.nemenyi <- function(x, ...){
+  cat( "\n", "Results of the", x$method, "\n", 
+       "Measure column =", x$measure, "\n", "\n" )
+  row.names(x$data_frame) <- NULL
+  output_data <- x$data_frame
+  output_matrix <- x$matrix
+  print(list(output_data, output_matrix))
+}
+

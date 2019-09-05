@@ -76,7 +76,7 @@ frame.
 data_with_na <- test_benchmark_small
 data_with_na$measure_col[1] <- "NA" 
 
-na_check 
+na_check(df = data_with_na, check_var = "algorithm") 
 
 ```
 
@@ -87,7 +87,7 @@ function gives important information, as you can see whether the problem set or
 the algorithm shows a higher NA ration, i.e. which is most likely to be removed. 
 
 ```{r}
-complete_data <- na_drop()
+complete_data <- na_drop(df = data_with_na, check_var = "algorithm")
 ```
 
 To test if the data frame already is in the right format, one can check the 

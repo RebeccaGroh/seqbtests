@@ -23,6 +23,7 @@
 #'     nemenyi_test(test_benchmark)
 #' @export
 nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
+    result <- data.frame()
     checkmate::assert_true(check_names(df, measure = NULL))
     checkmate::assert_true(check_structure(df))
     if (is.null(measure)) {
@@ -36,15 +37,15 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
     data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
     # Nemenyi post hoc test
     n_post <- scmamp::nemenyiTest(data, alpha)
-    result <- list()
-    result$measure <- measure
-    result$method <- n_post$method
-    result$diff_matrix <- n_post$diff.matrix
-    result$statistic <- n_post$statistic
-    result$p_value <- n_post$p.value
-    result$significance <- abs(n_post$diff.matrix) > n_post$statistic
-    return(result)
+    # return results 
+    result[1, "test"] <- "Critical difference = "
+    result[1, "statistic"] <- n_post$statistic
+    output <- get_results_htest(measure = measure, method = n_post$method, 
+                                matrix = n_post$diff.matrix, data = result)
+    class(output) <- "nemenyi"
+    return(output)
 }
+
 
 ## muss auch noch angepasst werden 
 
@@ -88,5 +89,6 @@ friedman_post <- function(df, measure = NULL, control = NULL) {
     class(output) <- "htest_small"
     return(output)
 }
-
-## funtkioniert nnoch nicht 
+## nochmal überprüfen: 
+# test <- friedman_post(test_benchmark)
+# names(test)

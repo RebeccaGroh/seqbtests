@@ -21,38 +21,32 @@ data_summary <- function(df) {
 #' @param df Input data frame.
 #' @param measure Measure column.
 #' @param check_var Column in data frame used to check for NAs. Either 
-#'     "problemsets" or "algorithm".
+#'     "problem" (default) or "algorithm". 
 #' @return List of Cases, NAs and the NA ratio according to check_var. 
 #' @export 
-na_check <- function(df, measure, check_var) {
-  if (!requireNamespace("dplyr", quietly=TRUE)) {
-    stop("This function requires the dplyr package. Please install it.", 
-         call.=FALSE)
+na_check <- function(df, measure = NULL, check_var = NULL){
+  result <- data.frame()
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
   }
-    if (any(is.na(df))) {
-        # incomplete columns
-        for (x in get_main_columns(df)) {
-            checkmate::assert_false(anyNA(df[[x]]))
-        }
-        requireNamespace("dplyr")
-        check_var <- enquo(check_var)
-        print(check_var)
-        measure <- enquo(measure)
-        print(measure)
-        # Share of NAs in Measure Columns
-        count <- df %>% group_by(!!check_var) %>% 
-          summarise(na_count = sum(is.na(!!measure)), cases_count = n())
-        na_dataframe <- data.frame(count)
-        # na_dataframe$cases_count <- col_count$cases_count
-        ratio <- (na_dataframe$na_count/na_dataframe$cases_count)
-        na_dataframe$na_ratio <- paste0(round(ratio * 100, digits = 2), 
-                                        "%", sep = "")
-        result <- na_dataframe
-    } else {
-        result <- "data complete"
+  if (is.null(check_var)) {
+    check_var <- "problem"
+  }
+  if (any(is.na(df))) {
+    values <- unique(df[, check_var])
+    for (i in as.character(values)) {
+      value_data <- subset(df, df[, check_var] == i)
+      result[i, "na_number"] <- sum(is.na(value_data[, measure]))
+      result[i, "observations"] <- length(which(df[, check_var] == i))
+      result[i, "na_ratio"] <- 
+        (result[i, "na_number"]/result[i, "observations"])
     }
-    return(result)
+  } else {
+    result <- "data complete"
+  }
+  return(result)
 }
+
 
 #' @title Drop NAs by groups 
 #' @description 
@@ -60,13 +54,17 @@ na_check <- function(df, measure, check_var) {
 #' @param df Input data frame.
 #' @param measure Measure column.
 #' @param check_var Column in data frame used to check for NAs. Either 
-#'     "problemsets" or "algorithm".
+#'     "problem" (default) or "algorithm".
 #' @return New data frame without NAs. 
 #' @export 
-na_drop <- function(df, check_var, measure) {
-    x <- deparse(substitute(check_var))
-    y <- deparse(substitute(measure))
-    df[!(df[[x]] %in% df[[x]][is.na(df[[y]])]), ]
+na_drop <- function(df, check_var = NULL, measure = NULL) {
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  }
+  if (is.null(check_var)) {
+    check_var <- "problem"
+  }
+  df[!(df[, check_var] %in% df[, check_var][is.na(df[, measure])]), ]
 }
 
 # auch nochmal anpassen 
