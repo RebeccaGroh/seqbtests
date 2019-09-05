@@ -112,3 +112,6 @@ Haben wir nur non-parametrische Tests ?
 
 
 
+Measure --> measuring the classification accuracy, precision/recall, mean 
+squared eroor or further. Samplign method annd measures used for evaluating the 
+performance are not that relevant for the package.  
