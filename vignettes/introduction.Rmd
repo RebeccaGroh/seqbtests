@@ -114,20 +114,23 @@ The data provided in this package show examples of performance measures for
 different algorithms evaluated on a number of different data sets. They are used
 to introduce the package functions. 
 
-## Frequentist Hypothesis tests 
+# Frequentist Hypothesis tests 
 
 To assess the statistical differences between the performance measure obtained 
 by different algorithms the package provides several frequentist hypothesis 
 tests. 
 
-One can differentiate parametric and non-parametric tests. If the assumptions 
-for the parametrc tests hold the tests a more powerful, if, however if the 
+One can differentiate parametric and non-parametric tests. The advantage of the 
+non-parametric tests is that ni assumptions need to be done. If the assumptions 
+for the parametric tests hold those tests a more powerful, if, however, the 
 assumptions do not apply one should rather use non-parametric tests. 
 
 Assumptions: 
 * Every parametric test assumes that the data follows a certain distribution. 
     Most test assume it to be a normal distribution. 
 * Data from multiple groups should show equal standard deviations. 
+
+
 
 Before testing the differences one should always have a further look on the 
 algorithms using the plot function `plot_densities` to visualize the 
@@ -162,7 +165,7 @@ The package implements three different tests for statistical differnences
 namely, the correlated t-test and the non-parametric Friedman test and Wilcoxon 
 Signed Ranks test. 
 
-### Correlated t-test 
+## Correlated t-test 
 
 The correlated t-test is an extension of the usual t-test that takes into 
 account that the performance of the algorithms is evaluated with overlapping 
@@ -170,25 +173,104 @@ trainingssets. It is used for the analysis of performance results on a single
 data set, while it accounts for correlation. 
 
 ```{r}
-results <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
+results_corr <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
                        baseline = "algo_1", algorithm = "algo_2")
 
 ```
 
-The common practice in frequentict hypothesis testing is to declare a significance level of p <= 0.05. If the p-value is below this threshold the accuracy is significantly different on that problem set. 
+The common practice in frequentict hypothesis testing is to declare a 
+significance level of p <= 0.05. If the p-value is below this threshold the 
+accuracy is significantly different on that problem set. 
 
-If no algorithm for comparing is defined, the baseline is tested against all algorithms in the data frame. Note that one has to take the multiple testing problem in account for the frequentist hypothesis tests and may correct the significance levlel via Bonferroni correction or other correctiom procedures. 
-### Friedman test 
-The friedman test is a non-parametric test that checks for differences among the algorithms performances. It has been recommended by Demsar [see @demsar2006] together with the corresponding post-hoc tests for comparison of classifiers among multiole problem sets. 
-It is the non-parametric equivalent to the ANOVA test. The friedman test ranks the algorithms for each problemset seperately. 
+If no algorithm for comparing is defined, the baseline is tested against all 
+algorithms in the data frame. Note that one has to take the multiple testing 
+problem in account for the frequentist hypothesis tests and may correct the 
+significance levlel via Bonferroni correction or other correctiom procedures. 
+
+## Wilcoxon Signed Ranks test 
+
+The Wilcoxon Signed Ranks test is recommended by Demsar [see @demsar2006] 
+for the comaprison of two classifiers on a single data set. It is a 
+non-parametric test that ranks and compares the performances of two classifiers. 
+
+```{r}
+results_wilcoxon <-  wilcoxon_signed_test(df = test_benchmark, 
+                                          baseline = "algo_1", 
+                                          algorithm = "algo_2", 
+                                          problemset = "problem_a")  
+```
+
+The Null-Hypothesis states that the algorithms performances on the problem set 
+are the same. If the p-value is smaller than 0.05 the Null-Hypothesis can be 
+rejected, i.e. there are significant differences among the compared algorithms. 
+
+## Friedman test 
+
+The Friedman test is a non-parametric test that checks for differences among 
+the algorithms performances. It has been recommended by Demsar [see @demsar2006] 
+together with the corresponding post-hoc tests for comparison of classifiers 
+among multiple problem sets. Therefore, it checks if there is one or more 
+algorithm that perform significantly different from the others. 
+It is the non-parametric equivalent to the ANOVA test. 
+
+```{r}
+results_friedman <- friedman_test(test_benchmark) 
+```
+
+The Null-Hyothesis states that all algorithms are equal. The p-value shows if 
+the Null-Hypothesis can safely be rejected, i.e showing that there are 
+significant differences among the algorithms. In the case of Rejection one can 
+proceed wiht a post-hoc test. 
 
 
 
- hier noch den CD plot
+
+## Post-hoc tests
+ 
+The post hoc tests are pairwise comparison of all algorithms. When there are 
+significant differences among the algorithms the post-hoc tests finally shows 
+among which algorithms the differences appear. 
 
 
-Die Tests sollten auch interpretiert werden (kurz)
-Haben wir nur non-parametrische Tests ? 
+If the Null-Hypothesis that states that all algorithms are significant is 
+rejected one can proceed with a post-hoc test. This package provides one 
+post-hoc test the Nemenyi post-hoc test which is recommended by Demsar 
+[see @demsar2006]. 
+
+### Nemenyi post-hoc test 
+
+The Nemenyi test is close to the Tukey test for the ANVOA, it compares each 
+algorithm to one another. If the average ranks of two algorithms differs by at 
+least the value of Critical Difference (CD) the two algorithms are significantly different. 
+
+```{r}
+nemenyi_test(test_benchmark_small)
+```
+
+
+The performance of all algorithms can be graphically visualized via the Critical 
+Differences (CD) plots, introduced by Demsar [see @demsar2006].
+
+```{r}
+plot_cd(test_benchmark_small)
+```
+
+Algorithms that are not significantly different are connected in the plot 
+
+It is possible that the Friedman test finds significant differences the post-hoc
+tests are not able to detect. This case happens quite rarely and is due to the 
+post-hocs lower power. With this, one can only state that there are significant 
+differences between the algorithms. 
+
+# Bayesian Testing 
+
+Erst einen Part, was Bayesian Testing ist. und wieso es empfohlen wird 
+The Bayesian Tests provided in this package, are the tests summarized and 
+recommended in Benavoli et al. [see @benavoli2017]. Its for tests, one, the
+Bayesian correlated t-test for the comparison of two algorithms on one data set
+and three tests, namely the Bayesian Sign test, the Bayesian Signed Rank test 
+and a Bayesian hierarchical correlated t-test for testing algorithms on multiple 
+data sets. 
 
 
 
