@@ -56,7 +56,10 @@ measure accuracy and F1-Score. It is mandatory to include at least one measure
 column along with one column defining the problem set the algorithms were tested 
 on and one column containing the name of the algorithms. For the sequential 
 tests further important is the replication column, with specifies the number of 
-evaluation runs. 
+evaluation runs. The data frame can contain more than one measure column, 
+however, for each test or plot one measure column has to be defined since it is 
+not possible to compare multiple measures at once. If no column is defined, per 
+default the first measure column in the data frame is used. 
 The package has one further advantage, within the sequential tests, no data 
 frame needs to be predefined. Instead the package provides the function 
 get_replications(). This function calls the replications within the sequential 
@@ -101,11 +104,65 @@ check_structure(test_benchmark_small)
 While the tests are run, the correct format and whether all necessary columns 
 are available is internally checked. 
 
-# Frequentist Hypothesis tests 
+# Statistical testing 
 
-To assess the statistical differences between the performance measure obtained by different algorithms the package provides several frequentist hypothesis tests. 
+```{r}
+data("test_benchmark_small")
+```
 
-One can differentiate parametric and non-parametric tests. 
+The data provided in this package show examples of performance measures for 
+different algorithms evaluated on a number of different data sets. They are used
+to introduce the package functions. 
+
+## Frequentist Hypothesis tests 
+
+To assess the statistical differences between the performance measure obtained 
+by different algorithms the package provides several frequentist hypothesis 
+tests. 
+
+One can differentiate parametric and non-parametric tests. If the assumptions 
+for the parametrc tests hold the tests a more powerful, if, however if the 
+assumptions do not apply one should rather use non-parametric tests. 
+
+Assumptions: 
+* Every parametric test assumes that the data follows a certain distribution. 
+    Most test assume it to be a normal distribution. 
+* Data from multiple groups should show equal standard deviations. 
+
+Before testing the differences one should always have a furthe look on the 
+algorithms using the plot function `plot_densities` to visualize the 
+distribution.
+
+```{r}
+plot_densities(test_benchmark_small)
+```
+
+The function plots the density of all algorithms performance in the considered 
+data frame. As an argument the user has to define the data frame, and if the 
+data contain more than one measure column the user should define which column 
+to use. On the basis of the denisties one can already determine whether each 
+algorithm is likely to have a normal distribution. 
+
+To investigate the mean performance measure of the algorithms, the User can take 
+a look at the boxplots. 
+
+```{r} 
+ plot_boxplot(df = test_benchmark_small)
+```
+
+The box plots show the mean performance of the algorithms across all problem 
+sets in the data frame. Here you can easily see if there are strong outliers. 
+
+The frequentist hypothesis tests test for statistiacal differences among the 
+algorithms in a data frame. The null hypothesis in doing so is that there are 
+no differences among the algorithms, thus all algorithm score the same 
+performance. 
+
+The package implements three different tests for statistical differnences 
+namely, the correlated t-test and the non-parametric Friedman test and Wilcoxon 
+Signed Ranks test. 
+
+
 
 Die Tests sollten auch interpretiert werden (kurz)
 Haben wir nur non-parametrische Tests ? 
