@@ -129,7 +129,7 @@ Assumptions:
     Most test assume it to be a normal distribution. 
 * Data from multiple groups should show equal standard deviations. 
 
-Before testing the differences one should always have a furthe look on the 
+Before testing the differences one should always have a further look on the 
 algorithms using the plot function `plot_densities` to visualize the 
 distribution.
 
@@ -162,6 +162,29 @@ The package implements three different tests for statistical differnences
 namely, the correlated t-test and the non-parametric Friedman test and Wilcoxon 
 Signed Ranks test. 
 
+### Correlated t-test 
+
+The correlated t-test is an extension of the usual t-test that takes into 
+account that the performance of the algorithms is evaluated with overlapping 
+trainingssets. It is used for the analysis of performance results on a single 
+data set, while it accounts for correlation. 
+
+```{r}
+results <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
+                       baseline = "algo_1", algorithm = "algo_2")
+
+```
+
+The common practice in frequentict hypothesis testing is to declare a significance level of p <= 0.05. If the p-value is below this threshold the accuracy is significantly different on that problem set. 
+
+If no algorithm for comparing is defined, the baseline is tested against all algorithms in the data frame. Note that one has to take the multiple testing problem in account for the frequentist hypothesis tests and may correct the significance levlel via Bonferroni correction or other correctiom procedures. 
+### Friedman test 
+The friedman test is a non-parametric test that checks for differences among the algorithms performances. It has been recommended by Demsar [see @demsar2006] together with the corresponding post-hoc tests for comparison of classifiers among multiole problem sets. 
+It is the non-parametric equivalent to the ANOVA test. The friedman test ranks the algorithms for each problemset seperately. 
+
+
+
+ hier noch den CD plot
 
 
 Die Tests sollten auch interpretiert werden (kurz)

@@ -52,7 +52,7 @@ corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
     }
     output <- get_results_htest(baseline = baseline, measure = measure, 
                       method = corr_test$method, data = result)
-    class(output) <- "htest"
+    class(output) <- "h_test"
     return(output)
 }
 
@@ -99,7 +99,7 @@ friedman_test <- function(df, measure = NULL) {
     result[1, "statistic"] <- f_test$statistic
     output <- get_results_htest(measure = measure, 
                             method = f_test$method, data = result)
-    class(output) <- "htest_small"
+    class(output) <- "h_test_small"
     return(output)
 }
 
@@ -158,7 +158,7 @@ wilcoxon_signed_test <- function(df, problemset, baseline, algorithm = NULL,
     }
     output <- get_results_htest(baseline = baseline, measure = measure, 
                                 method = w_test$method, data = result)
-    class(output) <- "htest"
+    class(output) <- "h_test"
     return(output)
 }
 

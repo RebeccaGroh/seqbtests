@@ -86,9 +86,6 @@ friedman_post <- function(df, measure = NULL, control = NULL) {
     # return results 
     output <- get_results_htest(measure = measure, data = f_post, 
                                 method = "Friedman post hoc test")
-    class(output) <- "htest_small"
+    class(output) <- "h_test_small"
     return(output)
 }
-## nochmal überprüfen: 
-# test <- friedman_post(test_benchmark)
-# names(test)

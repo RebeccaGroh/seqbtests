@@ -97,7 +97,7 @@ paste_algo_pars <- function(df, parameter_algo = NULL) {
 #' @title Table test results (Bayesian tests)
 #' @description Create a list containing the Bayesian test results based on a 
 #'     generic function.
-print.btest <- function(x, ...) {
+print.b_test <- function(x, ...) {
   cat( "\n", "Results of the", x$method, "\n", 
       "Measure column =", x$measure, "\n", 
       "Baseline algorithm =", x$baseline, "\n", "\n" )
@@ -110,7 +110,7 @@ print.btest <- function(x, ...) {
 
 ## kann man vielleicht genau dieselbe Funktion wie oben übernehmen, wenn man den 
 ## Datensatz genauso aufbaut --> Hier muss aber immer ein Algorithmus angegeben werden 
-print.htest <- function(x, ...) {
+print.h_test <- function(x, ...) {
   cat( "\n", "Results of the", x$method, "\n", 
        "Measure column =", x$measure, "\n", 
        "Baseline algorithm =", x$baseline, "\n", "\n" )
@@ -120,7 +120,7 @@ print.htest <- function(x, ...) {
 }
 
 
-print.htest_small <- function(x, ...) {
+print.h_test_small <- function(x, ...) {
   cat( "\n", "Results of the", x$method, "\n", 
        "Measure column =", x$measure, "\n", "\n" )
   row.names(x$data_frame) <- NULL

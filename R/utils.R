@@ -115,7 +115,7 @@ get_results <- function(baseline, method, measure, data = NULL, extra = NULL) {
                    measure = measure, 
                    data_frame = data, 
                    extra = extra)
-    class(output) <- "btest"
+    class(output) <- "b_test"
     return(output)
 }
 
