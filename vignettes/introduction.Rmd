@@ -51,7 +51,7 @@ this package. The following table specifies the format:
 | mandatory | mandatory |  mandatory | mandatory |
 
 There is a posibility to include more than one performance measure in the data 
-with just putting for example measure_acc and measure_f1 for the performance 
+with just putting for example measure_acc and measure_mse for the performance 
 measure accuracy and F1-Score. It is mandatory to include at least one measure 
 column along with one column defining the problem set the algorithms were tested 
 on and one column containing the name of the algorithms. For the sequential 
@@ -241,7 +241,8 @@ post-hoc test the Nemenyi post-hoc test which is recommended by Demsar
 
 The Nemenyi test is close to the Tukey test for the ANVOA, it compares each 
 algorithm to one another. If the average ranks of two algorithms differs by at 
-least the value of Critical Difference (CD) the two algorithms are significantly different. 
+least the value of Critical Difference (CD) the two algorithms are significantly 
+different. 
 
 ```{r}
 nemenyi_test(test_benchmark_small)
@@ -265,6 +266,8 @@ differences between the algorithms.
 # Bayesian Testing 
 
 Erst einen Part, was Bayesian Testing ist. und wieso es empfohlen wird 
+
+
 The Bayesian Tests provided in this package, are the tests summarized and 
 recommended in Benavoli et al. [see @benavoli2017]. Its for tests, one, the
 Bayesian correlated t-test for the comparison of two algorithms on one data set
@@ -272,8 +275,72 @@ and three tests, namely the Bayesian Sign test, the Bayesian Signed Rank test
 and a Bayesian hierarchical correlated t-test for testing algorithms on multiple 
 data sets. 
 
+# Sequential Bayesian Testing 
+
+While all the former tests have been implemented in different forms in other 
+packages, this packge is trying to otimize the process of evaluation of 
+different algorithms. 
+The procedure of assessing the algorithms performance is mostly quite time-
+consuming. To counteract this issue this package provides a sequential approach 
+for evaluating performance measure using Bayesian tests. Thereby the results of 
+the comparisons are checked after each run of evaluation of the performances. If 
+the baseline algorithm has high probability (the user can define the parameter 
+himself, by default 95% is used) to have a better performance than the compared 
+algorithm, all further testing is aborted after this run and the early results 
+are used. If all algorithms in the data frame are tested against the baseline 
+and the baseline outperforms on algorithms after a few runs, the analysis is 
+terminated for this specific algorithm, yet the procedure continues for the 
+other algorithms. 
+In this package the user has the possibility to generate each new run of 
+performance evaluation within the Bayesian tests. This works via the function 
+“get_replications” which can be used to build a data frame, where after each run
+a Bayesian test is performed to check if the threshold has already been reached,
+i.e. that the Baseline performs better than the other algorithm with a 
+probability of 95%. If the User is working with an already complete data frame, 
+he does not have to use an own  function but can call the default function for 
+“get_replications”, where the complete data frame is called by the argument 
+“df =”. The “max_repls” can be used to specify the maximum number of runs that 
+should be generated. If a comple9te record is provided “max_repls” should 
+correspond to the number of runs in the record. 
+When customizing the test, the User also has the option to specify whether the 
+Baseline algorithm should be tested to be better or at least as good as the 
+algorithm being tested against. This can be defined via the argument "compare" 
+by specifying either "better" or "equal". This is especially important when it 
+comes to comparing two almost similar algorithms, which differ in their 
+computational effort. Here it can often be helpful to know that the 
+computationally less complex algorithm performs at least as well as the other 
+one.
+With Bayesian tests, multiple testing problems usually do not play a role. You 
+can either avoid this by multilevel analysis, like the hierarchical model. You 
+can also reduce the problem by using the rope. 
+Extensive statistical experiments have shown that there is no early stopping 
+bias due to the sequential approach if a minimum number of replications is drawn
+before the stopping action is carried out. This minimum number is set to 5 in 
+this package after simulation studies have shown that this number is sufficient 
+to achieve valid results. However, the user can also set a minimum number 
+himself via "number_runs".
 
 
+
+
+```{r}
+results_seq_corr <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+                             problemset = "problem_a", baseline = "algo_1", 
+                             compare = "equal", max_repls = 10)
+results_seq_sign <- seq_b_sign_test(df = test_benchmark_small, 
+                                    baseline = "algo_1", max_repls = 10)
+results_seq_ranks <- seq_b_signed_rank_test(df = test_benchmark_small,
+                                            baseline = 'algo_1', max_repls = 10)
+results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
+                                        baseline = 'algo_1', max_repls = 10)
+
+
+```
+For further information regarding the sequential bayesian tests see Groh 
+[@groh2019]. 
+
+
+ kann man vielleicht noch irgendwo einfügen 
 Measure --> measuring the classification accuracy, precision/recall, mean 
 squared eroor or further. Samplign method annd measures used for evaluating the 
 performance are not that relevant for the package.  
