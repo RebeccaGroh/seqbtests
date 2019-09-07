@@ -21,6 +21,10 @@
 #' @param rope Region of practical equivalence.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is "0.95" (95%).
+#'  @param min_num The minimum number of replications that is either generated 
+#'      or used to perform the first Bayesian test in the sequential approach. 
+#'      To prevent an bias through early stopping a minimum number of 5 runs 
+#'      (default) is recommended. 
 #' @param ... Additional arguments. When already built dataset is used the User 
 #'     can define it with code{df}.  
 #' @return A list containing the following components:
@@ -47,9 +51,9 @@
 seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL, 
                               measure = NULL, compare = NULL, rho = 0.1, 
                               rope = c(-0.01, 0.01), max_repls = 20, 
-                              prob = 0.95, ...) {
+                              prob = 0.95, min_num = 5, ...) {
   result = data.frame()
-  for (i in 5:max_repls) {
+  for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
@@ -62,7 +66,7 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
     x <- data[data[["problem"]] == problemset 
               & data[["algorithm"]] == baseline, measure]
     algorithms <- unique(data[["algorithm"]])
-    if (i == 5) {
+    if (i == min_num) {
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
@@ -107,6 +111,10 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
   return(output)
 }
 
+# results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+#                              problemset = "problem_a", baseline = "algo_1", 
+#                              compare = "equal", max_repls = 10, min_num = 2)
+# results
 
 #' @title Sequential Bayesian Sign test 
 #' @description 
@@ -135,6 +143,10 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is "0.95" (95%).
+#'  @param min_num The minimum number of replications that is either generated 
+#'      or used to perform the first Bayesian test in the sequential approach. 
+#'      To prevent an bias through early stopping a minimum number of 5 runs 
+#'      (default) is recommended. 
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -159,7 +171,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
                             measure = NULL, compare = NULL, s = 1, z_0 = 0,
                             weights = c(s/2, rep(1, length(x))), 
                             mc_samples = 1e+05, rope = c(-0.01, 0.01), 
-                            max_repls = 20, prob = 0.95, ...) {
+                            max_repls = 20, prob = 0.95, min_num = 5, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -169,7 +181,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
   rope.min <- rope[1]
   rope.max <- rope[2]
   result = data.frame()
-  for (i in 5:max_repls) {
+  for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
@@ -180,7 +192,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
     }
     ## alle "algorithm" mit k ersetzen? 
     algorithms <- unique(data[["algorithm"]])
-    if (i == 5) {
+    if (i == min_num) {
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
@@ -269,6 +281,10 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is "0.95" (95%).
+#'  @param min_num The minimum number of replications that is either generated 
+#'      or used to perform the first Bayesian test in the sequential approach. 
+#'      To prevent an bias through early stopping a minimum number of 5 runs 
+#'      (default) is recommended. 
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -294,7 +310,7 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
                                    compare = NULL, s = 0.5, z_0 = 0,
                                    weights = NULL, mc_samples = 1e+05, 
                                    rope = c(-0.01, 0.01), max_repls = 20, 
-                                   prob = 0.95, ...) {
+                                   prob = 0.95, min_num = 5, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -304,7 +320,7 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
   rope.min <- rope[1]
   rope.max <- rope[2]
   result = data.frame()
-  for (i in 5:max_repls) {
+  for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
@@ -315,7 +331,7 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
     }
     ## alle "algorithm" mit k ersetzen? 
     algorithms <- unique(data[["algorithm"]])
-    if (i == 5) {
+    if (i == min_num) {
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
@@ -427,6 +443,10 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is "0.95" (95%).
+#'  @param min_num The minimum number of replications that is either generated 
+#'      or used to perform the first Bayesian test in the sequential approach. 
+#'      To prevent an bias through early stopping a minimum number of 5 runs 
+#'      (default) is recommended. 
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -455,9 +475,10 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
                                     beta.lower = 0.05, beta.upper = 0.15,
                                     nsim = 2000, nchains = 8, parallel = TRUE,
                                     stan.output.file = NULL, prob = 0.95, 
-                                    seed = as.numeric(Sys.time()), ...) {
+                                    seed = as.numeric(Sys.time()),
+                                    min_num = 5, ...) {
   result = data.frame()
-  for (i in 5:max_repls) {
+  for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
@@ -467,7 +488,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       measure <- get_measure_columns(data)[1]
     }
     algorithms <- unique(data[["algorithm"]])
-    if (i == 5) {
+    if (i == min_num) {
       liste <- c()
     }
     algorithms <- setdiff(algorithms, liste)
