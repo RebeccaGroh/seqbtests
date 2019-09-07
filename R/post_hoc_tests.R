@@ -47,8 +47,6 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 }
 
 
-## muss auch noch angepasst werden 
-
 #' @title Friedman's post hoc test 
 #' @description This function implements a Friedman post hoc test. It computes 
 #' the raw p-values for the post hoc based on Friedman's test. 
