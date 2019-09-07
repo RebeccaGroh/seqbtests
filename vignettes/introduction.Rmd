@@ -263,13 +263,32 @@ differences between the algorithms.
 
 # Bayesian Testing 
 
-In the analysis of the performance of alforithms, frequentist tests have been used for may years, while in other scientific fields it has been establisghed for a while now that Bayesian approaches have many advantages instead. Benavoli et al. [@benavoli2017] propose the use of Bayesian tests for comparing the performance of machine learning algorithms. The Bayesian tests model the posterior probability of the parameters and can be used to the estimate the probability of three different outcomes. While the null hypothesis of the frequentist tests is that there are no differences between the performances of the algorithms, the Bayesina approaches provide more information. On the one hand, the results are calculated for hwether the baseline is better than the compare algorithm (P(Baseline >> Algorithm)), the probability that the algorithm perfroms better than the Baselien (P(Baseline << Algorithm)) and additional the probability that the two algorithms are practically equivalent (P(Baseline = Algorithm)). While the nulll hypothesis can only be rejected in the frequentist tests, Bayesian tests allow to make a statement if the posterior proability of the two classifiers is practically the same. This can be achieved by determining teh ROPE (Region Of Practical Equivalende). Usually two algorithms are practically equivalent if the mean differences of accuracies are less than 1%. 
+In the analysis of the performance of alforithms, frequentist tests have been 
+used for may years, while in other scientific fields it has been establisghed 
+for a while now that Bayesian approaches have many advantages instead. Benavoli 
+et al. [@benavoli2017] propose the use of Bayesian tests for comparing the 
+performance of machine learning algorithms. The Bayesian tests model the 
+posterior probability of the parameters and can be used to the estimate the 
+probability of three different outcomes. While the null hypothesis of the 
+frequentist tests is that there are no differences between the performances of 
+the algorithms, the Bayesina approaches provide more information. On the one 
+hand, the results are calculated for hwether the baseline is better than the 
+compare algorithm (P(Baseline >> Algorithm)), the probability that the algorithm 
+perfroms better than the Baselien (P(Baseline << Algorithm)) and additional the 
+probability that the two algorithms are practically equivalent 
+(P(Baseline = Algorithm)). While the nulll hypothesis can only be rejected in 
+the frequentist tests, Bayesian tests allow to make a statement if the posterior 
+proability of the two classifiers is practically the same. This can be achieved 
+by determining teh ROPE (Region Of Practical Equivalende). Usually two 
+algorithms are practically equivalent if the mean differences of accuracies are 
+less than 1%. 
 
 The advantages of Baysesian tests are therefore: 
 * Estimation of the posterior probability for a meaningful Null Hypothesis 
 * If the algorithms are not practically the same, one can still make sensible 
     statements about the behaviour of the algorithms
-* The posterior probabilities display both the effects magnitude and the uncertainty 
+* The posterior probabilities display both the effects magnitude and the 
+    uncertainty 
 * The posterior proabilities don't depend on the sampling intentions.
 
 The Bayesian Tests provided in this package, are the tests summarized and 
@@ -284,17 +303,86 @@ data sets.
 The Bayesian correlated t-test compares the performance of two competign 
 classifiers on a single problem set. It is the Bayesian counterpart for the 
 frequentist correlated t-test and thus also takes correlation due to overlapping 
-trainings data into account. 
+trainings data into account. As the usual correlated t-test, the Bayesian 
+counterpart is a parametric test, which assumes Gaussian distribution of the 
+data. 
 
 ```{r}
 results_b_corr <- b_corr_t_test(df= test_benchmark_small, 
                                 problemset = "problem_a", 
-                                baseline = "algo_1")
+                                baseline = "algo_1", algorithm = "algo_5")
 ```
 
 The correlation "rho" has to be between 0 and 1, the variance needs to be > 0. 
 The "better" column shows either TRUE, if the Baseline performs better than the 
 compared algorithm for the given threshold, or else FALSE. 
+The function returns a dataframe with the results of each comparison in one row. 
+The User can either define an algorithm, that should be tested against the 
+Baseline, if no algorithm is defined, the Baseline will be tested against all 
+ALgorithms in the data frame. 
+The columns for left, rope and rigth show the posterior probabilities. The 
+column labeled "left defines the posterior probability of the differences 
+between the baseline and the compared algorithm being below the bound of the 
+rope (P(Baseline >> Algorithm)). The column "rope" determines the posterior 
+probability being inside the rope (P(Baseline = Algorithm)). Thus, the "right" 
+column shows the probability of being above the upper bound 
+(P(Baseline << Algorithm)). The column "better" indicates if the Baseline 
+performs better with a probability defined by the User (per default 95% is 
+assumed).  
+
+```{r}
+plot_posterior(results_b_corr, method = "b_corr_t_test")
+```
+
+The posterior probability can be plotted with the function "plot_posterior". It
+is a graphically visualization of the results. For the plot function two 
+arguments need to be defined. First the results that should be visualized. 
+Although the test allow to compare multiple algorithms against the Baseline, for 
+the plot function, the algorithm needs to be defined. The second argument is the 
+test that is performed via "method".
+The plot visualtizes the posterior probabilities, as well as the ROPE. 
+P(Baseline = Algorithm is the integral of the posterior distribution inbetween 
+the ROPE, which is defined by the twoe vertical lines. The width of the plots 
+corresponds to the uncertainty in the data. 
+If all the probability mass is inside the ROPE one can conclude that the 
+Baseline and ALgorithm are practically equivalent.  
+
+
+## Bayesian Sign test and Bayesian Signed Ranks test
+
+```{r}
+results_b_sign <- b_sign_test(df= test_benchmark_small, 
+                              problemset = "problem_a", 
+                              baseline = "algo_1", algorithm = "algo_2")
+results_b_signed <- b_signed_rank_test(df= test_benchmark_small, 
+                                       baseline = "algo_1", 
+                                       algorithm = "algo_2")
+```
+The graphical visualization can be called just the same way as for the 
+correlated t test via "plot_posterior" the User only needs to define the new 
+method used. 
+
+```{r}
+plot_posterior(results_b_sign, method = "b_sign_test")
+plot_posterior(results_b_signed, method = "b_signed_rank_test")
+```
+
+
+## Bayesian Hierarchical correlated t-test 
+
+```{r}
+results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
+                                            baseline = "algo_1", 
+                                            algorithm = "algo_2",  
+                                            rho=0.1, rope=c(-0.01, 0.01), 
+                                            nsim=2000,  nchains=5)
+```
+
+
+```{r}
+plot_posterior(results_b_hierarchical, method = "b_hierarchical_test")
+```
+
 
 
 # Sequential Bayesian Testing 
