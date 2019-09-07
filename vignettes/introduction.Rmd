@@ -38,8 +38,6 @@ single or multiple data sets. Further, some standard Hypothesis tests are
 provided. 
 
 
-
-
 # Data structure 
 
 The data needs to be in a specific form, to be used for all tests provided in 
@@ -265,8 +263,14 @@ differences between the algorithms.
 
 # Bayesian Testing 
 
-Erst einen Part, was Bayesian Testing ist. und wieso es empfohlen wird 
+In the analysis of the performance of alforithms, frequentist tests have been used for may years, while in other scientific fields it has been establisghed for a while now that Bayesian approaches have many advantages instead. Benavoli et al. [@benavoli2017] propose the use of Bayesian tests for comparing the performance of machine learning algorithms. The Bayesian tests model the posterior probability of the parameters and can be used to the estimate the probability of three different outcomes. While the null hypothesis of the frequentist tests is that there are no differences between the performances of the algorithms, the Bayesina approaches provide more information. On the one hand, the results are calculated for hwether the baseline is better than the compare algorithm (P(Baseline >> Algorithm)), the probability that the algorithm perfroms better than the Baselien (P(Baseline << Algorithm)) and additional the probability that the two algorithms are practically equivalent (P(Baseline = Algorithm)). While the nulll hypothesis can only be rejected in the frequentist tests, Bayesian tests allow to make a statement if the posterior proability of the two classifiers is practically the same. This can be achieved by determining teh ROPE (Region Of Practical Equivalende). Usually two algorithms are practically equivalent if the mean differences of accuracies are less than 1%. 
 
+The advantages of Baysesian tests are therefore: 
+* Estimation of the posterior probability for a meaningful Null Hypothesis 
+* If the algorithms are not practically the same, one can still make sensible 
+    statements about the behaviour of the algorithms
+* The posterior probabilities display both the effects magnitude and the uncertainty 
+* The posterior proabilities don't depend on the sampling intentions.
 
 The Bayesian Tests provided in this package, are the tests summarized and 
 recommended in Benavoli et al. [see @benavoli2017]. Its for tests, one, the
@@ -274,6 +278,24 @@ Bayesian correlated t-test for the comparison of two algorithms on one data set
 and three tests, namely the Bayesian Sign test, the Bayesian Signed Rank test 
 and a Bayesian hierarchical correlated t-test for testing algorithms on multiple 
 data sets. 
+
+## Bayesian correlated t-test 
+
+The Bayesian correlated t-test compares the performance of two competign 
+classifiers on a single problem set. It is the Bayesian counterpart for the 
+frequentist correlated t-test and thus also takes correlation due to overlapping 
+trainings data into account. 
+
+```{r}
+results_b_corr <- b_corr_t_test(df= test_benchmark_small, 
+                                problemset = "problem_a", 
+                                baseline = "algo_1")
+```
+
+The correlation "rho" has to be between 0 and 1, the variance needs to be > 0. 
+The "better" column shows either TRUE, if the Baseline performs better than the 
+compared algorithm for the given threshold, or else FALSE. 
+
 
 # Sequential Bayesian Testing 
 
@@ -336,6 +358,7 @@ results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
 
 
 ```
+
 For further information regarding the sequential bayesian tests see Groh 
 [@groh2019]. 
 
