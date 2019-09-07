@@ -58,6 +58,9 @@ evaluation runs. The data frame can contain more than one measure column,
 however, for each test or plot one measure column has to be defined since it is 
 not possible to compare multiple measures at once. If no column is defined, per 
 default the first measure column in the data frame is used. 
+FOr the sake of simplicity, the data frames containingf the evaluation data are
+referred to as data frames in the following, while the data sets used to 
+evaluate the classifiers performance are referred to as problem sets. 
 The package has one further advantage, within the sequential tests, no data 
 frame needs to be predefined. Instead the package provides the function 
 get_replications(). This function calls the replications within the sequential 
@@ -306,6 +309,10 @@ frequentist correlated t-test and thus also takes correlation due to overlapping
 trainings data into account. As the usual correlated t-test, the Bayesian 
 counterpart is a parametric test, which assumes Gaussian distribution of the 
 data. 
+For rho is 0 the Bayesian correlated t-test and the frequentist correlated 
+t-test are numerically equivalent. Yet, the approaches inferences are different. 
+The different interpretation of the same numerical values is different and thus, 
+changes the perspectives. 
 
 ```{r}
 results_b_corr <- b_corr_t_test(df= test_benchmark_small, 
@@ -319,7 +326,7 @@ compared algorithm for the given threshold, or else FALSE.
 The function returns a dataframe with the results of each comparison in one row. 
 The User can either define an algorithm, that should be tested against the 
 Baseline, if no algorithm is defined, the Baseline will be tested against all 
-ALgorithms in the data frame. 
+Algorithms in the data frame. 
 The columns for left, rope and rigth show the posterior probabilities. The 
 column labeled "left defines the posterior probability of the differences 
 between the baseline and the compared algorithm being below the bound of the 
@@ -350,6 +357,19 @@ Baseline and ALgorithm are practically equivalent.
 
 ## Bayesian Sign test and Bayesian Signed Ranks test
 
+The Bayesian Sign and Signed Ranks tests compare classifiers on multiple problem 
+sets. They are based on the non-parametric frequentist counterparts the Sign and
+Wilcoxon Signed Ranks test and assume a Dirichlet Process (DP) prior. 
+Different than the correlated t-test these tests don't take the correlation into 
+account. But because of the non-parametric nature of the tests, they do not 
+assume normality of the samples mean, is robust regarding outliers and does not 
+assume commensurability.
+
+The Bayesian Sign test is less powerful than the Bayesian Signed Rank test. 
+Since the Signed Ranks test does not only take the sign into account, but also 
+the size of differences. It ranks the absolute values of differences and 
+compares these ranks, while considering the signs. 
+
 ```{r}
 results_b_sign <- b_sign_test(df= test_benchmark_small, 
                               problemset = "problem_a", 
@@ -358,9 +378,12 @@ results_b_signed <- b_signed_rank_test(df= test_benchmark_small,
                                        baseline = "algo_1", 
                                        algorithm = "algo_2")
 ```
+
 The graphical visualization can be called just the same way as for the 
 correlated t test via "plot_posterior" the User only needs to define the new 
 method used. 
+In this plot the posterior distributions of the probabilities are plotted for 
+"left", "rope" and "right" are displayed in a triangle plot. 
 
 ```{r}
 plot_posterior(results_b_sign, method = "b_sign_test")
@@ -370,6 +393,9 @@ plot_posterior(results_b_signed, method = "b_signed_rank_test")
 
 ## Bayesian Hierarchical correlated t-test 
 
+The Bayesian hierarchical correlated t-test is an extension of the correlated 
+t-test that works for the compariosn of classifiers on multiple problem sets and 
+still takes correlation into account 
 ```{r}
 results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
                                             baseline = "algo_1", 
@@ -378,6 +404,12 @@ results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small,
                                             nsim=2000,  nchains=5)
 ```
 
+The Hierarchical approach is recommende by Benavoli [@benavoli2017] over the 
+Bayesian Signed test. Yet, it is quite time consuming, which is inconvenient if 
+the tests needs to be run often. 
+
+The graphical visualization shows a similar triangle plot as the Bayesian Sign 
+and Signed Ranks test. 
 
 ```{r}
 plot_posterior(results_b_hierarchical, method = "b_hierarchical_test")
@@ -429,8 +461,6 @@ before the stopping action is carried out. This minimum number is set to 5 in
 this package after simulation studies have shown that this number is sufficient 
 to achieve valid results. However, the user can also set a minimum number 
 himself via "number_runs".
-
-
 
 
 ```{r}
