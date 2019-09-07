@@ -11,6 +11,8 @@
 #' @param measure Measure column. 
 #' @param rho Correlation factor. 
 #' @param rope Region of practical equivalence. 
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on. The default is "0.95" (95%). 
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -33,7 +35,7 @@
 #' @export
 b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL, 
                           measure = NULL, compare = NULL, rho = 0.1, 
-                          rope = c(-0.01, 0.01)) {
+                          rope = c(-0.01, 0.01), prob = 0.95) {
     result <- data.frame()
     checkmate::assert_true(check_structure(df))
     checkmate::assert_true(check_names(df, problemset, baseline, 
@@ -65,7 +67,10 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
             threshold <- b_corr$posterior.probabilities[2] + 
                 b_corr$posterior.probabilities[1]
         } 
-        if (threshold > 0.95) {
+        if (is.null(prob)) {
+          prob <- 0.95
+        }
+        if (threshold > prob) {
             result[k, "significant"] <- TRUE
         } else {
             result[k, "significant"] <- FALSE
@@ -86,7 +91,7 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 }
 
 # results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a",
-#                        baseline = "algo_1", algorithm = "algo_2")
+#                        baseline = "algo_1")
 # results
 
 #' @title Bayesian Sign test 
@@ -105,6 +110,8 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 #' @param weights A-priori weights. 
 #' @param mc_samples Number of samples of the distribution. 
 #' @param rope Region of practical equivalence. 
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on. The default is "0.95" (95%).
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -125,7 +132,7 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 #'     problemset = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 #' @export
 b_sign_test <- function(df, problemset, baseline, algorithm = NULL, 
-                        measure = NULL, compare = NULL, 
+                        measure = NULL, compare = NULL, prob = 0.95, 
                         s = 1, z_0 = 0, weights = c(s/2, rep(1, length(x))), 
                         mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
   result <- data.frame()
@@ -178,7 +185,10 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
       threshold <- b_sign$probabilities[2] + 
         b_sign$probabilities[1]
     } 
-    if (threshold > 0.95) {
+    if (is.null(prob)) {
+      prob <- 0.95
+    }
+    if (threshold > prob) {
       result[k, "significant"] <- TRUE
     } else {
       result[k, "significant"] <- FALSE
@@ -207,6 +217,8 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
 #' @param weights A-priori weights. 
 #' @param mc_samples Number of samples of the distribution. 
 #' @param rope Region of practical equivalence. 
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on. The default is "0.95" (95%).
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -227,7 +239,7 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
 #'     baseline = "algo_1", algorithm = "algo_2")
 #' @export
 b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
-                               algorithm = NULL, measure = NULL, 
+                               algorithm = NULL, measure = NULL, prob = 0.95, 
                                s = 0.5, z_0 = 0, weights = NULL,  
                                mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
   result <- data.frame()
@@ -281,7 +293,10 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
       threshold <- b_signed_rank$probabilities[2] + 
         b_signed_rank$probabilities[1]
     } 
-    if (threshold > 0.95) {
+    if (is.null(prob)) {
+      prob <- 0.95
+    }
+    if (threshold > prob) {
       result[k, "significanct"] <- TRUE
     } else {
       result[k, "significanct"] <- FALSE
@@ -332,6 +347,8 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
 #' @param stan.output.file String containing the base name for the output files 
 #'     produced by Stan. If \code{NULL}, no files are stored.
 #' @param seed Optional parameter used to fix the random seed.
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on. The default is "0.95" (95%).
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -354,7 +371,7 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
 #' @export
 b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL, 
                                 rho = 0.1, compare = NULL, std.upper = 1000,
-                                d0.lower = NULL, d0.upper = NULL, 
+                                d0.lower = NULL, d0.upper = NULL, prob = 0.95, 
                                 alpha.lower = 0.5, alpha.upper = 5, 
                                 beta.lower = 0.05, beta.upper = 0.15, 
                                 rope = c(-0.01, 0.01), nsim = 2000, 
@@ -395,7 +412,10 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
       threshold <- b_hierarchical$posterior.probabilities[2] + 
         b_hierarchical$posterior.probabilities[1]
     } 
-    if (threshold > 0.95) {
+    if (is.null(prob)) {
+      prob <- 0.95
+    }
+    if (threshold > prob) {
       result[k, "significanct"] <- TRUE
     } else {
       result[k, "significanct"] <- FALSE

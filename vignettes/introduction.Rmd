@@ -410,7 +410,7 @@ probability of 95%. If the User is working with an already complete data frame,
 he does not have to use an own  function but can call the default function for 
 “get_replications”, where the complete data frame is called by the argument 
 “df =”. The “max_repls” can be used to specify the maximum number of runs that 
-should be generated. If a comple9te record is provided “max_repls” should 
+should be generated. If a complete record is provided “max_repls” should 
 correspond to the number of runs in the record. 
 When customizing the test, the User also has the option to specify whether the 
 Baseline algorithm should be tested to be better or at least as good as the 

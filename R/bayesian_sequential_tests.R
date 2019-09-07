@@ -19,6 +19,8 @@
 #'     get_replications. Or maximum number of replications in data frame, if 
 #'     a data frame that has already been built is being used.  
 #' @param rope Region of practical equivalence.
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on. The default is "0.95" (95%).
 #' @param ... Additional arguments. When already built dataset is used the User 
 #'     can define it with code{df}.  
 #' @return A list containing the following components:
@@ -44,7 +46,8 @@
 #' @export
 seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL, 
                               measure = NULL, compare = NULL, rho = 0.1, 
-                              rope = c(-0.01, 0.01), max_repls = 20, ...) {
+                              rope = c(-0.01, 0.01), max_repls = 20, 
+                              prob = 0.95, ...) {
   result = data.frame()
   for (i in 5:max_repls) {
     data <- get_replications(i, ...)
@@ -83,7 +86,10 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
         threshold <- b_test$posterior.probabilities[2] + 
           b_test$posterior.probabilities[1]
       } 
-      if (threshold > 0.95) {
+      if (is.null(prob)) {
+        prob <- 0.95
+      }
+      if (threshold > prob) {
         result[k, "significanct"] <- TRUE
       } else {
         result[k, "significanct"] <- FALSE
@@ -127,6 +133,8 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
 #'     a data frame that has already been built is being used.  
 #' @param ... Additional arguments. When already built dataset is used the User 
 #'     can define it with code{df}.
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on. The default is "0.95" (95%).
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -151,7 +159,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
                             measure = NULL, compare = NULL, s = 1, z_0 = 0,
                             weights = c(s/2, rep(1, length(x))), 
                             mc_samples = 1e+05, rope = c(-0.01, 0.01), 
-                            max_repls = 20, ...) {
+                            max_repls = 20, prob = 0.95, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -211,7 +219,10 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
         threshold <- b_sign$probabilities[2] + 
           b_sign$probabilities[1]
       } 
-      if (threshold > 0.95) {
+      if (is.null(prob)) {
+        prob <- 0.95
+      }
+      if (threshold > prob) {
         result[k, "significanct"] <- TRUE
       } else {
         result[k, "significanct"] <- FALSE
@@ -256,6 +267,8 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
 #'     a data frame that has already been built is being used.  
 #' @param ... Additional arguments. When already built dataset is used the User 
 #'     can define it with code{df}.
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on. The default is "0.95" (95%).
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -280,7 +293,8 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
                                    algorithm = NULL, measure = NULL, 
                                    compare = NULL, s = 0.5, z_0 = 0,
                                    weights = NULL, mc_samples = 1e+05, 
-                                   rope = c(-0.01, 0.01), max_repls = 20, ...) {
+                                   rope = c(-0.01, 0.01), max_repls = 20, 
+                                   prob = 0.95, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
             (min, max), but the values are not orderd. They will be swapped to
@@ -340,7 +354,10 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
         threshold <- b_signed_rank$probabilities[2] + 
           b_signed_rank$probabilities[1]
       } 
-      if (threshold > 0.95) {
+      if (is.null(prob)) {
+        prob <- 0.95
+      }
+      if (threshold > prob) {
         result[k, "significanct"] <- TRUE
       } else {
         result[k, "significanct"] <- FALSE
@@ -408,6 +425,8 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
 #' @param rope Region of practical equivalence. 
 #' @param ... Additional arguments. When already built dataset is used the User 
 #'     can define it with code{df}.
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on. The default is "0.95" (95%).
 #' @return A list containing the following components:
 #' \itemize{
 #' \item{code{measure}} A string with the name of the measure column used.
@@ -435,7 +454,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
                                     alpha.lower = 0.5, alpha.upper = 5, 
                                     beta.lower = 0.05, beta.upper = 0.15,
                                     nsim = 2000, nchains = 8, parallel = TRUE,
-                                    stan.output.file = NULL, 
+                                    stan.output.file = NULL, prob = 0.95, 
                                     seed = as.numeric(Sys.time()), ...) {
   result = data.frame()
   for (i in 5:max_repls) {
@@ -483,7 +502,10 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
         threshold <- b_hierarchical$posterior.probabilities[2] +
           b_hierarchical$posterior.probabilities[1]
       }
-      if (threshold > 0.95) {
+      if (is.null(prob)) {
+        prob <- 0.95
+      }
+      if (threshold > prob) {
         result[k, "significanct"] <- TRUE
       } else {
         result[k, "significanct"] <- FALSE
