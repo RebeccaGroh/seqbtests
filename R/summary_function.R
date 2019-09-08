@@ -67,4 +67,3 @@ na_drop <- function(df, check_var = NULL, measure = NULL) {
   df[!(df[, check_var] %in% df[, check_var][is.na(df[, measure])]), ]
 }
 
-# auch nochmal anpassen 

@@ -16,7 +16,7 @@ test_that("get_parameter_columns() for test_benchmark", {
 # check if get_measure_columns() works correctly for test_benchmark
 test_that("get_measure_columns for test_benchmark", {
   columns = get_measure_columns(test_benchmark)
-  expect_match(columns, "measure_mmce")
+  expect_match(columns, "measure_col")
 })
 
 
@@ -54,18 +54,25 @@ test_that("get_replications tests for the same number of replications", {
   expect_true(get_replications_count(x, y))
 })
 
-
-# check if paste_algo_pars() works correctly for test_benchmark 
-test_that("paste_algo_pars for test_benchmark", {
-  data <- paste_algo_pars(algorithm = test_benchmark$algorithm, 
-                          parameter_algorithm = test_benchmark$parameter_algorithm)
-  expect_output(str(data), "chr [1:2500]", fixed = TRUE)
+# check if data_transformation() returns data frame, with only numeric columns 
+test_that("data_transformation returns data frame with numeric columns", {
+  data <- data_transformation(df = test_benchmark_small, 
+                              algo = "algo_1", measure = "measure_col")
+  expect_type(data, "list")
+  for (i in ncol(data)) {
+    expect_type(data[, i], "double")
+  }
 })
 
-
-# check if data_transformation() returns data frame 
-test_that("data_transformation returns data frame", {
-  data <- data_transformation(df= test_benchmark_small, algo = "algo_1", 
-                              measure = "measure_col")
-  expect_data_frame(data)
+# check if get_results() returns a list 
+test_that("get_results returns a list", {
+  expect_type(get_results(baseline = "baseline", method = "method", 
+                          measure = "measure", data = "data"), "list")
 })
+
+# check if get_results() returns a list 
+test_that("get_results_htest returns a list", {
+  expect_type(get_results_htest(baseline = "baseline", method = "method", 
+                          measure = "measure", data = "data"), "list")
+})
+

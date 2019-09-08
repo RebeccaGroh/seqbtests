@@ -106,10 +106,9 @@ print.b_test <- function(x, ...) {
   print(output_data)
 }
 
-
-
-## kann man vielleicht genau dieselbe Funktion wie oben übernehmen, wenn man den 
-## Datensatz genauso aufbaut --> Hier muss aber immer ein Algorithmus angegeben werden 
+#' @title Table test results (Frequentist tests)
+#' @description Create a list containing the Frequentist test results based on a 
+#'     generic function.
 print.h_test <- function(x, ...) {
   cat( "\n", "Results of the", x$method, "\n", 
        "Measure column =", x$measure, "\n", 
@@ -119,7 +118,9 @@ print.h_test <- function(x, ...) {
   print(output_data)
 }
 
-
+#' @title Table test results (Frequentist tests)
+#' @description Create a list containing the Frequentist test results based on a 
+#'     generic function. Not containing the Baseline. 
 print.h_test_small <- function(x, ...) {
   cat( "\n", "Results of the", x$method, "\n", 
        "Measure column =", x$measure, "\n", "\n" )
@@ -128,6 +129,9 @@ print.h_test_small <- function(x, ...) {
   print(output_data)
 }
 
+#' @title Table test results (Nemenyi tests)
+#' @description Create a list containing the Nemenyi test results based on a 
+#'     generic function. 
 print.nemenyi <- function(x, ...){
   cat( "\n", "Results of the", x$method, "\n", 
        "Measure column =", x$measure, "\n", "\n" )

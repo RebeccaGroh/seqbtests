@@ -119,6 +119,16 @@ get_results <- function(baseline, method, measure, data = NULL, extra = NULL) {
     return(output)
 }
 
+
+#' @title Get test results (Frequentist tests)
+#' @description This function collects the results of the Bayesian tests. 
+#' @param baseline Baseline algorithms that every algorithm can be compared to.  
+#' @param method Bayesian test. 
+#' @param measure Measure column. 
+#' @param data Data frame containing the posterior probabilities. 
+#' @param matrix A matrix with all the pair wise differences of 
+#'     average rankings.
+#' @return List. 
 get_results_htest <- function(baseline = NULL, method, measure, data = NULL, 
                               matrix = NULL) {
     output <- list(baseline = baseline, 

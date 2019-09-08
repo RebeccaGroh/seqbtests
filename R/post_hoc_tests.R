@@ -11,8 +11,6 @@
 #' \item{code{p_value}} The p-value for the test.
 #' \item{code{diff_matrix}} A matrix with all the pair wise differences of 
 #'     average rankings.
-#' \item{code{significance}} A matrix with all the pair wise comparisons showing 
-#'     if there are significant differences among the algorithms.
 #' }
 #' @details  
 #'     The test has first been implemented in scmamp. 

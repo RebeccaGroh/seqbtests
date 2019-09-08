@@ -104,6 +104,11 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
 #' @references 
 #'     \url{https://github.com/b0rxa/scmamp}
 #'     \url{https://github.com/JacintoCC/rNPBST}
+#' @example 
+#'     results <- b_corr_t_test(df= test_benchmark_small, 
+#'                              problemset = "problem_a", 
+#'                              baseline = "algo_1", algorithm = "algo_2")
+#'     plot_posterior(results, method = "b_corr_t_test")
 #' @export
 plot_posterior <- function(results, method, points = 1000){
   if (method == "b_corr_t_test") {
@@ -146,3 +151,7 @@ plot_posterior <- function(results, method, points = 1000){
   }
 }
 
+results <- b_corr_t_test(df= test_benchmark_small, 
+                         problemset = "problem_a", 
+                         baseline = "algo_1", algorithm = "algo_2")
+plot_posterior(results, method = "b_corr_t_test")
