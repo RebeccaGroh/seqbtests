@@ -3,7 +3,7 @@ context("bayesian_sequential_tests")
 # check if seq_b_corr_t_test() returns a list with right information 
 test_that("seq_b_corr_t_test returns a list" , {
   results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-                               problemset = "problem_a", baseline = "algo_1", 
+                               problem = "problem_a", baseline = "algo_1", 
                                compare = "equal", max_repls = 10)
   expect_type(results, "list")
   expect_output(str(results), "List of 5")
@@ -16,14 +16,14 @@ test_that("seq_b_corr_t_test returns a list" , {
 # check if seq_b_corr_t_test() returns error if names are not correct
 test_that("seq_b_corr_t_test() returns error", {
   expect_error(seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-                                 problemset = "problem_1", baseline = "algo_1", 
+                                 problem = "problem_1", baseline = "algo_1", 
                                  compare = "equal", max_repls = 10))
 })
 
 # check that if theres early stopping, the left column needs to be >= 0.95
 test_that("check if early stopping works for seq_b_corr_t_test", {
   results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-                               problemset = "problem_a", baseline = "algo_1", 
+                               problem = "problem_a", baseline = "algo_1", 
                                compare = "equal", max_repls = 10)
   for (i in nrow(results$data_frame)) {
     replications <- results$data_frame$repls

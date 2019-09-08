@@ -5,7 +5,7 @@
 #'     another. Sample size is not fixed in advance, data are evaluated as they 
 #'     are collected. Further sampling is stopped in accordance with a 
 #'     pre-defined stopping rule as soon as significant results are obtained.  
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #'     tested against baseline. 
@@ -45,10 +45,10 @@
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
 #'     results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-#'     problemset = "problem_a", baseline = "algo_1", 
+#'     problem = "problem_a", baseline = "algo_1", 
 #'     compare = "equal", max_repls = 10)
 #' @export
-seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL, 
+seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL, 
                               measure = NULL, compare = NULL, rho = 0.1, 
                               rope = c(-0.01, 0.01), max_repls = 20, 
                               prob = 0.95, min_num = 5, ...) {
@@ -57,13 +57,13 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
-    checkmate::assert_true(check_names(df = data, problemset, baseline, 
+    checkmate::assert_true(check_names(df = data, problem, baseline, 
                                        algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
     # define samples
-    x <- data[data[["problem"]] == problemset 
+    x <- data[data[["problem"]] == problem 
               & data[["algorithm"]] == baseline, measure]
     algorithms <- unique(data[["algorithm"]])
     if (i == min_num) {
@@ -74,7 +74,7 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
       algorithms <- algorithm
     }
     for (k in algorithms[algorithms != baseline]) {
-        y <- data[data[["problem"]] == problemset 
+        y <- data[data[["problem"]] == problem 
                   & data[["algorithm"]] == k, measure]
       # Bayesian correlated t Test
       b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)
@@ -112,7 +112,7 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
 }
 
 # results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-#                              problemset = "problem_a", baseline = "algo_1", 
+#                              problem = "problem_a", baseline = "algo_1", 
 #                              compare = "equal", max_repls = 10, min_num = 2)
 # results
 
@@ -123,7 +123,7 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
 #'     to one another. Sample size is not fixed in advance, data are evaluated 
 #'     as they are collected. Further sampling is stopped in accordance with a 
 #'     pre-defined stopping rule as soon as significant results are obtained. 
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #'     tested against baseline.  
@@ -167,7 +167,7 @@ seq_b_corr_t_test <- function(problemset, baseline, algorithm = NULL,
 #'     results <- seq_b_sign_test(df = test_benchmark_small, 
 #'     baseline = "algo_1", max_repls = 10)
 #' @export
-seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL, 
+seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL, 
                             measure = NULL, compare = NULL, s = 1, z_0 = 0,
                             weights = c(s/2, rep(1, length(x))), 
                             mc_samples = 1e+05, rope = c(-0.01, 0.01), 
@@ -185,7 +185,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
-    checkmate::assert_true(check_names(df = data, problemset = NULL, baseline, 
+    checkmate::assert_true(check_names(df = data, problem = NULL, baseline, 
                                        algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
@@ -201,7 +201,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
     }
     for (k in algorithms[algorithms != baseline]) {
       # define samples when testing on multiple datasets
-      if (is.null(problemset)) {
+      if (is.null(problem)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
         sum_data <- aggregate(data_wide[, c(baseline, k)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
@@ -209,9 +209,9 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
         y <- sum_data[, k]
       } else {
         # define samples when testing on a single dataset
-        x <- data[data[["problem"]] == problemset 
+        x <- data[data[["problem"]] == problem 
                   & data[["algorithm"]] == baseline, measure]
-        y <- data[data[["problem"]] == problemset 
+        y <- data[data[["problem"]] == problem 
                   & data[["algorithm"]] == k, measure]
       }
       n.samples <- mc_samples
@@ -261,7 +261,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
 #'     evaluated as they are collected. Further sampling is stopped in 
 #'     accordance with a pre-defined stopping rule as soon as significant 
 #'     results are obtained. 
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #'     tested against baseline. 
@@ -305,7 +305,7 @@ seq_b_sign_test <- function(problemset = NULL, baseline, algorithm = NULL,
 #'     results <- seq_b_signed_rank_test(df = test_benchmark_small, 
 #'     baseline = 'algo_1', max_repls = 10)
 #' @export
-seq_b_signed_rank_test <- function(problemset = NULL, baseline, 
+seq_b_signed_rank_test <- function(problem = NULL, baseline, 
                                    algorithm = NULL, measure = NULL, 
                                    compare = NULL, s = 0.5, z_0 = 0,
                                    weights = NULL, mc_samples = 1e+05, 
@@ -324,7 +324,7 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
-    checkmate::assert_true(check_names(df = data, problemset = NULL, baseline, 
+    checkmate::assert_true(check_names(df = data, problem = NULL, baseline, 
                                        algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
@@ -340,7 +340,7 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
     }
     for (k in algorithms[algorithms != baseline]) {
       # define samples when testing on multiple datasets
-      if (is.null(problemset)) {
+      if (is.null(problem)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
         sum_data <- aggregate(data_wide[, c(baseline, k)], 
                               by = list(data_wide[["problem"]]), FUN = mean)
@@ -348,9 +348,9 @@ seq_b_signed_rank_test <- function(problemset = NULL, baseline,
         y <- sum_data[, k]
       } else {
         # define samples when testing on a single dataset
-        x <- data[data[["problem"]] == problemset 
+        x <- data[data[["problem"]] == problem 
                   & data[["algorithm"]] == baseline, measure]
-        y <- data[data[["problem"]] == problemset 
+        y <- data[data[["problem"]] == problem 
                   & data[["algorithm"]] == k, measure]
       }
       mc.samples <- mc_samples
@@ -483,7 +483,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, baseline, algorithm = NULL,
-                                       measure = NULL, problemset = NULL))
+                                       measure = NULL, problem = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }

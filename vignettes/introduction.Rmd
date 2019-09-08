@@ -174,7 +174,7 @@ trainingssets. It is used for the analysis of performance results on a single
 data set, while it accounts for correlation. 
 
 ```{r}
-results_corr <- corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
+results_corr <- corr_t_test(df= test_benchmark_small, problem = "problem_a", 
                        baseline = "algo_1", algorithm = "algo_2")
 
 ```
@@ -198,7 +198,7 @@ non-parametric test that ranks and compares the performances of two classifiers.
 results_wilcoxon <-  wilcoxon_signed_test(df = test_benchmark, 
                                           baseline = "algo_1", 
                                           algorithm = "algo_2", 
-                                          problemset = "problem_a")  
+                                          problem = "problem_a")  
 ```
 
 The Null-Hypothesis states that the algorithms performances on the problem set 
@@ -316,7 +316,7 @@ changes the perspectives.
 
 ```{r}
 results_b_corr <- b_corr_t_test(df= test_benchmark_small, 
-                                problemset = "problem_a", 
+                                problem = "problem_a", 
                                 baseline = "algo_1", algorithm = "algo_5")
 ```
 
@@ -372,7 +372,7 @@ compares these ranks, while considering the signs.
 
 ```{r}
 results_b_sign <- b_sign_test(df= test_benchmark_small, 
-                              problemset = "problem_a", 
+                              problem = "problem_a", 
                               baseline = "algo_1", algorithm = "algo_2")
 results_b_signed <- b_signed_rank_test(df= test_benchmark_small, 
                                        baseline = "algo_1", 
@@ -465,7 +465,7 @@ himself via "number_runs".
 
 ```{r}
 results_seq_corr <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-                             problemset = "problem_a", baseline = "algo_1", 
+                             problem = "problem_a", baseline = "algo_1", 
                              compare = "equal", max_repls = 10)
 results_seq_sign <- seq_b_sign_test(df = test_benchmark_small, 
                                     baseline = "algo_1", max_repls = 10)

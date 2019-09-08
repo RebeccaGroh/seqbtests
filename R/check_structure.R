@@ -2,16 +2,16 @@
 #' @description Check if column names that were passed by User are contained 
 #'     in the data frame. 
 #' @param df Input data frame.
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #'     tested against baseline. 
 #' @param measure Measure column. 
 #' @export
-check_names <- function(df, problemset = NULL, baseline = NULL, 
+check_names <- function(df, problem = NULL, baseline = NULL, 
                         algorithm = NULL, measure = NULL) {
-    if (!is.null(problemset)) {
-        checkmate::assert_true(problemset %in% df[["problem"]])
+    if (!is.null(problem)) {
+        checkmate::assert_true(problem %in% df[["problem"]])
     }
     if (!is.null(baseline)) {
         checkmate::assert_true(baseline %in% df[["algorithm"]])

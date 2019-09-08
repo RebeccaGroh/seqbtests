@@ -4,7 +4,7 @@
 #'     The performance of one baseline algorithm on one data set is compared to 
 #'     either one or multiple algorithms.  
 #' @param df Input data frame. 
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm. 
 #' @param algorithm Algorithm to be compared. If no algorithm is defined, the 
 #'     baseline is compared to every algorithm in the data frame. 
@@ -30,28 +30,28 @@
 #'     standard t test.   
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
-#' results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a", 
+#' results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a", 
 #'                          baseline = "algo_1", algorithm = "algo_2")
 #' @export
-b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL, 
+b_corr_t_test <- function(df, problem, baseline, algorithm = NULL, 
                           measure = NULL, compare = NULL, rho = 0.1, 
                           rope = c(-0.01, 0.01), prob = 0.95) {
     result <- data.frame()
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset, baseline, 
+    checkmate::assert_true(check_names(df, problem, baseline, 
                                        algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
     # define samples
-    x <- df[df[["problem"]] == problemset 
+    x <- df[df[["problem"]] == problem 
             & df[["algorithm"]] == baseline, measure]
     algorithms <- unique(df[["algorithm"]])
     if (!is.null(algorithm)) {
         algorithms <- algorithm
     }
     for (k in algorithms[algorithms != baseline]) {
-            y <- df[df[["problem"]] == problemset 
+            y <- df[df[["problem"]] == problem 
                     & df[["algorithm"]] == k, measure]
         # Bayesian correlated t Test
         b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
@@ -90,7 +90,7 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
     return(output)
 }
 
-# results <- b_corr_t_test(df= test_benchmark_small, problemset = "problem_a",
+# results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
 #                        baseline = "algo_1")
 # results
 
@@ -100,7 +100,7 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 #'     performance of one baseline algorithm on one or multiple data sets is 
 #'     compared to either one or multiple algorithms.   
 #' @param df Input data frame. 
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #'     tested against baseline. 
@@ -129,9 +129,9 @@ b_corr_t_test <- function(df, problemset, baseline, algorithm = NULL,
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @example 
 #'     results <- b_sign_test(df= test_benchmark_small, 
-#'     problemset = "problem_a", baseline = "algo_1", algorithm = "algo_2")
+#'     problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 #' @export
-b_sign_test <- function(df, problemset, baseline, algorithm = NULL, 
+b_sign_test <- function(df, problem, baseline, algorithm = NULL, 
                         measure = NULL, compare = NULL, prob = 0.95, 
                         s = 1, z_0 = 0, weights = c(s/2, rep(1, length(x))), 
                         mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
@@ -145,7 +145,7 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
   rope.min <- rope[1]
   rope.max <- rope[2]
   checkmate::assert_true(check_structure(df))
-  checkmate::assert_true(check_names(df, problemset, baseline, algorithm, 
+  checkmate::assert_true(check_names(df, problem, baseline, algorithm, 
                                      measure = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
@@ -156,7 +156,7 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
   }
   for (k in algorithms[algorithms != baseline]) {
     # define samples when testing on multiple datasets
-    if (is.null(problemset)) {
+    if (is.null(problem)) {
       data_wide <- tidyr::spread(df, algorithm, measure)
       sum_data <- aggregate(data_wide[, c(baseline, k)], 
                             by = list(data_wide[["problem"]]), FUN = mean)
@@ -164,9 +164,9 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
       y <- sum_data[, k]
     } else {
       # define samples when testing on a single dataset
-      x <- df[df[["problem"]] == problemset 
+      x <- df[df[["problem"]] == problem 
               & df[["algorithm"]] == baseline, measure]
-      y <- df[df[["problem"]] == problemset 
+      y <- df[df[["problem"]] == problem 
               & df[["algorithm"]] == k, measure]
     }
     n.samples <- mc_samples
@@ -207,7 +207,7 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
 #'     The performance of one baseline algorithm on one or multiple data sets is 
 #'     compared to either one or multiple algorithms.    
 #' @param df Input data frame. 
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #'     tested against baseline. 
@@ -238,7 +238,7 @@ b_sign_test <- function(df, problemset, baseline, algorithm = NULL,
 #'     results <- b_signed_rank_test(df= test_benchmark_small,
 #'     baseline = "algo_1", algorithm = "algo_2")
 #' @export
-b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
+b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
                                algorithm = NULL, measure = NULL, prob = 0.95, 
                                s = 0.5, z_0 = 0, weights = NULL,  
                                mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
@@ -252,7 +252,7 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
   rope.min <- rope[1]
   rope.max <- rope[2]
   checkmate::assert_true(check_structure(df))
-  checkmate::assert_true(check_names(df, problemset = NULL, baseline, 
+  checkmate::assert_true(check_names(df, problem = NULL, baseline, 
                                      algorithm, measure = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
@@ -263,7 +263,7 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
   }
   for (k in algorithms[algorithms != baseline]) {
     # define samples when testing on multiple datasets
-    if (is.null(problemset)) {
+    if (is.null(problem)) {
       data_wide <- tidyr::spread(df, algorithm, measure)
       sum_data <- aggregate(data_wide[, c(baseline, k)], 
                             by = list(data_wide[["problem"]]), FUN = mean)
@@ -271,9 +271,9 @@ b_signed_rank_test <- function(df, problemset = NULL, baseline, compare = NULL,
       y <- sum_data[, k]
     } else {
       # define samples when testing on a single dataset
-      x <- df[df[["problem"]] == problemset 
+      x <- df[df[["problem"]] == problem 
               & df[["algorithm"]] == baseline, measure]
-      y <- df[df[["problem"]] == problemset 
+      y <- df[df[["problem"]] == problem 
               & df[["algorithm"]] == k, measure]
     }
     mc.samples <- mc_samples
@@ -380,7 +380,7 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
   result <- data.frame()
   checkmate::assert_true(check_structure(df))
   checkmate::assert_true(check_names(df, baseline, algorithm = NULL, 
-                                     measure = NULL, problemset = NULL))
+                                     measure = NULL, problem = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   }

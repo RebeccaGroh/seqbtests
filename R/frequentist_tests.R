@@ -1,7 +1,7 @@
 #' @title Correlated t test 
 #' @description This function implements a two-sided t test for paired samples. 
 #' @param df Input data frame. 
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
@@ -22,26 +22,26 @@
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
 #'     results <- corr_t_test(df= test_benchmark_small, 
-#'     problemset = "problem_a", baseline = "algo_1", algorithm = "algo_2")
+#'     problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 #' @export
-corr_t_test <- function(df, problemset, baseline, algorithm = NULL, 
+corr_t_test <- function(df, problem, baseline, algorithm = NULL, 
                         measure = NULL, rho = 0.01) {
     result <- data.frame()
     checkmate::assert_true(check_structure(df))
-    checkmate::assert_true(check_names(df, problemset, baseline, 
+    checkmate::assert_true(check_names(df, problem, baseline, 
                                        algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
     # define samples
-    x <- df[df[["problem"]] == problemset 
+    x <- df[df[["problem"]] == problem 
             & df[["algorithm"]] == baseline, measure]
     algorithms <- unique(df[["algorithm"]])
     if (!is.null(algorithm)) {
         algorithms <- algorithm
     }
     for (k in algorithms[algorithms != baseline]) {
-        y <- df[df[["problem"]] == problemset 
+        y <- df[df[["problem"]] == problem 
                 & df[["algorithm"]] == k, measure]
         # Correlated t Test
         corr_test <- scmamp::correlatedTtest(x, y, rho, alternative = "two.sided")
@@ -110,7 +110,7 @@ friedman_test <- function(df, measure = NULL) {
 #'     non-parametric statistical hypothesis test to compare the means of two 
 #'     paired samples. 
 #' @param df Input data frame. 
-#' @param problemset Problem set on which the test should be performed. 
+#' @param problem Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. 
 #' @param measure Measure column. 
@@ -128,26 +128,26 @@ friedman_test <- function(df, measure = NULL) {
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @example 
 #'     results <- wilcoxon_signed_test(df = test_benchmark, baseline = "algo_1",
-#'     algorithm = "algo_2", problemset = "problem_a")  
+#'     algorithm = "algo_2", problem = "problem_a")  
 #' @export
-wilcoxon_signed_test <- function(df, problemset, baseline, algorithm = NULL, 
+wilcoxon_signed_test <- function(df, problem, baseline, algorithm = NULL, 
                                  measure = NULL) {
     result <- data.frame()
-    checkmate::assert_true(check_names(df, problemset, baseline, 
+    checkmate::assert_true(check_names(df, problem, baseline, 
                                        algorithm = NULL, measure = NULL))
     checkmate::assert_true(check_names(df))
     if (is.null(measure)) {
         measure <- get_measure_columns(df)[1]
     }
     # define samples
-    x <- df[df[["problem"]] == problemset 
+    x <- df[df[["problem"]] == problem 
             & df[["algorithm"]] == baseline, measure]
     algorithms <- unique(df[["algorithm"]])
     if (!is.null(algorithm)) {
         algorithms <- algorithm
     }
     for (k in algorithms[algorithms != baseline]) {
-        y <- df[df[["problem"]] == problemset 
+        y <- df[df[["problem"]] == problem 
                 & df[["algorithm"]] == k, measure]
         # Wilcoxon signed rank test
         w_test <- scmamp::wilcoxonSignedTest(x, y)
