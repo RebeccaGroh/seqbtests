@@ -151,7 +151,3 @@ plot_posterior <- function(results, method, points = 1000){
   }
 }
 
-results <- b_corr_t_test(df= test_benchmark_small, 
-                         problem = "problem_a", 
-                         baseline = "algo_1", algorithm = "algo_2")
-plot_posterior(results, method = "b_corr_t_test")
