@@ -4,14 +4,15 @@
 \alias{b_signed_rank_test}
 \title{Bayesian Signed Rank test}
 \usage{
-b_signed_rank_test(df, problemset = NULL, baseline, compare = NULL,
-  algorithm = NULL, measure = NULL, s = 0.5, z_0 = 0,
-  weights = NULL, mc_samples = 1e+05, rope = c(-0.01, 0.01))
+b_signed_rank_test(df, problem = NULL, baseline, compare = NULL,
+  algorithm = NULL, measure = NULL, prob = 0.95, s = 0.5,
+  z_0 = 0, weights = NULL, mc_samples = 1e+05, rope = c(-0.01,
+  0.01))
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{problemset}{Problem set on which the test should be performed.}
+\item{problem}{Problem set on which the test should be performed.}
 
 \item{baseline}{First algorithm.}
 
@@ -19,6 +20,9 @@ b_signed_rank_test(df, problemset = NULL, baseline, compare = NULL,
 tested against baseline.}
 
 \item{measure}{Measure column.}
+
+\item{prob}{Probability, which the decision that the Baseline is better than 
+the algorithm is based on. The default is 0.95.}
 
 \item{s}{Prior pseudo-observation probability.}
 
@@ -30,6 +34,17 @@ tested against baseline.}
 
 \item{rope}{Region of practical equivalence.}
 }
+\value{
+A list containing the following components:
+\itemize{
+    \item{code{measure}} A string with the name of the measure column used.
+    \item{code{method}} A string with the name of the method used.
+    \item{code{baseline}} A string with the name of the baseline algorithm.
+    \item{code{posteriror_probabilities}} A data frame with one row for every 
+        algorithm that is compared to the baseline. The columns show the 
+        posterior probabilities and whether significance appears.
+}
+}
 \description{
 This function implements the Bayesian version of the signed rank test. 
     The performance of one baseline algorithm on one or multiple data sets is 
@@ -40,6 +55,10 @@ The test has first been implemented in rNPBST. For testing over multiple
     datasets, don´t specify the problem set argument in the function. Note 
     that if no measure column is defined per default the first column 
     defined as measure_* in the data frame is used.
+}
+\examples{
+    results <- b_signed_rank_test(df= test_benchmark_small,
+    baseline = "algo_1", algorithm = "algo_2")
 }
 \references{
 \url{https://github.com/JacintoCC/rNPBST}

@@ -4,13 +4,14 @@
 \alias{seq_b_sign_test}
 \title{Sequential Bayesian Sign test}
 \usage{
-seq_b_sign_test(problemset = NULL, baseline, algorithm = NULL,
+seq_b_sign_test(problem = NULL, baseline, algorithm = NULL,
   measure = NULL, compare = NULL, s = 1, z_0 = 0,
   weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05,
-  rope = c(-0.01, 0.01), max_repls = 20, ...)
+  rope = c(-0.01, 0.01), max_repls = 20, prob = 0.95, min_num = 5,
+  ...)
 }
 \arguments{
-\item{problemset}{Problem set on which the test should be performed.}
+\item{problem}{Problem set on which the test should be performed.}
 
 \item{baseline}{First algorithm.}
 
@@ -37,8 +38,27 @@ algorithms. If not defined, the default is to test for 'better'.}
 get_replications. Or maximum number of replications in data frame, if 
 a data frame that has already been built is being used.}
 
+\item{prob}{Probability, which the decision that the Baseline is better than 
+   the algorithm is based on. The default is 0.95. 
+@param min_num The minimum number of replications that is either generated 
+    or used to perform the first Bayesian test in the sequential approach. 
+    To prevent an bias through early stopping a minimum number of 5 runs 
+    (default) is recommended.}
+
 \item{...}{Additional arguments. When already built dataset is used the User 
 can define it with code{df}.}
+}
+\value{
+A list containing the following components:
+\itemize{
+    \item{code{measure}} A string with the name of the measure column used.
+    \item{code{method}} A string with the name of the method used.
+    \item{code{baseline}} A string with the name of the baseline algorithm.
+    \item{code{posteriror_probabilities}} A data frame with one row for every 
+        algorithm that is compared to the baseline. The columns show the 
+        posterior probabilities and whether significance appears.
+    \item{code{repls}} Number of the considered replications.
+}
 }
 \description{
 This function implements a sequential approach of the Bayesian version of
@@ -52,6 +72,11 @@ The basis for this test has first been implemented in rNPBST. For testing
     over multiple datasets, don´t specify the problem set argument in the 
     function. Note that if no measure column is defined per default the first
     column defined as measure_* in the data frame is used.
+}
+\examples{
+    
+    results <- seq_b_sign_test(df = test_benchmark_small, 
+    baseline = "algo_1", max_repls = 10)
 }
 \references{
 \url{https://github.com/JacintoCC/rNPBST}

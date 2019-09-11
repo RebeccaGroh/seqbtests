@@ -12,15 +12,15 @@
 #' @param rho Correlation factor. 
 #' @param rope Region of practical equivalence. 
 #' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is "0.95" (95%). 
+#'     the algorithm is based on. The default is 0.95. 
 #' @return A list containing the following components:
 #' \itemize{
-#' \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{baseline} A string with the name of the baseline algorithm.
-#' \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'     algorithm that is compared to the baseline. The columns show the 
-#'     posterior probabilities and whether significance appears.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{baseline}} A string with the name of the baseline algorithm.
+#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'         algorithm that is compared to the baseline. The columns show the 
+#'         posterior probabilities and whether significance appears.
 #' }
 #' @details
 #'     The test has first been implemented in scmamp. 
@@ -29,7 +29,7 @@
 #'     0.1. If rho equals 0 this converts the test in the equivalent of the 
 #'     standard t test.   
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
+#' @examples 
 #' results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a", 
 #'                          baseline = "algo_1", algorithm = "algo_2")
 #' @export
@@ -67,6 +67,7 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
             threshold <- b_corr$posterior.probabilities[2] + 
                 b_corr$posterior.probabilities[1]
         } 
+        
         if (is.null(prob)) {
           prob <- 0.95
         }
@@ -111,15 +112,15 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 #' @param mc_samples Number of samples of the distribution. 
 #' @param rope Region of practical equivalence. 
 #' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is "0.95" (95%).
+#'     the algorithm is based on. The default is 0.95. 
 #' @return A list containing the following components:
 #' \itemize{
-#' \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{baseline} A string with the name of the baseline algorithm.
-#' \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'     algorithm that is compared to the baseline. The columns show the 
-#'     posterior probabilities and whether significance appears.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{baseline}} A string with the name of the baseline algorithm.
+#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'         algorithm that is compared to the baseline. The columns show the 
+#'         posterior probabilities and whether significance appears.
 #' }
 #' @details 
 #'     The test has first been implemented in rNPBST. For testing over multiple 
@@ -127,7 +128,7 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 #'     that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
-#' @example 
+#' @examples
 #'     results <- b_sign_test(df= test_benchmark_small, 
 #'     problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 #' @export
@@ -218,15 +219,15 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
 #' @param mc_samples Number of samples of the distribution. 
 #' @param rope Region of practical equivalence. 
 #' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is "0.95" (95%).
+#'     the algorithm is based on. The default is 0.95. 
 #' @return A list containing the following components:
 #' \itemize{
-#' \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{baseline} A string with the name of the baseline algorithm.
-#' \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'     algorithm that is compared to the baseline. The columns show the 
-#'     posterior probabilities and whether significance appears.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{baseline}} A string with the name of the baseline algorithm.
+#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'         algorithm that is compared to the baseline. The columns show the 
+#'         posterior probabilities and whether significance appears.
 #' }
 #' @details 
 #'     The test has first been implemented in rNPBST. For testing over multiple 
@@ -234,7 +235,7 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
 #'     that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
-#' @example 
+#' @examples 
 #'     results <- b_signed_rank_test(df= test_benchmark_small,
 #'     baseline = "algo_1", algorithm = "algo_2")
 #' @export
@@ -348,22 +349,22 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #'     produced by Stan. If \code{NULL}, no files are stored.
 #' @param seed Optional parameter used to fix the random seed.
 #' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is "0.95" (95%).
+#'     the algorithm is based on. The default is 0.95. 
 #' @return A list containing the following components:
 #' \itemize{
-#' \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{baseline} A string with the name of the baseline algorithm.
-#' \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'     algorithm that is compared to the baseline. The columns show the 
-#'     posterior probabilities and whether significance appears.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{baseline}} A string with the name of the baseline algorithm.
+#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'         algorithm that is compared to the baseline. The columns show the 
+#'         posterior probabilities and whether significance appears.
 #' }
 #' @details 
 #'     The test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used. The default of rho is 
 #'     0.1. 
-#' @example 
+#' @examples 
 #'     results <- b_hierarchical_test(df= test_benchmark_small, 
 #'     baseline = "algo_1", algorithm = "algo_2",  rho=0.1, 
 #'     rope=c(-0.01, 0.01), nsim=2000,  nchains=5)

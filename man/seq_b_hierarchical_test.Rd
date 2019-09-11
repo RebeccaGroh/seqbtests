@@ -9,7 +9,8 @@ seq_b_hierarchical_test(baseline, algorithm = NULL, measure = NULL,
   std.upper = 1000, d0.lower = NULL, d0.upper = NULL,
   alpha.lower = 0.5, alpha.upper = 5, beta.lower = 0.05,
   beta.upper = 0.15, nsim = 2000, nchains = 8, parallel = TRUE,
-  stan.output.file = NULL, seed = as.numeric(Sys.time()), ...)
+  stan.output.file = NULL, prob = 0.95,
+  seed = as.numeric(Sys.time()), min_num = 5, ...)
 }
 \arguments{
 \item{baseline}{First algorithm.}
@@ -58,6 +59,13 @@ parallel.}
 \item{stan.output.file}{String containing the base name for the output files 
 produced by Stan. If \code{NULL}, no files are stored.}
 
+\item{prob}{Probability, which the decision that the Baseline is better than 
+   the algorithm is based on. The default is 0.95. 
+@param min_num The minimum number of replications that is either generated 
+    or used to perform the first Bayesian test in the sequential approach. 
+    To prevent an bias through early stopping a minimum number of 5 runs 
+    (default) is recommended.}
+
 \item{seed}{Optional parameter used to fix the random seed}
 
 \item{...}{Additional arguments. When already built dataset is used the User 
@@ -75,6 +83,18 @@ be \code{nchain}*\code{nsim}/2.}
 
 \item{rope}{Region of practical equivalence.}
 }
+\value{
+A list containing the following components:
+\itemize{
+    \item{code{measure}} A string with the name of the measure column used.
+    \item{code{method}} A string with the name of the method used.
+    \item{code{baseline}} A string with the name of the baseline algorithm.
+    \item{code{posteriror_probabilities}} A data frame with one row for every 
+        algorithm that is compared to the baseline. The columns show the 
+        posterior probabilities and whether significance appears.
+    \item{code{repls}} Number of the considered replications.
+}
+}
 \description{
 This function implements a sequential approach of the Bayesian 
     hierarchical test to compare the performance of machine learning 
@@ -88,6 +108,10 @@ The basis for this test has first been implemented in scmamp.
     Note that if no measure column is defined per default the first column 
     defined as measure_* in the data frame is used. The default of rho is 
     0.1.
+}
+\examples{
+    results <- seq_b_hierarchical_test(df = test_benchmark_small,
+    baseline = 'algo_1', max_repls = 10)
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

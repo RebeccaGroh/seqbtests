@@ -10,17 +10,17 @@
 #'     size of the dataset.) 
 #' @return A list containing the following components: 
 #' \itemize{
-#'  \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{statistic}} The value of the statistic used in the test.
-#' \item{code{p_value}} The p-value for the test.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{statistic}} The value of the statistic used in the test.
+#'     \item{code{p_value}} The p-value for the test.
 #' }
 #' @details  
 #'     The test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
+#' @examples
 #'     results <- corr_t_test(df= test_benchmark_small, 
 #'     problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 #' @export
@@ -65,17 +65,17 @@ corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 #' @param measure Measure column. 
 #' @return A list containing the following components: 
 #' \itemize{
-#'  \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{statistic}} The value of the statistic used in the test.
-#' \item{code{p_value}} The p-value for the test.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{statistic}} The value of the statistic used in the test.
+#'     \item{code{p_value}} The p-value for the test.
 #' }
 #' @details  
 #'     The test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
+#' @examples 
 #'     results <- friedman_test(test_benchmark) 
 #' @export
 friedman_test <- function(df, measure = NULL) {
@@ -116,17 +116,17 @@ friedman_test <- function(df, measure = NULL) {
 #' @param measure Measure column. 
 #' @return A list containing the following components: 
 #' \itemize{
-#'  \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{statistic}} The value of the statistic used in the test.
-#' \item{code{p_value}} The p-value for the test.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{statistic}} The value of the statistic used in the test.
+#'     \item{code{p_value}} The p-value for the test.
 #' }
 #' @details  
 #'     The test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
+#' @examples 
 #'     results <- wilcoxon_signed_test(df = test_benchmark, baseline = "algo_1",
 #'     algorithm = "algo_2", problem = "problem_a")  
 #' @export

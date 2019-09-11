@@ -20,7 +20,7 @@
 #'     a data frame that has already been built is being used.  
 #' @param rope Region of practical equivalence.
 #' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is "0.95" (95%).
+#'     the algorithm is based on. The default is 0.95. 
 #'  @param min_num The minimum number of replications that is either generated 
 #'      or used to perform the first Bayesian test in the sequential approach. 
 #'      To prevent an bias through early stopping a minimum number of 5 runs 
@@ -29,13 +29,13 @@
 #'     can define it with code{df}.  
 #' @return A list containing the following components:
 #' \itemize{
-#' \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{baseline} A string with the name of the baseline algorithm.
-#' \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'     algorithm that is compared to the baseline. The columns show the 
-#'     posterior probabilities and whether significance appears.
-#' \item{code{repls}} Number of the considered replications.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{baseline}} A string with the name of the baseline algorithm.
+#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'         algorithm that is compared to the baseline. The columns show the 
+#'         posterior probabilities and whether significance appears.
+#'     \item{code{repls}} Number of the considered replications.
 #' }
 #' @details 
 #'     The basis for this test has first been implemented in scmamp. 
@@ -43,7 +43,7 @@
 #'     defined as measure_* in the data frame is used. The default of rho is 
 #'     0.1. 
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
+#' @examples
 #'     results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
 #'     problem = "problem_a", baseline = "algo_1", 
 #'     compare = "equal", max_repls = 10)
@@ -142,20 +142,20 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 #' @param ... Additional arguments. When already built dataset is used the User 
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is "0.95" (95%).
+#'     the algorithm is based on. The default is 0.95. 
 #'  @param min_num The minimum number of replications that is either generated 
 #'      or used to perform the first Bayesian test in the sequential approach. 
 #'      To prevent an bias through early stopping a minimum number of 5 runs 
 #'      (default) is recommended. 
 #' @return A list containing the following components:
 #' \itemize{
-#' \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{baseline} A string with the name of the baseline algorithm.
-#' \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'     algorithm that is compared to the baseline. The columns show the 
-#'     posterior probabilities and whether significance appears.
-#' \item{code{repls}} Number of the considered replications.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{baseline}} A string with the name of the baseline algorithm.
+#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'         algorithm that is compared to the baseline. The columns show the 
+#'         posterior probabilities and whether significance appears.
+#'     \item{code{repls}} Number of the considered replications.
 #' }
 #' @details 
 #'     The basis for this test has first been implemented in rNPBST. For testing
@@ -163,7 +163,7 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 #'     function. Note that if no measure column is defined per default the first
 #'     column defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
-#' @example     
+#' @examples     
 #'     results <- seq_b_sign_test(df = test_benchmark_small, 
 #'     baseline = "algo_1", max_repls = 10)
 #' @export
@@ -280,20 +280,20 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 #' @param ... Additional arguments. When already built dataset is used the User 
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is "0.95" (95%).
+#'     the algorithm is based on. The default is 0.95. 
 #'  @param min_num The minimum number of replications that is either generated 
 #'      or used to perform the first Bayesian test in the sequential approach. 
 #'      To prevent an bias through early stopping a minimum number of 5 runs 
 #'      (default) is recommended. 
 #' @return A list containing the following components:
 #' \itemize{
-#' \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{baseline} A string with the name of the baseline algorithm.
-#' \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'     algorithm that is compared to the baseline. The columns show the 
-#'     posterior probabilities and whether significance appears.
-#' \item{code{repls}} Number of the considered replications.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{baseline}} A string with the name of the baseline algorithm.
+#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'         algorithm that is compared to the baseline. The columns show the 
+#'         posterior probabilities and whether significance appears.
+#'     \item{code{repls}} Number of the considered replications.
 #' }
 #' @details 
 #'     The basis for this test has first been implemented in rNPBST. For testing
@@ -301,7 +301,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 #'     function. Note that if no measure column is defined per default the first
 #'     column defined as measure_* in the data frame is used. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
-#' @example     
+#' @examples     
 #'     results <- seq_b_signed_rank_test(df = test_benchmark_small, 
 #'     baseline = 'algo_1', max_repls = 10)
 #' @export
@@ -442,20 +442,20 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #' @param ... Additional arguments. When already built dataset is used the User 
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is "0.95" (95%).
+#'     the algorithm is based on. The default is 0.95. 
 #'  @param min_num The minimum number of replications that is either generated 
 #'      or used to perform the first Bayesian test in the sequential approach. 
 #'      To prevent an bias through early stopping a minimum number of 5 runs 
 #'      (default) is recommended. 
 #' @return A list containing the following components:
 #' \itemize{
-#' \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{baseline} A string with the name of the baseline algorithm.
-#' \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'     algorithm that is compared to the baseline. The columns show the 
-#'     posterior probabilities and whether significance appears.
-#' \item{code{repls}} Number of the considered replications.
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{baseline}} A string with the name of the baseline algorithm.
+#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
+#'         algorithm that is compared to the baseline. The columns show the 
+#'         posterior probabilities and whether significance appears.
+#'     \item{code{repls}} Number of the considered replications.
 #' }
 #' @details 
 #'     The basis for this test has first been implemented in scmamp. 
@@ -463,7 +463,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #'     defined as measure_* in the data frame is used. The default of rho is 
 #'     0.1. 
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
+#' @examples 
 #'     results <- seq_b_hierarchical_test(df = test_benchmark_small,
 #'     baseline = 'algo_1', max_repls = 10)
 #' @export

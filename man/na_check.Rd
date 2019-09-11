@@ -4,7 +4,7 @@
 \alias{na_check}
 \title{NA Check}
 \usage{
-na_check(df, measure, check_var)
+na_check(df, measure = NULL, check_var = NULL)
 }
 \arguments{
 \item{df}{Input data frame.}
@@ -12,7 +12,7 @@ na_check(df, measure, check_var)
 \item{measure}{Measure column.}
 
 \item{check_var}{Column in data frame used to check for NAs. Either 
-"problemsets" or "algorithm".}
+"problem" (default) or "algorithm".}
 }
 \value{
 List of Cases, NAs and the NA ratio according to check_var.

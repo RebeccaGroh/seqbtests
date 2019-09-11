@@ -5,11 +5,11 @@
 #' @param alpha Significance level.
 #' @return A list containing the following components: 
 #' \itemize{
-#'  \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{statistic}} The value of the statistic used in the test.
-#' \item{code{p_value}} The p-value for the test.
-#' \item{code{diff_matrix}} A matrix with all the pair wise differences of 
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{statistic}} The value of the statistic used in the test.
+#'     \item{code{p_value}} The p-value for the test.
+#'     \item{code{diff_matrix}} A matrix with all the pair wise differences of 
 #'     average rankings.
 #' }
 #' @details  
@@ -17,7 +17,7 @@
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
+#' @examples 
 #'     nemenyi_test(test_benchmark)
 #' @export
 nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
@@ -54,15 +54,16 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 #' provided, all algorithms are compared against each other. 
 #' @return A list containing the following components: 
 #' \itemize{
-#'  \item{code{measure}} A string with the name of the measure column used.
-#' \item{code{method}} A string with the name of the method used.
-#' \item{code{matrix}}  A matrix with all the pair wise raw p-values. 
+#'     \item{code{measure}} A string with the name of the measure column used.
+#'     \item{code{method}} A string with the name of the method used.
+#'     \item{code{matrix}}  A matrix with all the pair wise raw p-values. 
+#' }
 #' @details  
 #'     The test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used.
 #' @references \url{https://github.com/b0rxa/scmamp}
-#' @example 
+#' @examples 
 #'     friedman_post(test_benchmark)
 #' @export
 friedman_post <- function(df, measure = NULL, control = NULL) {

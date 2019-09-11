@@ -21,6 +21,9 @@ performances of each algorithm in the data frame
 \details{
 The test has first been implemented in scmamp.
 }
+\examples{
+    plot_densities(test_benchmark_small)
+}
 \references{
 \url{https://github.com/b0rxa/scmamp}
 }

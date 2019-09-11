@@ -21,6 +21,9 @@ This function plots the performance of every algorithm in each
 \details{
 The test has first been implemented in scmamp.
 }
+\examples{
+    plot_boxplot(df = test_benchmark_small)
+}
 \references{
 \url{https://github.com/b0rxa/scmamp}
 }

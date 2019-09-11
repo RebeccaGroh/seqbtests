@@ -4,13 +4,13 @@
 \alias{check_names}
 \title{Check column names}
 \usage{
-check_names(df, problemset = NULL, baseline = NULL, algorithm = NULL,
+check_names(df, problem = NULL, baseline = NULL, algorithm = NULL,
   measure = NULL)
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{problemset}{Problem set on which the test should be performed.}
+\item{problem}{Problem set on which the test should be performed.}
 
 \item{baseline}{First algorithm.}
 

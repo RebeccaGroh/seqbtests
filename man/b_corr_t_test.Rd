@@ -4,13 +4,13 @@
 \alias{b_corr_t_test}
 \title{Bayesian correlated t test}
 \usage{
-b_corr_t_test(df, problemset, baseline, algorithm = NULL,
-  measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01))
+b_corr_t_test(df, problem, baseline, algorithm = NULL, measure = NULL,
+  compare = NULL, rho = 0.1, rope = c(-0.01, 0.01), prob = 0.95)
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{problemset}{Problem set on which the test should be performed.}
+\item{problem}{Problem set on which the test should be performed.}
 
 \item{baseline}{First algorithm.}
 
@@ -22,6 +22,20 @@ baseline is compared to every algorithm in the data frame.}
 \item{rho}{Correlation factor.}
 
 \item{rope}{Region of practical equivalence.}
+
+\item{prob}{Probability, which the decision that the Baseline is better than 
+the algorithm is based on. The default is 0.95.}
+}
+\value{
+A list containing the following components:
+\itemize{
+    \item{code{measure}} A string with the name of the measure column used.
+    \item{code{method}} A string with the name of the method used.
+    \item{code{baseline}} A string with the name of the baseline algorithm.
+    \item{code{posteriror_probabilities}} A data frame with one row for every 
+        algorithm that is compared to the baseline. The columns show the 
+        posterior probabilities and whether significance appears.
+}
 }
 \description{
 This function implements the Bayesian version of the correlated t-test. 
@@ -34,6 +48,10 @@ The test has first been implemented in scmamp.
     defined as measure_* in the data frame is used. The default of rho is 
     0.1. If rho equals 0 this converts the test in the equivalent of the 
     standard t test.
+}
+\examples{
+results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a", 
+                         baseline = "algo_1", algorithm = "algo_2")
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

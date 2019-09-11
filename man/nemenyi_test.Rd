@@ -16,14 +16,12 @@ nemenyi_test(df, measure = NULL, alpha = 0.05)
 \value{
 A list containing the following components: 
 \itemize{
- \item{code{measure}} A string with the name of the measure column used.
-\item{code{method}} A string with the name of the method used.
-\item{code{statistic}} The value of the statistic used in the test.
-\item{code{p_value}} The p-value for the test.
-\item{code{diff_matrix}} A matrix with all the pair wise differences of 
+    \item{code{measure}} A string with the name of the measure column used.
+    \item{code{method}} A string with the name of the method used.
+    \item{code{statistic}} The value of the statistic used in the test.
+    \item{code{p_value}} The p-value for the test.
+    \item{code{diff_matrix}} A matrix with all the pair wise differences of 
     average rankings.
-\item{code{significance}} A matrix with all the pair wise comparisons showing 
-    if there are significant differences among the algorithms.
 }
 }
 \description{
@@ -33,6 +31,9 @@ This function implements the Nemenyi post hoc test.
 The test has first been implemented in scmamp. 
     Note that if no measure column is defined per default the first column 
     defined as measure_* in the data frame is used.
+}
+\examples{
+    nemenyi_test(test_benchmark)
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

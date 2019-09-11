@@ -14,10 +14,10 @@ friedman_test(df, measure = NULL)
 \value{
 A list containing the following components: 
 \itemize{
- \item{code{measure}} A string with the name of the measure column used.
-\item{code{method}} A string with the name of the method used.
-\item{code{statistic}} The value of the statistic used in the test.
-\item{code{p_value}} The p-value for the test.
+    \item{code{measure}} A string with the name of the measure column used.
+    \item{code{method}} A string with the name of the method used.
+    \item{code{statistic}} The value of the statistic used in the test.
+    \item{code{p_value}} The p-value for the test.
 }
 }
 \description{
@@ -29,6 +29,9 @@ This function implements the Friedman's test for multiple
 The test has first been implemented in scmamp. 
     Note that if no measure column is defined per default the first column 
     defined as measure_* in the data frame is used.
+}
+\examples{
+    results <- friedman_test(test_benchmark) 
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

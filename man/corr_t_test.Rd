@@ -4,13 +4,13 @@
 \alias{corr_t_test}
 \title{Correlated t test}
 \usage{
-corr_t_test(df, problemset, baseline, algorithm, measure = NULL,
+corr_t_test(df, problem, baseline, algorithm = NULL, measure = NULL,
   rho = 0.01)
 }
 \arguments{
 \item{df}{Input data frame.}
 
-\item{problemset}{Problem set on which the test should be performed.}
+\item{problem}{Problem set on which the test should be performed.}
 
 \item{baseline}{First algorithm.}
 
@@ -25,10 +25,10 @@ size of the dataset.)}
 \value{
 A list containing the following components: 
 \itemize{
- \item{code{measure}} A string with the name of the measure column used.
-\item{code{method}} A string with the name of the method used.
-\item{code{statistic}} The value of the statistic used in the test.
-\item{code{p_value}} The p-value for the test.
+    \item{code{measure}} A string with the name of the measure column used.
+    \item{code{method}} A string with the name of the method used.
+    \item{code{statistic}} The value of the statistic used in the test.
+    \item{code{p_value}} The p-value for the test.
 }
 }
 \description{
@@ -38,6 +38,10 @@ This function implements a two-sided t test for paired samples.
 The test has first been implemented in scmamp. 
     Note that if no measure column is defined per default the first column 
     defined as measure_* in the data frame is used.
+}
+\examples{
+    results <- corr_t_test(df= test_benchmark_small, 
+    problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

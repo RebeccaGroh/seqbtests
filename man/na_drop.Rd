@@ -4,13 +4,13 @@
 \alias{na_drop}
 \title{Drop NAs by groups}
 \usage{
-na_drop(df, check_var, measure)
+na_drop(df, check_var = NULL, measure = NULL)
 }
 \arguments{
 \item{df}{Input data frame.}
 
 \item{check_var}{Column in data frame used to check for NAs. Either 
-"problemsets" or "algorithm".}
+"problem" (default) or "algorithm".}
 
 \item{measure}{Measure column.}
 }

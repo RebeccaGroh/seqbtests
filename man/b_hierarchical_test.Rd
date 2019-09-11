@@ -6,7 +6,7 @@
 \usage{
 b_hierarchical_test(df, baseline, algorithm = NULL, measure = NULL,
   rho = 0.1, compare = NULL, std.upper = 1000, d0.lower = NULL,
-  d0.upper = NULL, alpha.lower = 0.5, alpha.upper = 5,
+  d0.upper = NULL, prob = 0.95, alpha.lower = 0.5, alpha.upper = 5,
   beta.lower = 0.05, beta.upper = 0.15, rope = c(-0.01, 0.01),
   nsim = 2000, parallel = TRUE, stan.output.file = NULL,
   nchains = 8, seed = as.numeric(Sys.time()))
@@ -30,6 +30,9 @@ the smallest observed difference is used.}
 
 \item{d0.upper}{Upper bound for the prior for mu_0. If not provided, 
 the biggest observed difference is used.}
+
+\item{prob}{Probability, which the decision that the Baseline is better than 
+the algorithm is based on. The default is 0.95.}
 
 \item{alpha.lower}{Lower bound for the (uniform) prior for the alpha 
 hyperparameter. Default value set at 0.5.}
@@ -64,6 +67,17 @@ Dirichlet Process. The default value is set to 0 (inside the rope).}
 are used for the warm-up, the total number of simulations will 
 be \code{nchain}*\code{nsim}/2.}
 }
+\value{
+A list containing the following components:
+\itemize{
+    \item{code{measure}} A string with the name of the measure column used.
+    \item{code{method}} A string with the name of the method used.
+    \item{code{baseline}} A string with the name of the baseline algorithm.
+    \item{code{posteriror_probabilities}} A data frame with one row for every 
+        algorithm that is compared to the baseline. The columns show the 
+        posterior probabilities and whether significance appears.
+}
+}
 \description{
 This function implements a Bayesian hierarchical test. The performance of 
     one baseline algorithm on multiple data set is compared to either one or
@@ -74,6 +88,11 @@ The test has first been implemented in scmamp.
     Note that if no measure column is defined per default the first column 
     defined as measure_* in the data frame is used. The default of rho is 
     0.1.
+}
+\examples{
+    results <- b_hierarchical_test(df= test_benchmark_small, 
+    baseline = "algo_1", algorithm = "algo_2",  rho=0.1, 
+    rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}
