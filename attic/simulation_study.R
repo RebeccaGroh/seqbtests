@@ -1,4 +1,12 @@
 
+# first set seed. 
+set.seed(123456)
+
+
+
+
+#-------------------------------------------------------------------------------
+
 
 # create data frame:
 # 30 Problemsets 2 Algorithms

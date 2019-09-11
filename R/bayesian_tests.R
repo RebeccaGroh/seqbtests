@@ -63,15 +63,17 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
         if (is.null(compare)) {compare <- "better"}
         if (compare == "better") { 
             threshold <- b_corr$posterior.probabilities[1]
+            threshold_vv <- b_corr$posterior.probabilities[3]
         } else if (compare == "equal") {
             threshold <- b_corr$posterior.probabilities[2] + 
                 b_corr$posterior.probabilities[1]
+            threshold_vv <- b_corr$posterior.probabilities[2] + 
+              b_corr$posterior.probabilities[3]
         } 
-        
         if (is.null(prob)) {
           prob <- 0.95
         }
-        if (threshold > prob) {
+        if (threshold > prob | threshold_vv > prob) {
             result[k, "significant"] <- TRUE
         } else {
             result[k, "significant"] <- FALSE
@@ -402,6 +404,8 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
                                 beta.lower, beta.upper, rope, nsim, nchains, 
                                 parallel, stan.output.file, seed)
     # results
+    ## result[k, ] <- get_data_frame(algorithm = k, left = b_hierarchical$posterior.probabilities[1], 
+    ## rope = b_hierarchical$posterior.probabilities[2], right = b_hierarchical$posterior.probabilities[3])
     result[k, "algorithm"] <- k
     result[k, "left"] <- b_hierarchical$posterior.probabilities[1]
     result[k, "rope"] <- b_hierarchical$posterior.probabilities[2]
@@ -409,14 +413,18 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
     if (is.null(compare)) {compare <- "better"}
     if (compare == "better") { 
       threshold <- b_hierarchical$posterior.probabilities[1]
+      threshold_vv <- b_hierarchical$posterior.probabilities[3]
     } else if (compare == "equal") {
       threshold <- b_hierarchical$posterior.probabilities[2] + 
         b_hierarchical$posterior.probabilities[1]
+      threshold_vv <- b_hierarchical$posterior.probabilities[2] + 
+        b_hierarchical$posterior.probabilities[3]
+      
     } 
     if (is.null(prob)) {
       prob <- 0.95
     }
-    if (threshold > prob) {
+    if (threshold > prob | threshold_vv > prob) {
       result[k, "significanct"] <- TRUE
     } else {
       result[k, "significanct"] <- FALSE
@@ -431,3 +439,7 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
   return(output)
 }
 
+# results <- b_hierarchical_test(df= test_benchmark_small, 
+#                                baseline = "algo_1", rho=0.1, 
+#                                rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
+# results

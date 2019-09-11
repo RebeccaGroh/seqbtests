@@ -121,9 +121,9 @@ get_results <- function(baseline, method, measure, data = NULL, extra = NULL) {
 
 
 #' @title Get test results (Frequentist tests)
-#' @description This function collects the results of the Bayesian tests. 
+#' @description This function collects the results of the Frequentist tests. 
 #' @param baseline Baseline algorithms that every algorithm can be compared to.  
-#' @param method Bayesian test. 
+#' @param method Frequentist test. 
 #' @param measure Measure column. 
 #' @param data Data frame containing the posterior probabilities. 
 #' @param matrix A matrix with all the pair wise differences of 
@@ -139,3 +139,17 @@ get_results_htest <- function(baseline = NULL, method, measure, data = NULL,
     return(output)
 }
 
+#' @title Get test results (for data frame)
+#' @description This function collects the part of the results shown in the data 
+#'     frame. 
+#' @param algorithm   
+#' @param left  
+#' @param rope 
+#' @param right 
+#' @param repls Number of replications used until a decision is made. 
+#' @return List. 
+get_data_frame <- function(algortihm, left, rope, right, repls = NULL) {
+    output <- list(algorithm = algorithm, left = left, 
+                   rope = rope, right = right, repls = repls)
+    return(output)
+}
