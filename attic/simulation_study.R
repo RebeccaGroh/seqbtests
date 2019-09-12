@@ -40,17 +40,13 @@ out_seq$data_frame$algorithm
 
 start_iter = 5
 delta_mean = 0
-test_data <- data.frame()
+mu = 0.7
+rel_data <- data.frame()
 for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
   df <- generate_data(start_iter, mu, delta_mean, sigma)
   out_seq <- seq_b_corr_t_test(df = df, baseline = "algo_a", problem = "problem_1", max_repls = start_iter)
-  test_data[sigma, "algorithm"]<- out_seq$data_frame$algorithm
-  test_data[sigma, "left"]<- out_seq$data_frame$left
-  test_data[sigma, "rope"]<- out_seq$data_frame$rope
-  test_data[sigma, "right"]<- out_seq$data_frame$right
-  test_data[sigma, "sigma"]<- sigma
-  
 }
+
 
 
 #-------------------------------------------------------------------------------
