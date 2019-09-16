@@ -148,8 +148,12 @@ get_results_htest <- function(baseline = NULL, method, measure, data = NULL,
 #' @param right 
 #' @param repls Number of replications used until a decision is made. 
 #' @return List. 
-get_data_frame <- function(algortihm, left, rope, right, repls = NULL) {
-    output <- list(algorithm = algorithm, left = left, 
-                   rope = rope, right = right, repls = repls)
+get_data_frame <- function(k, left, rope, right, repls = NULL) {
+    output[k, "algorithm"] <- k
+    output[k, "left"] <- left 
+    output[k, "rope"] <- rope
+    output[k, "right"] <- right
+    output[k, "replications"] <- repls 
     return(output)
 }
+

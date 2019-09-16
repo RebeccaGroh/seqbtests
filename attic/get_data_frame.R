@@ -1,0 +1,72 @@
+b_corr_t_test <- function(df, problem, baseline, algorithm = NULL, 
+                          measure = NULL, compare = NULL, rho = 0.1, 
+                          rope = c(-0.01, 0.01), prob = 0.95) {
+  result <- data.frame()
+  checkmate::assert_true(check_structure(df))
+  checkmate::assert_true(check_names(df, problem, baseline, 
+                                     algorithm = NULL, measure = NULL))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  }
+  # define samples
+  x <- df[df[["problem"]] == problem 
+          & df[["algorithm"]] == baseline, measure]
+  algorithms <- unique(df[["algorithm"]])
+  if (!is.null(algorithm)) {
+    algorithms <- algorithm
+  }
+  for (k in algorithms[algorithms != baseline]) {
+    y <- df[df[["problem"]] == problem 
+            & df[["algorithm"]] == k, measure]
+    # Bayesian correlated t Test
+    b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
+    # results
+    result[k] <- get_data_frame(k = k, left = b_corr$posterior.probabilities[1], 
+                             rope = b_corr$posterior.probabilities[2], 
+                             right = b_corr$posterior.probabilities[3])
+    if (is.null(compare)) {compare <- "better"}
+    if (compare == "better") { 
+      threshold <- b_corr$posterior.probabilities[1]
+      threshold_vv <- b_corr$posterior.probabilities[3]
+    } else if (compare == "equal") {
+      threshold <- b_corr$posterior.probabilities[2] + 
+        b_corr$posterior.probabilities[1]
+      threshold_vv <- b_corr$posterior.probabilities[2] + 
+        b_corr$posterior.probabilities[3]
+    } 
+    if (is.null(prob)) {
+      prob <- 0.95
+    }
+    if (threshold > prob | threshold_vv > prob) {
+      result[k, "significant"] <- TRUE
+    } else {
+      result[k, "significant"] <- FALSE
+    }
+  }
+  output <- get_results(baseline, measure, method = b_corr$method, 
+                        data = result, 
+                        extra = list(b_corr$additional, 
+                                     b_corr$approximate, 
+                                     b_corr$parameters, 
+                                     b_corr$posterior, 
+                                     b_corr$additional$pposterior,
+                                     b_corr$additional$qposterior,
+                                     b_corr$additional$posterior.df,
+                                     b_corr$additional$posterior.mean,
+                                     b_corr$additional$posterior.sd))
+  return(output)
+}
+
+results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
+                       baseline = "algo_1", algorithm = "algo_2")
+results
+
+
+get_data_frame <- function(k, left, rope, right) {
+  output <- data.frame()
+  output[k, "algorithm"] <- k
+  output[k, "left"] <- left
+  output[k, "rope"] <- rope
+  output[k, "right"] <- right
+  return(output)
+}

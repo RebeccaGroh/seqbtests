@@ -2,51 +2,128 @@
 # first set seed. 
 set.seed(123456)
 
-for(start_iter in c(5, 10, 30)){
-  for (delta_mean in c(0, 0.001, 0.01, 0.05, 0.1, 0.2)) {
-    for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
-      df <- generate_data(start_iter, mu, delta_mean, sigma)
-      out_seq <- seq_b_corr_t_test(df = df, baseline = "algo_a", problem = "problem_1", max_repls = start_iter)
-    }
-  }
-}
+# for(start_iter in c(5, 10, 30)){
+#   for (delta_mean in c(0, 0.001, 0.01, 0.05, 0.1, 0.2)) {
+#     for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
+#       df <- generate_data(start_iter, mu, delta_mean, sigma)
+#       out_seq <- seq_b_corr_t_test(df = df, baseline = "algo_a", problem = "problem_1", max_repls = start_iter)
+#     }
+#   }
+# }
 
-generate_data <- function(start_iter, mu, delta_mean, sigma) {
-  measure_accuracy <- rnorm(n = start_iter, mean = c(mu, mu+delta_mean), sd = sigma)
-  algorithm <- rep(c("algo_a", "algo_b"), start_iter)
-  algorithm <- as.character(algorithm)
-  data <- data.frame(algorithm, measure_accuracy)
-  data$problem <- "problem_1"
-  #data$replications <- sequence(rle(data$algorithm)$lengths)
-  data[1, "replications"] <- 1
-  data[2, "replications"] <- 1
-  data[3, "replications"] <- 2
-  data[4, "replications"] <- 2
-  data[5, "replications"] <- 3
-  data[6, "replications"] <- 3
-  data[7, "replications"] <- 4
-  data[8, "replications"] <- 4
-  data[9, "replications"] <- 5
-  data[10, "replications"] <- 5
-  return(data)
-}
-
-
-data_test <- generate_data(start_iter = 5, mu = 0.4, delta_mean = 0.001, sigma = 0.01) 
-data_test
-out_seq <- seq_b_corr_t_test(df = data_test, baseline = "algo_a", problem = "problem_1", max_repls = 5)
-out_seq$data_frame$algorithm
 
 
 start_iter = 5
 delta_mean = 0
 mu = 0.7
-rel_data <- data.frame()
+sigma =  0.01
+
+
+
+generate_data <- function( start_iter, mu, delta_mean, sigma){
+  data <- data.frame(algorithm = rep(c("algo_a", "algo_b"), start_iter), 
+                     replications = rep(1:start_iter, times = 2), 
+                     measure_accuracy = rnorm(n = start_iter, mean = c(mu, mu + delta_mean), sd = sigma))
+  data$problem <- "problem_1"
+  return(data)
+}
+
+data_sigma = list()
+data_delta = list()
+data_repls = list()
+for(start_iter in c(5, 10, 30)){
+  for (delta_mean in c(0, 0.001, 0.01, 0.05, 0.1, 0.2)) {
+    for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
+      df <- generate_data(start_iter, mu, delta_mean, sigma)
+      out_seq <- seq_b_corr_t_test(df = df, baseline = "algo_a", problem = "problem_1", max_repls = start_iter)
+      out_seq$data_frame$sigma <- sigma 
+      out_seq$data_frame$mu <- mu
+      out_seq$data_frame$delta <- delta_mean 
+      out_seq$data_frame$start_iter <- start_iter
+      data_sigma <- rbind(data_sigma, out_seq$data_frame)
+      row.names(data_sigma) <- NULL
+    }
+    data_delta <- rbind(data_delta, data_sigma)
+  }
+  data_repls <- rbind(data_repls, data_delta)
+}
+# for (delta_mean in c(0, 0.001, 0.01, 0.05, 0.1, 0.2)) {
+#   for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
+#     df <- generate_data(start_iter, mu, delta_mean, sigma)
+#     out_seq <- seq_b_corr_t_test(df = df, baseline = "algo_a", problem = "problem_1", max_repls = start_iter)
+#     out_seq$data_frame$sigma <- sigma 
+#     out_seq$data_frame$mu <- mu
+#     out_seq$data_frame$delta <- delta_mean 
+#     out_seq$data_frame$start_iter <- start_iter
+#     data_sigma <- rbind(data_sigma, out_seq$data_frame)
+#     row.names(data_sigma) <- NULL
+#   }
+#   data_delta <- rbind(data_delta, data_sigma)
+# }
+delta_mean = 0
 for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
   df <- generate_data(start_iter, mu, delta_mean, sigma)
   out_seq <- seq_b_corr_t_test(df = df, baseline = "algo_a", problem = "problem_1", max_repls = start_iter)
+  out_seq$data_frame$sigma <- sigma 
+  out_seq$data_frame$mu <- mu
+  out_seq$data_frame$delta <- delta_mean 
+  out_seq$data_frame$start_iter <- start_iter
+  data_sigma <- rbind(data_sigma, out_seq$data_frame)
+  row.names(data_sigma) <- NULL
 }
+data_sigma
+data_delta
+data_repls
 
+rm(data_delta)
+rm(data_sigma)
+rm(data_repls)
+#-------------------------------------------------------------------------------
+
+
+
+
+
+
+library(dplyr)
+data$replications <- data %>% group_indices(algorithm) 
+data 
+
+install.packages("splitstackshape")
+library(splitstackshape)
+data <- getanID(data, id.vars = "algorithm")
+df$id <- df %>% group_indices(IDFAM)
+data$replications <- count(data, "algorithm")
+count(data, "algorithm")
+#-------------------------------------------------------------------------------
+measure_accuracy <- rnorm(n = start_iter, mean = c(mu, mu+delta_mean), sd = sigma)
+measure_accuracy
+algorithm <- rep(c("algo_a", "algo_b"), start_iter)
+algorithm <- as.character(algorithm)
+algorithm
+data <- data.frame(algorithm, measure_accuracy)
+data 
+data$problem <- "problem_1"
+data 
+data$replications <- seq(rle(data$algorithm)$lengths)
+mode(data$algorithm)
+measure_accuracy <- rnorm(n = start_iter, mean = c(mu, mu+delta_mean), sd = sigma)
+algorithm <- rep(c("algo_a", "algo_b"), start_iter)
+algorithm <- as.character(algorithm)
+data <- data.frame(algorithm, measure_accuracy)
+data$problem <- "problem_1"
+#data$replications <- sequence(rle(data$algorithm)$lengths)
+data[1, "replications"] <- 1
+data[2, "replications"] <- 1
+data[3, "replications"] <- 2
+data[4, "replications"] <- 2
+data[5, "replications"] <- 3
+data[6, "replications"] <- 3
+data[7, "replications"] <- 4
+data[8, "replications"] <- 4
+data[9, "replications"] <- 5
+data[10, "replications"] <- 5
+return(data)
 
 
 #-------------------------------------------------------------------------------
