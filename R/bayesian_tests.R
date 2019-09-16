@@ -93,9 +93,9 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
     return(output)
 }
 
-results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
-                       baseline = "algo_1")
-results
+# results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
+#                        baseline = "algo_1")
+# results
 
 #' @title Bayesian Sign test 
 #' @description 
