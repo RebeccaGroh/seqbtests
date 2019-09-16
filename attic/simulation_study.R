@@ -44,9 +44,13 @@ for(start_iter in c(5, 10, 30)){
       row.names(data_sigma) <- NULL
     }
     data_delta <- rbind(data_delta, data_sigma)
+    data_sigma = list()
   }
   data_repls <- rbind(data_repls, data_delta)
+  data_delta = list()
 }
+data_repls
+
 # for (delta_mean in c(0, 0.001, 0.01, 0.05, 0.1, 0.2)) {
 #   for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
 #     df <- generate_data(start_iter, mu, delta_mean, sigma)
