@@ -1,7 +1,7 @@
 b_corr_t_test <- function(df, problem, baseline, algorithm = NULL, 
                           measure = NULL, compare = NULL, rho = 0.1, 
                           rope = c(-0.01, 0.01), prob = 0.95) {
-  result <- data.frame()
+  part_result <- data.frame()
   checkmate::assert_true(check_structure(df))
   checkmate::assert_true(check_names(df, problem, baseline, 
                                      algorithm = NULL, measure = NULL))
@@ -21,9 +21,10 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
     # Bayesian correlated t Test
     b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
     # results
-    result <- get_data_frame(k = , left = b_corr$posterior.probabilities[1], 
+    results_test <- get_data_frame(k = k, left = b_corr$posterior.probabilities[1], 
                              rope = b_corr$posterior.probabilities[2], 
                              right = b_corr$posterior.probabilities[3])
+    result_b <- rbind(result_b, results_test)
     if (is.null(compare)) {compare <- "better"}
     if (compare == "better") { 
       threshold <- b_corr$posterior.probabilities[1]
@@ -38,11 +39,12 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
       prob <- 0.95
     }
     if (threshold > prob | threshold_vv > prob) {
-      result[k, "significant"] <- TRUE
+      part_result[k, "significant"] <- TRUE
     } else {
-      result[k, "significant"] <- FALSE
+      part_result[k, "significant"] <- FALSE
     }
   }
+  result <- cbind(result_b, part_result)
   output <- get_results(baseline, measure, method = b_corr$method, 
                         data = result, 
                         extra = list(b_corr$additional, 
@@ -57,14 +59,16 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
   return(output)
 }
 
-results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
-                       baseline = "algo_1", algorithm = "algo_2")
-results
+results_test <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
+                       baseline = "algo_1")
+results_test
 
 
-get_data_frame <- function(k, left, rope, right, repls = NULL) {
-  output <- list(result[k, "algorithm"] = k, result[k, "left"] = left, 
-                 result[k, "rope"] = rope, result[k, "right"] = right, 
-                 result[k, "repls"] = repls)
-  return(output)
+get_data_frame <- function(k, left, rope, right) {
+  result_b <- data.frame()
+  result_b[k, "algorithm"] <- k
+  result_b[k, "left"] <- left
+  result_b[k, "rope"] <- rope
+  result_b[k, "right"] <- right
+  return(result_b)
 }
