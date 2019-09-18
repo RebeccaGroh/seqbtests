@@ -5,9 +5,9 @@
 #' @return A vector containing the columns names and number of rows.
 #' @export
 data_summary <- function(df) {
-    rows <- nrow(df)
-    columns <- colnames(df)
-    return(list(Rows = rows, Columns = columns))
+  rows <- nrow(df)
+  columns <- colnames(df)
+  return(list(Rows = rows, Columns = columns))
 }
 
 

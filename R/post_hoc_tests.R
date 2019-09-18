@@ -21,27 +21,27 @@
 #'     nemenyi_test(test_benchmark)
 #' @export
 nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
-    result <- data.frame()
-    checkmate::assert_true(check_names(df, measure = NULL))
-    checkmate::assert_true(check_structure(df))
-    if (is.null(measure)) {
-        measure <- get_measure_columns(df)[1]
-    }
-    algo_names <- unique(df[["algorithm"]])
-    data_wide <- tidyr::spread(df, algorithm, measure)
-    sum_data <- aggregate(data_wide[, algo_names], 
-                          by = list(data_wide[["problem"]]), FUN = mean)
-    # define dataset
-    data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
-    # Nemenyi post hoc test
-    n_post <- scmamp::nemenyiTest(data, alpha)
-    # return results 
-    result[1, "test"] <- "Critical difference = "
-    result[1, "statistic"] <- n_post$statistic
-    output <- get_results_htest(measure = measure, method = n_post$method, 
-                                matrix = n_post$diff.matrix, data = result)
-    class(output) <- "nemenyi"
-    return(output)
+  result <- data.frame()
+  checkmate::assert_true(check_names(df, measure = NULL))
+  checkmate::assert_true(check_structure(df))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  }
+  algo_names <- unique(df[["algorithm"]])
+  data_wide <- tidyr::spread(df, algorithm, measure)
+  sum_data <- aggregate(data_wide[, algo_names], 
+    by = list(data_wide[["problem"]]), FUN = mean)
+  # define dataset
+  data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
+  # Nemenyi post hoc test
+  n_post <- scmamp::nemenyiTest(data, alpha)
+  # return results 
+  result[1, "test"] <- "Critical difference = "
+  result[1, "statistic"] <- n_post$statistic
+  output <- get_results_htest(measure = measure, method = n_post$method, 
+    matrix = n_post$diff.matrix, data = result)
+  class(output) <- "nemenyi"
+  return(output)
 }
 
 
@@ -67,22 +67,22 @@ nemenyi_test <- function(df, measure = NULL, alpha = 0.05) {
 #'     friedman_post(test_benchmark)
 #' @export
 friedman_post <- function(df, measure = NULL, control = NULL) {
-    checkmate::assert_true(check_names(df, measure = NULL))
-    checkmate::assert_true(check_structure(df))
-    if (is.null(measure)) {
-        measure <- get_measure_columns(df)[1]
-    }
-    algo_names <- unique(df[["algorithm"]])
-    data_wide <- tidyr::spread(df, algorithm, measure)
-    sum_data <- aggregate(data_wide[, algo_names], 
-                          by = list(data_wide[["problem"]]), FUN = mean)
-    # define dataset
-    data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
-    # Friedman post hoc test
-    f_post <- scmamp::friedmanPost(data, control)
-    # return results 
-    output <- get_results_htest(measure = measure, data = f_post, 
-                                method = "Friedman post hoc test")
-    class(output) <- "h_test_small"
-    return(output)
+  checkmate::assert_true(check_names(df, measure = NULL))
+  checkmate::assert_true(check_structure(df))
+  if (is.null(measure)) {
+    measure <- get_measure_columns(df)[1]
+  }
+  algo_names <- unique(df[["algorithm"]])
+  data_wide <- tidyr::spread(df, algorithm, measure)
+  sum_data <- aggregate(data_wide[, algo_names], 
+    by = list(data_wide[["problem"]]), FUN = mean)
+  # define dataset
+  data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
+  # Friedman post hoc test
+  f_post <- scmamp::friedmanPost(data, control)
+  # return results 
+  output <- get_results_htest(measure = measure, data = f_post, 
+    method = "Friedman post hoc test")
+  class(output) <- "h_test_small"
+  return(output)
 }

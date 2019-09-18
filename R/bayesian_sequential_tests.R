@@ -49,22 +49,21 @@
 #'     compare = "equal", max_repls = 10)
 #' @export
 seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL, 
-                              measure = NULL, compare = NULL, rho = 0.1, 
-                              rope = c(-0.01, 0.01), max_repls = 20, 
-                              prob = 0.95, min_num = 5, ...) {
+  measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01), 
+  max_repls = 20, prob = 0.95, min_num = 5, ...) {
   result = data.frame()
   for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problem, baseline, 
-                                       algorithm = NULL, measure = NULL))
+      algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
     # define samples
     x <- data[data[["problem"]] == problem 
-              & data[["algorithm"]] == baseline, measure]
+      & data[["algorithm"]] == baseline, measure]
     algorithms <- unique(data[["algorithm"]])
     if (i == min_num) {
       liste <- c()
@@ -74,8 +73,8 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
       algorithms <- algorithm
     }
     for (k in algorithms[algorithms != baseline]) {
-        y <- data[data[["problem"]] == problem 
-                  & data[["algorithm"]] == k, measure]
+      y <- data[data[["problem"]] == problem 
+        & data[["algorithm"]] == k, measure]
       # Bayesian correlated t Test
       b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)
       result[k, "algorithm"] <- k
@@ -106,8 +105,8 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
       }
     }
   }
-  output <- get_results(baseline, measure, method = b_test$method, 
-                             data = result)
+  output <- get_results(baseline, measure, method = b_test$method,
+    data = result)
   return(output)
 }
 
@@ -168,14 +167,13 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 #'     baseline = "algo_1", max_repls = 10)
 #' @export
 seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL, 
-                            measure = NULL, compare = NULL, s = 1, z_0 = 0,
-                            weights = c(s/2, rep(1, length(x))), 
-                            mc_samples = 1e+05, rope = c(-0.01, 0.01), 
-                            max_repls = 20, prob = 0.95, min_num = 5, ...) {
+  measure = NULL, compare = NULL, s = 1, z_0 = 0, rope = c(-0.01, 0.01),
+  weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05, max_repls = 20, 
+  prob = 0.95, min_num = 5, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
-            (min, max), but the values are not orderd. They will be swapped to
-            follow with the procedure")
+      (min, max), but the values are not orderd. They will be swapped to follow 
+      with the procedure")
     rope <- sort(rope)
   }
   rope.min <- rope[1]
@@ -186,7 +184,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problem = NULL, baseline, 
-                                       algorithm = NULL, measure = NULL))
+      algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
@@ -204,21 +202,20 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
       if (is.null(problem)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
         sum_data <- aggregate(data_wide[, c(baseline, k)], 
-                              by = list(data_wide[["problem"]]), FUN = mean)
+          by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, baseline]
         y <- sum_data[, k]
       } else {
         # define samples when testing on a single dataset
         x <- data[data[["problem"]] == problem 
-                  & data[["algorithm"]] == baseline, measure]
+          & data[["algorithm"]] == baseline, measure]
         y <- data[data[["problem"]] == problem 
-                  & data[["algorithm"]] == k, measure]
+          & data[["algorithm"]] == k, measure]
       }
       n.samples <- mc_samples
       # Bayesian Sign Test
       b_sign <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max, 
-                                          weights, n.samples)
-      
+        weights, n.samples)
       result[k, "algorithm"] <- k
       result[k, "left"] <- b_sign$probabilities[1]
       result[k, "rope"] <- b_sign$probabilities[2]
@@ -248,7 +245,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
     }
   }
   output <- get_results(baseline, measure, method = b_sign$method, 
-                             data = result)
+    data = result)
   return(output)
 }
 
@@ -306,15 +303,13 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 #'     baseline = 'algo_1', max_repls = 10)
 #' @export
 seq_b_signed_rank_test <- function(problem = NULL, baseline, 
-                                   algorithm = NULL, measure = NULL, 
-                                   compare = NULL, s = 0.5, z_0 = 0,
-                                   weights = NULL, mc_samples = 1e+05, 
-                                   rope = c(-0.01, 0.01), max_repls = 20, 
-                                   prob = 0.95, min_num = 5, ...) {
+  algorithm = NULL, measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
+  weights = NULL, mc_samples = 1e+05, rope = c(-0.01, 0.01), max_repls = 20, 
+  prob = 0.95, min_num = 5, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
-            (min, max), but the values are not orderd. They will be swapped to
-            follow with the procedure")
+      (min, max), but the values are not orderd. They will be swapped to follow 
+      with the procedure")
     rope <- sort(rope)
   }
   rope.min <- rope[1]
@@ -325,7 +320,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problem = NULL, baseline, 
-                                       algorithm = NULL, measure = NULL))
+      algorithm = NULL, measure = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
@@ -343,21 +338,20 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
       if (is.null(problem)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
         sum_data <- aggregate(data_wide[, c(baseline, k)], 
-                              by = list(data_wide[["problem"]]), FUN = mean)
+          by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, baseline]
         y <- sum_data[, k]
       } else {
         # define samples when testing on a single dataset
         x <- data[data[["problem"]] == problem 
-                  & data[["algorithm"]] == baseline, measure]
+          & data[["algorithm"]] == baseline, measure]
         y <- data[data[["problem"]] == problem 
-                  & data[["algorithm"]] == k, measure]
+          & data[["algorithm"]] == k, measure]
       }
       mc.samples <- mc_samples
       # Bayesian Sign Test
       b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, 
-                                                       rope.min, rope.max, 
-                                                       weights, mc.samples)
+        rope.min, rope.max, weights, mc.samples)
       result[k, "algorithm"] <- k
       result[k, "left"] <- b_signed_rank$probabilities[1]
       result[k, "rope"] <- b_signed_rank$probabilities[2]
@@ -387,7 +381,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
     }
   }
   output <- get_results(baseline, measure, method = b_signed_rank$method, 
-                             data = result)
+    data = result)
   return(output)
 }
 
@@ -468,22 +462,18 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #'     baseline = 'algo_1', max_repls = 10)
 #' @export
 seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL, 
-                                    compare = NULL, rho = 0.1, max_repls = 20, 
-                                    rope = c(-0.01, 0.01), std.upper = 1000,
-                                    d0.lower = NULL, d0.upper = NULL,
-                                    alpha.lower = 0.5, alpha.upper = 5, 
-                                    beta.lower = 0.05, beta.upper = 0.15,
-                                    nsim = 2000, nchains = 8, parallel = TRUE,
-                                    stan.output.file = NULL, prob = 0.95, 
-                                    seed = as.numeric(Sys.time()),
-                                    min_num = 5, ...) {
+  compare = NULL, rho = 0.1, max_repls = 20, rope = c(-0.01, 0.01), 
+  std.upper = 1000, d0.lower = NULL, d0.upper = NULL, alpha.lower = 0.5, 
+  alpha.upper = 5, beta.lower = 0.05, beta.upper = 0.15, nsim = 2000, 
+  nchains = 8, parallel = TRUE, stan.output.file = NULL, prob = 0.95, 
+  seed = as.numeric(Sys.time()), min_num = 5, ...) {
   result = data.frame()
   for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
-    checkmate::assert_true(check_names(df = data, baseline, algorithm = NULL,
-                                       measure = NULL, problem = NULL))
+    checkmate::assert_true(check_names(df = data, baseline, algorithm = NULL, 
+      measure = NULL, problem = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
@@ -503,12 +493,8 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
       # Bayesian correlated t Test
       b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, 
-                                                  std.upper, d0.lower, 
-                                                  d0.upper, alpha.lower,
-                                                  alpha.upper, beta.lower,
-                                                  beta.upper, rope, nsim,
-                                                  nchains, parallel, 
-                                                  stan.output.file, seed)
+        std.upper, d0.lower, d0.upper, alpha.lower, alpha.upper, beta.lower,
+        beta.upper, rope, nsim, nchains, parallel, stan.output.file, seed)
       result[k, "algorithm"] <- k
       result[k, "left"] <- b_hierarchical$posterior.probabilities[1]
       result[k, "rope"] <- b_hierarchical$posterior.probabilities[2]
@@ -540,6 +526,6 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
     }
   }
   output <- get_results(baseline, measure, method = b_hierarchical$method, 
-                             data = result)
+    data = result)
   return(output)
 }

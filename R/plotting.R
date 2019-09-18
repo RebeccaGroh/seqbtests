@@ -18,7 +18,7 @@ plot_densities <- function(df, measure = NULL) {
   algo_names <- unique(df$algorithm)
   data_wide <- tidyr::spread(df, algorithm, measure)
   sum_data <- aggregate(data_wide[, algo_names], 
-                        by = list(data_wide[["problem"]]), FUN = mean)
+    by = list(data_wide[["problem"]]), FUN = mean)
   # define dataset
   results_matrix <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
   # plot densities 
@@ -80,7 +80,7 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
   algo_names <- unique(df$algorithm)
   data_wide <- tidyr::spread(df, algorithm, measure)
   sum_data <- aggregate(data_wide[, algo_names], 
-                        by = list(data_wide[["problem"]]), FUN = mean)
+    by = list(data_wide[["problem"]]), FUN = mean)
   # define dataset
   results_matrix <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
   # plot CD
@@ -134,15 +134,13 @@ plot_posterior <- function(results, method, points = 1000){
       return(dt(x,tdist.df))
     }
     test[["additional"]] <- list(pposterior = ppos, 
-                                 qposterior = qpos, 
-                                 posterior.df = tdist.df,  
-                                 posterior.mean = tdist.mean, 
-                                 posterior.sd = tdist.sd)
+      qposterior = qpos, posterior.df = tdist.df, posterior.mean = tdist.mean,
+      posterior.sd = tdist.sd)
     test[["approximate"]] <- as.logical(results[["extra"]][2])
     test[["parameters"]] <- as.data.frame(results[["extra"]][3])
     test[["posterior"]] <- dpos
     scmamp::plotPosterior(results = test, num.points = points, plot.rope = TRUE, 
-                          plot.samples = TRUE, alpha)
+      plot.samples = TRUE, alpha)
   } else if (method == "b_sign_test" | method == "b_signed_rank_test") {
     test <- list()
     test[["sample"]] <- as.data.frame(results[["extra"]])

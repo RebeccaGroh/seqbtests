@@ -21,7 +21,7 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
     # Bayesian correlated t Test
     b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
     # results
-    result[k] <- get_data_frame(k = k, left = b_corr$posterior.probabilities[1], 
+    result <- get_data_frame(k = , left = b_corr$posterior.probabilities[1], 
                              rope = b_corr$posterior.probabilities[2], 
                              right = b_corr$posterior.probabilities[3])
     if (is.null(compare)) {compare <- "better"}
@@ -62,11 +62,9 @@ results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
 results
 
 
-get_data_frame <- function(k, left, rope, right) {
-  output <- data.frame()
-  output[k, "algorithm"] <- k
-  output[k, "left"] <- left
-  output[k, "rope"] <- rope
-  output[k, "right"] <- right
+get_data_frame <- function(k, left, rope, right, repls = NULL) {
+  output <- list(result[k, "algorithm"] = k, result[k, "left"] = left, 
+                 result[k, "rope"] = rope, result[k, "right"] = right, 
+                 result[k, "repls"] = repls)
   return(output)
 }
