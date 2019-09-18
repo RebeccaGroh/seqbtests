@@ -23,10 +23,8 @@ Imports:
     checkmate,
     devtools,
     ggplot2,
-    graph, 
     metRology,
     remotes,
-    Rgraphviz,
     rNPBST,
     rstan,
     scmamp,
@@ -38,6 +36,7 @@ Suggests:
     rmarkdown,
     roxygen2
 RoxygenNote: 6.1.1
-Remotes: 
+Remotes: bioc::3.8/graph, 
+    bioc::3.8/Rgraphviz,
     JacintoCC/rNPBST
 VignetteBuilder: knitr
