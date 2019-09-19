@@ -15,7 +15,6 @@ set.seed(123456)
 
 start_iter = 5
 delta_mean = 0
-mu = 0.7
 sigma =  0.01
 
 
@@ -27,13 +26,14 @@ generate_data <- function( start_iter, mu, delta_mean, sigma){
   data$problem <- "problem_1"
   return(data)
 }
+mu = 0.7
 
 data_sigma = list()
 data_delta = list()
 data_repls = list()
 for(start_iter in c(5, 10, 30)){
   for (delta_mean in c(0, 0.001, 0.01, 0.05, 0.1, 0.2)) {
-    for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
+    for (sigma in c(0.01)) {
       df <- generate_data(start_iter, mu, delta_mean, sigma)
       out_seq <- seq_b_corr_t_test(df = df, baseline = "algo_a", problem = "problem_1", max_repls = start_iter)
       out_seq$data_frame$sigma <- sigma 
@@ -50,6 +50,12 @@ for(start_iter in c(5, 10, 30)){
   data_delta = list()
 }
 data_repls
+#
+## weitere Sigma Werte , 0.02, 0.05, 0.1, 0.2
+
+# nochmal drüber nachdenken welche abgelehnt werden sollten, wenn keine Varianzt 
+# vorliegt? alle die diese 0.01 entfernt sind oder mehr/weniger? 
+
 
 # for (delta_mean in c(0, 0.001, 0.01, 0.05, 0.1, 0.2)) {
 #   for (sigma in c(0.01, 0.02, 0.05, 0.1, 0.2)) {
