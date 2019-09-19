@@ -43,17 +43,19 @@ corr_t_test <- function(df, problem, baseline, algorithm = NULL,
     y <- df[df[["problem"]] == problem & df[["algorithm"]] == k, measure]
     # Correlated t Test
     corr_test <- scmamp::correlatedTtest(x, y, rho, alternative = "two.sided")
-    # return results 
-    result[k, "p_value"] <- corr_test$p.value
-    result[k, "test"] <- "t = "
-    result[k, "statistic"] <- corr_test$statistic
+    # results 
+    result_test <- get_data_frame_htest(k = k, p_value = corr_test$p.value, 
+      test = "t = ", statistic = corr_test$statistic)
+    result <- rbind(result, result_test)
   }
   output <- get_results_htest(baseline = baseline, measure = measure, 
     method = corr_test$method, data = result)
   class(output) <- "h_test"
   return(output)
 }
-
+# results <- corr_t_test(df= test_benchmark_small, 
+#                        problem = "problem_a", baseline = "algo_1")
+# results
 
 #' @title Friedman's test 
 #' @description This function implements the Friedman's test for multiple 
@@ -77,7 +79,6 @@ corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 #'     results <- friedman_test(test_benchmark) 
 #' @export
 friedman_test <- function(df, measure = NULL) {
-  result <- data.frame()
   checkmate::assert_true(check_structure(df))
   checkmate::assert_true(check_names(df, measure = NULL))
   if (is.null(measure)) {
@@ -91,16 +92,16 @@ friedman_test <- function(df, measure = NULL) {
   data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
   # Friedman Test
   f_test <- scmamp::friedmanTest(data)
-  # return results 
-  result[1, "p_value"] <- f_test$p.value
-  result[1, "test"] <- "Friedman's chi-squared = "
-  result[1, "statistic"] <- f_test$statistic
+  # results 
+  result <- get_data_frame_htest_small(p_value = f_test$p.value, 
+    test = "Friedman's chi-squared = ", statistic = f_test$statistic)
   output <- get_results_htest(measure = measure, method = f_test$method, 
     data = result)
   class(output) <- "h_test_small"
   return(output)
 }
-
+# results <- friedman_test(test_benchmark) 
+# results
 
 #' @title Wilcoxon signed-rank test 
 #' @description 
@@ -147,10 +148,10 @@ wilcoxon_signed_test <- function(df, problem, baseline, algorithm = NULL,
     y <- df[df[["problem"]] == problem & df[["algorithm"]] == k, measure]
     # Wilcoxon signed rank test
     w_test <- scmamp::wilcoxonSignedTest(x, y)
-    # return results 
-    result[k, "p_value"] <- w_test$p.value
-    result[k, "test"] <- "t = "
-    result[k, "statistic"] <- w_test$statistic
+    # results
+    result_test <- get_data_frame_htest(k = k, p_value = w_test$p.value, 
+      test = "t = ", statistic = w_test$statistic)
+    result <- rbind(result, result_test)
   }
   output <- get_results_htest(baseline = baseline, measure = measure, 
     method = w_test$method, data = result)
@@ -158,3 +159,6 @@ wilcoxon_signed_test <- function(df, problem, baseline, algorithm = NULL,
   return(output)
 }
 
+# results <- wilcoxon_signed_test(df = test_benchmark, baseline = "algo_1",
+#                                 problem = "problem_a") 
+# results

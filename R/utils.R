@@ -161,15 +161,39 @@ get_data_frame <- function(k, left, rope, right) {
 #' @param repls Number of replications used until a decision is made. 
 #' @return List. 
 get_data_frame_seq <- function(k, left, rope, right, repls) {
-result <- data.frame()
-result[k, "algorithm"] <- k
-result[k, "left"] <- left
-result[k, "rope"] <- rope
-result[k, "right"] <- right
-result[k, "repls"] <- repls
-return(result)
+  result <- data.frame()
+  result[k, "algorithm"] <- k
+  result[k, "left"] <- left
+  result[k, "rope"] <- rope
+  result[k, "right"] <- right
+  result[k, "repls"] <- repls
+  return(result)
 }
 
+#' @title Get test results (for frequentist tests)
+#' @description This function collects the part of the results shown in the data 
+#'     frame. 
+#' @param p_value
+#' @param test
+#' @param statistic
+#' @return List. 
+get_data_frame_htest <- function(k, p_value, test, statistic) {
+  result <- data.frame()
+  result[k, "algorithm"] <- k
+  result[k, "p_value"] <- p_value
+  result[k, "test"] <- test
+  result[k, "statistic"] <- statistic
+  return(result)
+}
+
+
+get_data_frame_htest_small <- function(p_value, test, statistic) {
+  result <- data.frame()
+  result[1, "p_value"] <- p_value
+  result[1, "test"] <- test
+  result[1, "statistic"] <- statistic
+  return(result)
+}
 
 #' @title Get extras from tests (for tests from scmamp)
 #' @description This function collects additional information from the test 
@@ -183,3 +207,5 @@ get_extras_scmamp <- function(x, ...) {
                  x$additional$posterior.sd)
   return(extras)
 }
+
+
