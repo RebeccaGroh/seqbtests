@@ -85,14 +85,17 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
       if (is.null(compare)) {compare <- "better"}
       if (compare == "better") { 
         threshold <- b_test$posterior.probabilities[1]
+        threshold_vv <- b_test$posterior.probabilities[3]
       } else if (compare == "equal") {
         threshold <- b_test$posterior.probabilities[2] + 
           b_test$posterior.probabilities[1]
+        threshold_vv <- b_test$posterior.probabilities[2] + 
+          b_test$posterior.probabilities[3]
       } 
       if (is.null(prob)) {
         prob <- 0.95
       }
-      if (threshold > prob) {
+      if (threshold > prob | threshold_vv > prob) {
         result[k, "significanct"] <- TRUE
       } else {
         result[k, "significanct"] <- FALSE
@@ -110,10 +113,10 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
   return(output)
 }
 
-# results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-#                              problem = "problem_a", baseline = "algo_1", 
-#                              compare = "equal", max_repls = 10, min_num = 2)
-# results
+results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+                             problem = "problem_a", baseline = "algo_1",
+                             compare = "equal", max_repls = 10, min_num = 5)
+results
 
 #' @title Sequential Bayesian Sign test 
 #' @description 
@@ -224,14 +227,17 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
       if (is.null(compare)) {compare <- "better"}
       if (compare == "better") { 
         threshold <- b_sign$probabilities[1]
+        threshold_vv <- b_sign$probabilities[3]
       } else if (compare == "equal") {
         threshold <- b_sign$probabilities[2] + 
           b_sign$probabilities[1]
+        threshold_vv <- b_sign$probabilities[2] + 
+          b_sign$probabilities[3]
       } 
       if (is.null(prob)) {
         prob <- 0.95
       }
-      if (threshold > prob) {
+      if (threshold > prob | threshold_vv > prob) {
         result[k, "significanct"] <- TRUE
       } else {
         result[k, "significanct"] <- FALSE
@@ -360,14 +366,17 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
       if (is.null(compare)) {compare <- "better"}
       if (compare == "better") { 
         threshold <- b_signed_rank$probabilities[1]
+        threshold_vv <- b_signed_rank$probabilities[3]
       } else if (compare == "equal") {
         threshold <- b_signed_rank$probabilities[2] + 
           b_signed_rank$probabilities[1]
+        threshold_vv <- b_signed_rank$probabilities[2] + 
+          b_signed_rank$probabilities[3]
       } 
       if (is.null(prob)) {
         prob <- 0.95
       }
-      if (threshold > prob) {
+      if (threshold > prob | threshold_vv > prob) {
         result[k, "significanct"] <- TRUE
       } else {
         result[k, "significanct"] <- FALSE
@@ -505,14 +514,17 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       }
       if (compare == "better") {
         threshold <- b_hierarchical$posterior.probabilities[1]
+        threshold_vv <- b_hierarchical$posterior.probabilities[3]
       } else if (compare == "equal") {
         threshold <- b_hierarchical$posterior.probabilities[2] +
           b_hierarchical$posterior.probabilities[1]
+        threshold_vv <- b_hierarchical$posterior.probabilities[2] +
+          b_hierarchical$posterior.probabilities[3]
       }
       if (is.null(prob)) {
         prob <- 0.95
       }
-      if (threshold > prob) {
+      if (threshold > prob | threshold_vv > prob) {
         result[k, "significanct"] <- TRUE
       } else {
         result[k, "significanct"] <- FALSE

@@ -140,14 +140,46 @@ get_results_htest <- function(baseline = NULL, method, measure, data = NULL,
 #' @param left  
 #' @param rope 
 #' @param right 
+#' @return List. 
+get_data_frame <- function(k, left, rope, right) {
+  result <- data.frame()
+  result[k, "algorithm"] <- k
+  result[k, "left"] <- left
+  result[k, "rope"] <- rope
+  result[k, "right"] <- right
+  return(result)
+}
+
+
+#' @title Get test results (for sequential tests)
+#' @description This function collects the part of the results shown in the data 
+#'     frame. 
+#' @param algorithm   
+#' @param left  
+#' @param rope 
+#' @param right 
 #' @param repls Number of replications used until a decision is made. 
 #' @return List. 
-# get_data_frame <- function(k, left, rope, right, repls = NULL) {
-#   output[k, "algorithm"] <- k
-#   output[k, "left"] <- left 
-#   output[k, "rope"] <- rope
-#   output[k, "right"] <- right
-#   output[k, "replications"] <- repls 
-#   return(output)
-# }
-# 
+get_data_frame_seq <- function(k, left, rope, right, repls) {
+result <- data.frame()
+result[k, "algorithm"] <- k
+result[k, "left"] <- left
+result[k, "rope"] <- rope
+result[k, "right"] <- right
+result[k, "repls"] <- repls
+return(result)
+}
+
+
+#' @title Get extras from tests (for tests from scmamp)
+#' @description This function collects additional information from the test 
+#'     summed up as "extras". 
+#' @param x result of test in function. 
+#' @return list. 
+get_extras_scmamp <- function(x, ...) {
+  extras <- list(x$additional, x$approximate, x$parameters, x$posterior,
+                 x$additional$pposterior, x$additional$qposterior, 
+                 x$additional$posterior.df, x$additional$posterior.mean, 
+                 x$additional$posterior.sd)
+  return(extras)
+}

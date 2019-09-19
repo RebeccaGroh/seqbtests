@@ -1,7 +1,10 @@
+
+
 b_corr_t_test <- function(df, problem, baseline, algorithm = NULL, 
                           measure = NULL, compare = NULL, rho = 0.1, 
                           rope = c(-0.01, 0.01), prob = 0.95) {
   part_result <- data.frame()
+  result_bind <- data.frame()
   checkmate::assert_true(check_structure(df))
   checkmate::assert_true(check_names(df, problem, baseline, 
                                      algorithm = NULL, measure = NULL))
@@ -21,10 +24,10 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
     # Bayesian correlated t Test
     b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
     # results
-    results_test <- get_data_frame(k = k, left = b_corr$posterior.probabilities[1], 
+    result_test <- get_data_frame(k = k, left = b_corr$posterior.probabilities[1], 
                              rope = b_corr$posterior.probabilities[2], 
                              right = b_corr$posterior.probabilities[3])
-    result_b <- rbind(result_b, results_test)
+    result_bind <- rbind(result_bind, result_test)
     if (is.null(compare)) {compare <- "better"}
     if (compare == "better") { 
       threshold <- b_corr$posterior.probabilities[1]
@@ -44,31 +47,16 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
       part_result[k, "significant"] <- FALSE
     }
   }
-  result <- cbind(result_b, part_result)
+  result <- cbind(result_bind, part_result)
   output <- get_results(baseline, measure, method = b_corr$method, 
                         data = result, 
-                        extra = list(b_corr$additional, 
-                                     b_corr$approximate, 
-                                     b_corr$parameters, 
-                                     b_corr$posterior, 
-                                     b_corr$additional$pposterior,
-                                     b_corr$additional$qposterior,
-                                     b_corr$additional$posterior.df,
-                                     b_corr$additional$posterior.mean,
-                                     b_corr$additional$posterior.sd))
+                        extra = get_extras_scmamp(b_corr))
   return(output)
 }
 
-results_test <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
+results_test <- b_corr_t_test(df= test_benchmark_small, problem = "problem_b",
                        baseline = "algo_1")
 results_test
 
 
-get_data_frame <- function(k, left, rope, right) {
-  result_b <- data.frame()
-  result_b[k, "algorithm"] <- k
-  result_b[k, "left"] <- left
-  result_b[k, "rope"] <- rope
-  result_b[k, "right"] <- right
-  return(result_b)
-}
+
