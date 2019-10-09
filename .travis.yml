@@ -9,8 +9,11 @@ r:
   - devel
   
   
-  
-  
+r_github_packages: 
+  - JacintoCC/rNPBST
+bioc_packages:
+  - Rgraphviz
+  - graph  
 
 
 #script:
