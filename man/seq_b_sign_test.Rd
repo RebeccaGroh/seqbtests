@@ -5,10 +5,9 @@
 \title{Sequential Bayesian Sign test}
 \usage{
 seq_b_sign_test(problem = NULL, baseline, algorithm = NULL,
-  measure = NULL, compare = NULL, s = 1, z_0 = 0,
-  weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05,
-  rope = c(-0.01, 0.01), max_repls = 20, prob = 0.95, min_num = 5,
-  ...)
+  measure = NULL, compare = NULL, s = 1, z_0 = 0, rope = c(-0.01,
+  0.01), weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05,
+  max_repls = 20, prob = 0.95, min_num = 5, ...)
 }
 \arguments{
 \item{problem}{Problem set on which the test should be performed.}
@@ -28,11 +27,11 @@ algorithms. If not defined, the default is to test for 'better'.}
 
 \item{z_0}{Prior pseudo-observation.}
 
+\item{rope}{Region of practical equivalence.}
+
 \item{weights}{A-priori weights.}
 
 \item{mc_samples}{Number of samples of the distribution.}
-
-\item{rope}{Region of practical equivalence.}
 
 \item{max_repls}{Maximum number of replications that should be build in 
 get_replications. Or maximum number of replications in data frame, if 

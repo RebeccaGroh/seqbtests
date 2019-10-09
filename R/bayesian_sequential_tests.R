@@ -51,7 +51,7 @@
 seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL, 
   measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01), 
   max_repls = 20, prob = 0.95, min_num = 5, ...) {
-  result = data.frame()
+  result <- data.frame()
   for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
@@ -68,55 +68,39 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
     if (i == min_num) {
       liste <- c()
     }
-    algorithms <- setdiff(algorithms, liste)
     if (!is.null(algorithm)) {
       algorithms <- algorithm
     }
+    algorithms <- setdiff(algorithms, liste)
     for (k in algorithms[algorithms != baseline]) {
       y <- data[data[["problem"]] == problem 
         & data[["algorithm"]] == k, measure]
       # Bayesian correlated t Test
       b_test <- scmamp::bCorrelatedTtest(x, y, rho, rope)
-      result[k, "algorithm"] <- k
-      result[k, "left"] <- b_test$posterior.probabilities[1]
-      result[k, "rope"] <- b_test$posterior.probabilities[2]
-      result[k, "right"] <- b_test$posterior.probabilities[3]
-      result[k, "repls"] <- i
+      test_result <- get_data_frame_seq(k = k, 
+        posterior = b_test$posterior.probabilities, repls = i)
+      result <- rbind(result, test_result)
       if (is.null(compare)) {compare <- "better"}
-      if (compare == "better") { 
-        threshold <- b_test$posterior.probabilities[1]
-        threshold_vv <- b_test$posterior.probabilities[3]
-      } else if (compare == "equal") {
-        threshold <- b_test$posterior.probabilities[2] + 
-          b_test$posterior.probabilities[1]
-        threshold_vv <- b_test$posterior.probabilities[2] + 
-          b_test$posterior.probabilities[3]
-      } 
-      if (is.null(prob)) {
-        prob <- 0.95
-      }
+      threshold <- get_threshold(compare, 
+        posterior = b_test$posterior.probabilities)
+      threshold_vv <- get_threshold_vv(compare, 
+        posterior = b_test$posterior.probabilities)
       if (threshold > prob | threshold_vv > prob) {
-        result[k, "significanct"] <- TRUE
-      } else {
-        result[k, "significanct"] <- FALSE
-      }
-      liste <-  rownames(result[result[["significanct"]] == TRUE, ])
-    }
-    if (!is.null(algorithm)) {
-      if (threshold > 0.95) {
-        break 
+        liste <- rbind(liste, k)
       }
     }
   }
+  result <- get_rows(result = result)
+  result <- get_probabilities(result, compare, prob)
   output <- get_results(baseline, measure, method = b_test$method,
     data = result)
   return(output)
 }
 
-results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-                             problem = "problem_a", baseline = "algo_1",
-                             compare = "equal", max_repls = 10, min_num = 5)
-results
+# results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+#                              problem = "problem_b", baseline = "algo_1", algorithm = "algo_3",
+#                              compare = "better", max_repls = 10, min_num = 5)
+# results
 
 #' @title Sequential Bayesian Sign test 
 #' @description 
@@ -181,7 +165,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
   }
   rope.min <- rope[1]
   rope.max <- rope[2]
-  result = data.frame()
+  result <- data.frame()
   for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
@@ -196,10 +180,10 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
     if (i == min_num) {
       liste <- c()
     }
-    algorithms <- setdiff(algorithms, liste)
     if (!is.null(algorithm)) {
       algorithms <- algorithm
     }
+    algorithms <- setdiff(algorithms, liste)
     for (k in algorithms[algorithms != baseline]) {
       # define samples when testing on multiple datasets
       if (is.null(problem)) {
@@ -219,41 +203,28 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
       # Bayesian Sign Test
       b_sign <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max, 
         weights, n.samples)
-      result[k, "algorithm"] <- k
-      result[k, "left"] <- b_sign$probabilities[1]
-      result[k, "rope"] <- b_sign$probabilities[2]
-      result[k, "right"] <- b_sign$probabilities[3]
-      result[k, "repls"] <- i
+      test_result <- get_data_frame_seq(k = k, 
+        posterior = b_sign$probabilities, repls = i)
+      result <- rbind(result, test_result)
       if (is.null(compare)) {compare <- "better"}
-      if (compare == "better") { 
-        threshold <- b_sign$probabilities[1]
-        threshold_vv <- b_sign$probabilities[3]
-      } else if (compare == "equal") {
-        threshold <- b_sign$probabilities[2] + 
-          b_sign$probabilities[1]
-        threshold_vv <- b_sign$probabilities[2] + 
-          b_sign$probabilities[3]
-      } 
-      if (is.null(prob)) {
-        prob <- 0.95
-      }
+      threshold <- get_threshold(compare, posterior = b_sign$probabilities)
+      threshold_vv <- get_threshold_vv(compare, 
+        posterior = b_sign$probabilities)
       if (threshold > prob | threshold_vv > prob) {
-        result[k, "significanct"] <- TRUE
-      } else {
-        result[k, "significanct"] <- FALSE
-      }
-      liste <-  rownames(result[result[["significanct"]] == TRUE, ])
-    }
-    if (!is.null(algorithm)) {
-      if (threshold > 0.95) {
-        break 
+        liste <- rbind(liste, k)
       }
     }
   }
+  result <- get_rows(result = result)
+  result <- get_probabilities(result, compare, prob)
   output <- get_results(baseline, measure, method = b_sign$method, 
     data = result)
   return(output)
 }
+
+# results_test <- seq_b_sign_test(df = test_benchmark_small,
+#                            baseline = "algo_1", max_repls = 10)
+# results_test
 
 
 #' @title Sequential Bayesian Signed Rank test 
@@ -320,7 +291,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
   }
   rope.min <- rope[1]
   rope.max <- rope[2]
-  result = data.frame()
+  result <- data.frame()
   for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
@@ -335,10 +306,10 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
     if (i == min_num) {
       liste <- c()
     }
-    algorithms <- setdiff(algorithms, liste)
     if (!is.null(algorithm)) {
       algorithms <- algorithm
     }
+    algorithms <- setdiff(algorithms, liste)
     for (k in algorithms[algorithms != baseline]) {
       # define samples when testing on multiple datasets
       if (is.null(problem)) {
@@ -358,41 +329,29 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
       # Bayesian Sign Test
       b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, 
         rope.min, rope.max, weights, mc.samples)
-      result[k, "algorithm"] <- k
-      result[k, "left"] <- b_signed_rank$probabilities[1]
-      result[k, "rope"] <- b_signed_rank$probabilities[2]
-      result[k, "right"] <- b_signed_rank$probabilities[3]
-      result[k, "repls"] <- i
+      test_result <- get_data_frame_seq(k = k, 
+        posterior = b_signed_rank$probabilities, repls = i)
+      result <- rbind(result, test_result)
       if (is.null(compare)) {compare <- "better"}
-      if (compare == "better") { 
-        threshold <- b_signed_rank$probabilities[1]
-        threshold_vv <- b_signed_rank$probabilities[3]
-      } else if (compare == "equal") {
-        threshold <- b_signed_rank$probabilities[2] + 
-          b_signed_rank$probabilities[1]
-        threshold_vv <- b_signed_rank$probabilities[2] + 
-          b_signed_rank$probabilities[3]
-      } 
-      if (is.null(prob)) {
-        prob <- 0.95
-      }
+      threshold <- get_threshold(compare, 
+        posterior = b_signed_rank$probabilities)
+      threshold_vv <- get_threshold_vv(compare, 
+        posterior = b_signed_rank$probabilities)
       if (threshold > prob | threshold_vv > prob) {
-        result[k, "significanct"] <- TRUE
-      } else {
-        result[k, "significanct"] <- FALSE
-      }
-      liste <-  rownames(result[result[["significanct"]] == TRUE, ])
-    }
-    if (!is.null(algorithm)) {
-      if (threshold > 0.95) {
-        break 
+        liste <- rbind(liste, k)
       }
     }
   }
+  result <- get_rows(result = result)
+  result <- get_probabilities(result, compare, prob)
   output <- get_results(baseline, measure, method = b_signed_rank$method, 
     data = result)
   return(output)
 }
+
+# results <- seq_b_signed_rank_test(df = test_benchmark_small, 
+#                                   baseline = 'algo_1', max_repls = 10, compare = "equal")
+# results
 
 
 #' @title Sequential Bayesian hierarchical correlated t-test
@@ -476,7 +435,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
   alpha.upper = 5, beta.lower = 0.05, beta.upper = 0.15, nsim = 2000, 
   nchains = 8, parallel = TRUE, stan.output.file = NULL, prob = 0.95, 
   seed = as.numeric(Sys.time()), min_num = 5, ...) {
-  result = data.frame()
+  result <- data.frame()
   for (i in min_num:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
@@ -490,10 +449,10 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
     if (i == min_num) {
       liste <- c()
     }
-    algorithms <- setdiff(algorithms, liste)
     if (!is.null(algorithm)) {
       algorithms <- algorithm
     }
+    algorithms <- setdiff(algorithms, liste)
     # define samples
     x.matrix <- data_transformation(data, algo = baseline, measure)
     for (k in algorithms[algorithms != baseline]) {
@@ -504,40 +463,29 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, 
         std.upper, d0.lower, d0.upper, alpha.lower, alpha.upper, beta.lower,
         beta.upper, rope, nsim, nchains, parallel, stan.output.file, seed)
-      result[k, "algorithm"] <- k
-      result[k, "left"] <- b_hierarchical$posterior.probabilities[1]
-      result[k, "rope"] <- b_hierarchical$posterior.probabilities[2]
-      result[k, "right"] <- b_hierarchical$posterior.probabilities[3]
-      result[k, "repls"] <- i
+      test_result <- get_data_frame_seq(k = k, 
+        posterior = b_hierarchical$posterior.probabilities, repls = i)
+      result <- rbind(result, test_result)
       if (is.null(compare)) {
         compare <- "better"
       }
-      if (compare == "better") {
-        threshold <- b_hierarchical$posterior.probabilities[1]
-        threshold_vv <- b_hierarchical$posterior.probabilities[3]
-      } else if (compare == "equal") {
-        threshold <- b_hierarchical$posterior.probabilities[2] +
-          b_hierarchical$posterior.probabilities[1]
-        threshold_vv <- b_hierarchical$posterior.probabilities[2] +
-          b_hierarchical$posterior.probabilities[3]
-      }
-      if (is.null(prob)) {
-        prob <- 0.95
-      }
+      threshold <- get_threshold(compare, 
+        posterior = b_hierarchical$posterior.probabilities)
+      threshold_vv <- get_threshold_vv(compare, 
+        posterior = b_hierarchical$posterior.probabilities)
       if (threshold > prob | threshold_vv > prob) {
-        result[k, "significanct"] <- TRUE
-      } else {
-        result[k, "significanct"] <- FALSE
-      }
-      liste <- rownames(result[result[["significanct"]] == TRUE,])
-    }
-    if (!is.null(algorithm)) {
-      if (threshold > 0.95) {
-        break
+        liste <- rbind(liste, k)
       }
     }
   }
+  result <- get_rows(result = result)
+  result <- get_probabilities(result, compare, prob)
   output <- get_results(baseline, measure, method = b_hierarchical$method, 
     data = result)
   return(output)
 }
+
+
+# results <- seq_b_hierarchical_test(df = test_benchmark_small, algorithm = "algo_4",
+#                                    baseline = 'algo_1', max_repls = 10)
+# results

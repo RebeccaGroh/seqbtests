@@ -136,17 +136,15 @@ get_results_htest <- function(baseline = NULL, method, measure, data = NULL,
 #' @title Get test results (for data frame)
 #' @description This function collects the part of the results shown in the data 
 #'     frame. 
-#' @param algorithm   
-#' @param left  
-#' @param rope 
-#' @param right 
+#' @param k Algorithm tested against the baseline.       
+#' @param posterior Call for the posterior probabilities of the bayesian tests. 
 #' @return List. 
-get_data_frame <- function(k, left, rope, right) {
+get_data_frame <- function(k, posterior) {
   result <- data.frame()
   result[k, "algorithm"] <- k
-  result[k, "left"] <- left
-  result[k, "rope"] <- rope
-  result[k, "right"] <- right
+  result[k, "left"] <- posterior[1]
+  result[k, "rope"] <- posterior[2]
+  result[k, "right"] <- posterior[3]
   return(result)
 }
 
@@ -154,18 +152,16 @@ get_data_frame <- function(k, left, rope, right) {
 #' @title Get test results (for sequential tests)
 #' @description This function collects the part of the results shown in the data 
 #'     frame. 
-#' @param algorithm   
-#' @param left  
-#' @param rope 
-#' @param right 
+#' @param k algorithm tested against the baseline.    
+#' @param posterior Call for the posterior probabilities of the bayesian tests. 
 #' @param repls Number of replications used until a decision is made. 
 #' @return List. 
-get_data_frame_seq <- function(k, left, rope, right, repls) {
+get_data_frame_seq <- function(k, posterior, repls) {
   result <- data.frame()
   result[k, "algorithm"] <- k
-  result[k, "left"] <- left
-  result[k, "rope"] <- rope
-  result[k, "right"] <- right
+  result[k, "left"] <- posterior[1]
+  result[k, "rope"] <- posterior[2]
+  result[k, "right"] <- posterior[3]
   result[k, "repls"] <- repls
   return(result)
 }
@@ -173,6 +169,7 @@ get_data_frame_seq <- function(k, left, rope, right, repls) {
 #' @title Get test results (for frequentist tests)
 #' @description This function collects the part of the results shown in the data 
 #'     frame. 
+#' @param k algorithm tested against the baseline.    
 #' @param p_value
 #' @param test
 #' @param statistic
@@ -186,7 +183,13 @@ get_data_frame_htest <- function(k, p_value, test, statistic) {
   return(result)
 }
 
-
+#' @title Get test results (for frequentist tests)
+#' @description This function collects the part of the results shown in the data 
+#'     frame. Not depending on algorithms.  
+#' @param p_value
+#' @param test
+#' @param statistic
+#' @return List. 
 get_data_frame_htest_small <- function(p_value, test, statistic) {
   result <- data.frame()
   result[1, "p_value"] <- p_value
@@ -199,7 +202,7 @@ get_data_frame_htest_small <- function(p_value, test, statistic) {
 #' @description This function collects additional information from the test 
 #'     summed up as "extras". 
 #' @param x result of test in function. 
-#' @return list. 
+#' @return List. 
 get_extras_scmamp <- function(x, ...) {
   extras <- list(x$additional, x$approximate, x$parameters, x$posterior,
                  x$additional$pposterior, x$additional$qposterior, 
@@ -208,4 +211,88 @@ get_extras_scmamp <- function(x, ...) {
   return(extras)
 }
 
+#' @title Get relevant rows in data frame (for sequential tests)
+#' @description This function drops the non-final results during the sequential 
+#'     testing process. 
+#' @param result Data frame with all the results within in the tests. 
+#' @return Data frame with just the relevant rows. 
+get_rows <- function(result) {
+  sorted <- result[order(result$algorithm, -result$repls),]
+  sorted <- sorted[!duplicated(sorted$algorithm),]
+  row.names(sorted) <- NULL
+  return(sorted)
+}
 
+#' @title Get probabilities 
+#' @description This function defines the probabilities resulting from the
+#'     Bayesian tests for each algorithm that is tested against the baseline. 
+#' @param result Data frame with all the results within in the tests. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms.
+#' @param prob Probability, which the decision that the Baseline is better than 
+#'     the algorithm is based on.
+#' @return Column of result data frame. 
+get_probabilities <- function(result, compare, prob) {
+  for (i in 1:nrow(result)) {
+    if (compare == "better") {
+      threshold <- result[i, "left"]
+      threshold_vv <- result[i, "right"]
+      decision_base <- ">>"
+      decision_algo <- "<<"
+    }
+    if (compare == "equal") {
+      threshold <- result[i, "left"] + result[i, "rope"]
+      threshold_vv <- result[i, "right"] + result[i, "rope"]
+      decision_base <- ">="
+      decision_algo <- "<="
+    }
+    if (threshold > prob) {
+      result$probabilities[i] <- paste("P(Baseline", decision_base,  
+        "Algorithm) >", prob, sep = " ")
+    } else if (threshold_vv > prob) {
+      result$probabilities[i] <- paste("P(Baseline", decision_algo, 
+        "Algorithm) >", prob, sep = " ")
+    } else if (result[i, "rope"] > prob) {
+      result$probabilities[i] <- cat("P(Baseline = Algorithm) >", prob)
+    } else {
+      result$probabilities[i] <- "no decision"
+    }
+  }
+  return(result)
+}
+
+
+#' @title Get threshold 
+#' @description This function defines the threshold for making any decisions 
+#'     depending on the calculated posterior probabilities. 
+#' @param posterior Call for the posterior probabilities of the bayesian tests. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better 
+get_threshold <- function(posterior, compare) {
+  if (compare == "better") { 
+    threshold <- posterior[1]
+  } else if (compare == "equal") {
+    threshold <- posterior[2] + 
+      posterior[1]
+  }
+  return(threshold)
+}
+
+
+#' @title Get threshold vice versa 
+#' @description This function defines the threshold for making any decisions 
+#'     depending on the calculated posterior probabilities. The threshold_vv 
+#'     defines where the Algorithm is better than the baseline. 
+#' @param posterior Call for the posterior probabilities of the bayesian tests. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better 
+get_threshold_vv <- function(posterior, compare) {
+  if (compare == "better") { 
+    threshold_vv <- posterior[3]
+  } else if (compare == "equal") {
+    threshold_vv <- posterior[2] + 
+      posterior[3]
+  }
+  return(threshold_vv)
+}

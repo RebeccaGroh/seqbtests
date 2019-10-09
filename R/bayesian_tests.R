@@ -36,8 +36,7 @@
 b_corr_t_test <- function(df, problem, baseline, algorithm = NULL, 
     measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01), 
     prob = 0.95) {
-  part_result <- data.frame()
-  result_bind <- data.frame()
+  result <- data.frame()
   checkmate::assert_true(check_structure(df))
   checkmate::assert_true(check_names(df, problem, baseline, 
     algorithm = NULL, measure = NULL))
@@ -56,31 +55,12 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
     # Bayesian correlated t Test
     b_corr <- scmamp::bCorrelatedTtest(x, y, rho, rope)
     # results
-    result_test <- get_data_frame(k = k, 
-      left = b_corr$posterior.probabilities[1], 
-      rope = b_corr$posterior.probabilities[2], 
-      right = b_corr$posterior.probabilities[3])
-    result_bind <- rbind(result_bind, result_test)
-    if (is.null(compare)) {compare <- "better"}
-    if (compare == "better") { 
-      threshold <- b_corr$posterior.probabilities[1]
-      threshold_vv <- b_corr$posterior.probabilities[3]
-    } else if (compare == "equal") {
-      threshold <- b_corr$posterior.probabilities[2] + 
-        b_corr$posterior.probabilities[1]
-      threshold_vv <- b_corr$posterior.probabilities[2] + 
-        b_corr$posterior.probabilities[3]
-    } 
-    if (is.null(prob)) {
-      prob <- 0.95
-    }
-    if (threshold > prob | threshold_vv > prob) {
-      part_result[k, "significant"] <- TRUE
-    } else {
-      part_result[k, "significant"] <- FALSE
-    }
+    test_result <- get_data_frame(k = k, 
+      posterior = b_corr$posterior.probabilities)
+    result <- rbind(result, test_result)
   }
-  result <- cbind(result_bind, part_result)
+  if (is.null(compare)) {compare <- "better"}
+  result <- get_probabilities(result, compare, prob)
   output <- get_results(baseline, measure, method = b_corr$method, 
     data = result, extra = get_extras_scmamp(b_corr))
   return(output)
@@ -131,8 +111,7 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
   measure = NULL, compare = NULL, prob = 0.95, s = 1, z_0 = 0, 
   weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05, 
   rope = c(-0.01, 0.01)) {
-  part_result <- data.frame()
-  result_bind <- data.frame()
+  result <- data.frame()
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the 
       rope (min, max), but the values are not orderd. They will be swapped to 
@@ -171,32 +150,18 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
     b_sign <- rNPBST::bayesianSign.test(x, y, s, z_0, rope.min, rope.max, 
       weights, n.samples)
     # results
-    result_test <- get_data_frame(k = k, left =  b_sign$probabilities[1], 
-      rope =  b_sign$probabilities[2], right =  b_sign$probabilities[3])
-    result_bind <- rbind(result_bind, result_test)
-    if (is.null(compare)) {compare <- "better"}
-    if (compare == "better") { 
-      threshold <- b_sign$probabilities[1]
-    } else if (compare == "equal") {
-      threshold <- b_sign$probabilities[2] + 
-        b_sign$probabilities[1]
-    } 
-    if (is.null(prob)) {
-      prob <- 0.95
-    }
-    if (threshold > prob) {
-      part_result[k, "significant"] <- TRUE
-    } else {
-      part_result[k, "significant"] <- FALSE
-    }
+    test_result <- get_data_frame(k = k, posterior =  b_sign$probabilities)
+    result <- rbind(result, test_result)
   }
-  result <- cbind(result_bind, part_result)
+  if (is.null(compare)) {compare <- "better"}
+  result <- get_probabilities(result, compare, prob)
   output <- get_results(baseline, measure, method = b_sign$method, 
     data = result, extra = list(b_sign$sample))
   return(output)
 }
-# results <- b_sign_test(df= test_benchmark_small, 
-#                        problem = "problem_a", baseline = "algo_1")
+
+# results <- b_sign_test(df= test_benchmark_small,
+#                        problem = "problem_a", baseline = "algo_1", compare = "equal")
 # results
 
 #' @title Bayesian Signed Rank test 
@@ -239,8 +204,7 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
 b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
   algorithm = NULL, measure = NULL, prob = 0.95, s = 0.5, z_0 = 0, 
   weights = NULL, mc_samples = 1e+05, rope = c(-0.01, 0.01)) {
-  part_result <- data.frame()
-  result_bind <- data.frame()
+  result <- data.frame()
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
       (min, max), but the values are not orderd. They will be swapped to follow 
@@ -279,33 +243,19 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
     b_signed_rank <- rNPBST::bayesianSignedRank.test(x, y, s, z_0, 
       rope.min, rope.max, weights, mc.samples)
     # results
-    result_test <- get_data_frame(k = k, left = b_signed_rank$probabilities[1], 
-      rope = b_signed_rank$probabilities[2], 
-      right = b_signed_rank$probabilities[3])
-    result_bind <- rbind(result_bind, result_test)
-    if (is.null(compare)) {compare <- "better"}
-    if (compare == "better") { 
-      threshold <- b_signed_rank$probabilities[1]
-    } else if (compare == "equal") {
-      threshold <- b_signed_rank$probabilities[2] + 
-        b_signed_rank$probabilities[1]
-    } 
-    if (is.null(prob)) {
-      prob <- 0.95
-    }
-    if (threshold > prob) {
-      part_result[k, "significanct"] <- TRUE
-    } else {
-      part_result[k, "significanct"] <- FALSE
-    }
+    test_result <- get_data_frame(k = k, 
+      posterior = b_signed_rank$probabilities)
+    result <- rbind(result, test_result)
   }
-  result <- cbind(result_bind, part_result)
+  if (is.null(compare)) {compare <- "better"}
+  result <- get_probabilities(result, compare, prob)
   output <- get_results(baseline, measure, method = b_signed_rank$method, 
     data = result, extra = list(b_signed_rank$sample))
   return(output)
 }
+
 # results <- b_signed_rank_test(df= test_benchmark_small,
-#                               baseline = "algo_1")
+#                               baseline = "algo_1", compare = "equal")
 # results
 
 #' @title Bayesian hierarchical correlated t-test
@@ -373,8 +323,7 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
   prob = 0.95, alpha.lower = 0.5, alpha.upper = 5, beta.lower = 0.05, 
   beta.upper = 0.15, rope = c(-0.01, 0.01), nsim = 2000, parallel = TRUE, 
   stan.output.file = NULL, nchains = 8, seed = as.numeric(Sys.time())) {
-  part_result <- data.frame()
-  result_bind <- data.frame()
+  result <- data.frame()
   checkmate::assert_true(check_structure(df))
   checkmate::assert_true(check_names(df, baseline, algorithm = NULL, 
     measure = NULL, problem = NULL))
@@ -397,37 +346,18 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
         d0.lower, d0.upper, alpha.lower, alpha.upper, beta.lower, beta.upper, 
         rope, nsim, nchains, parallel, stan.output.file, seed)
     # results
-    result_test <- get_data_frame(k = k, 
-      left = b_hierarchical$posterior.probabilities[1], 
-      rope =  b_hierarchical$posterior.probabilities[2], 
-      right =  b_hierarchical$posterior.probabilities[3])
-    result_bind <- rbind(result_bind, result_test)
-    if (is.null(compare)) {compare <- "better"}
-    if (compare == "better") { 
-      threshold <- b_hierarchical$posterior.probabilities[1]
-      threshold_vv <- b_hierarchical$posterior.probabilities[3]
-    } else if (compare == "equal") {
-      threshold <- b_hierarchical$posterior.probabilities[2] + 
-        b_hierarchical$posterior.probabilities[1]
-      threshold_vv <- b_hierarchical$posterior.probabilities[2] + 
-        b_hierarchical$posterior.probabilities[3]
-    } 
-    if (is.null(prob)) {
-      prob <- 0.95
-    }
-    if (threshold > prob | threshold_vv > prob) {
-      part_result[k, "significanct"] <- TRUE
-    } else {
-      part_result[k, "significanct"] <- FALSE
-    }
+    test_result <- get_data_frame(k = k, 
+      posterior = b_hierarchical$posterior.probabilities)
+    result <- rbind(result, test_result)
   }
-  result <- cbind(result_bind, part_result)
+  if (is.null(compare)) {compare <- "better"}
+  result <- get_probabilities(result, compare, prob)
   output <- get_results(baseline, measure, method = b_hierarchical$method, 
     data = result, get_extras_scmamp(b_hierarchical))
   return(output)
 }
 
-results <- b_hierarchical_test(df= test_benchmark_small,
-                               baseline = "algo_1", rho=0.1,
-                               rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
-results
+# results <- b_hierarchical_test(df= test_benchmark_small,
+#                                baseline = "algo_1", rho=0.1,
+#                                rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
+# results

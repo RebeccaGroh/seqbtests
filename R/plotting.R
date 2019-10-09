@@ -10,7 +10,7 @@
 #'     plot_densities(test_benchmark_small)
 #' @export
 plot_densities <- function(df, measure = NULL) {
-  requireNamespace(ggplot2)
+  requireNamespace("ggplot2", quietly = TRUE)
   checkmate::assert_true(check_structure(df))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
@@ -39,7 +39,7 @@ plot_densities <- function(df, measure = NULL) {
 #'     plot_boxplot(df = test_benchmark_small)
 #' @export
 plot_boxplot <- function(df, measure = NULL) {
-  requireNamespace(ggplot2)
+  requireNamespace("ggplot2", quietly = TRUE)
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   }
@@ -72,7 +72,7 @@ plot_boxplot <- function(df, measure = NULL) {
 #'     plot_cd(test_benchmark)
 #' @export
 plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
-  requireNamespace(ggplot2)
+  requireNamespace("ggplot2", quietly = TRUE)
   checkmate::assert_true(check_structure(df))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
@@ -114,7 +114,7 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
 #'     plot_posterior(results, method = "b_corr_t_test")
 #' @export
 plot_posterior <- function(results, method, points = 1000){
-  requireNamespace(ggplot2)
+  requireNamespace("ggplot2", quietly = TRUE)
   if (method == "b_corr_t_test") {
     test <- list()
     tdist.df <- as.numeric(results[["extra"]][7])

@@ -10,7 +10,7 @@ get_results_htest(baseline = NULL, method, measure, data = NULL,
 \arguments{
 \item{baseline}{Baseline algorithms that every algorithm can be compared to.}
 
-\item{method}{Bayesian test.}
+\item{method}{Frequentist test.}
 
 \item{measure}{Measure column.}
 
@@ -23,5 +23,5 @@ average rankings.}
 List.
 }
 \description{
-This function collects the results of the Bayesian tests.
+This function collects the results of the Frequentist tests.
 }
