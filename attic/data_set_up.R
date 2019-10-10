@@ -50,7 +50,7 @@ data_final <- list()
 for (datasets in problems) {
   for (start_iter in 2:10) {
     out_seq <- seq_b_corr_t_test(df = result_small, baseline = "ranger.pow_wavelet_tune", 
-                                 problem = "Adiac", max_repls = 10, min_num = start_iter)
+                                 problem = datasets, max_repls = 10, min_num = start_iter)
     out_seq$data_frame$start_iter <- start_iter
     out_seq$data_frame$problem <- datasets
     data <- rbind(data, out_seq$data_frame)
@@ -78,3 +78,50 @@ data_final
 # muss auch noch nachfragen, weil ich in dem Datensatz nur 10 Replikationen 
 # vorliegen habe statt 20 
 
+
+# Start: nur für einen Datensatz um alles aufzubauen 
+data <- list()
+for (start_iter in 2:10) {
+  out_seq <- seq_b_corr_t_test(df = result_small, baseline = "ranger.pow_wavelet_tune", 
+                               problem = "Adiac", max_repls = 10, min_num = start_iter)
+  out_seq$data_frame$start_iter <- start_iter
+  out_seq$data_frame$problem <- "Adiac"
+  data <- rbind(data, out_seq$data_frame)
+}
+data
+
+
+# Neue Spalte erstellen in der der Wert 0 ist, wenn das Ergebnis mit dem Ergebnis 
+# aus der letzten Repliaktion übereinstimmt und 1 wenn sie sich unterscheiden. 
+# In der letzten Replikation sind alle Werte bei 0 
+# zunächst Gruppen erstellen: Auf der Grundlage von "algorithm" (später kommt 
+# noch "problem" dazu.)
+# Bedingung formulieren: Innerhalb der festgelegten Gruppe, wenn probabilities 
+# gleich probabilities in der letzten Beobachtung der  Gruppe, dann erstelle 
+# data$decision = 0. Wenn sie sich unterscheiden, dann erstelle data$decision = 1. 
+# So können am Ende die falschen Entscheidungen gezählt werden. Die Anzahl der 
+# Entscheidungen wird durch die Algorithms bestimmt. 
+for (i in 1:nrow(data)) {
+  if (data$probabilities[i] == # hier muss das Ergebnis aus der letzten Replikation aufgerufen werden) {
+      data$decision == 0
+} else {
+  data$decision == 1
+  }
+}
+# für diese Gruppen muss dann die Anzahl an falschen Entscheidungen gezählt werden 
+# dann kann der Plot aufgebaut werden 
+
+# benötigt: Gruppen Variable (aber das ist eigentlich schond er Algorithmus) 
+# (später kann man über paste aus dem Algorithmus und dem Problem eine Gruppenvariable erstellen)
+# data <- data[order(data$start_iter),]
+# data_10 <- by(data, data$start_iter, tail, n=1)
+# highestd<-do.call("rbind", as.list(data_10))
+
+data$diff <- ave(data$start_iter, data$algorithm, FUN=function(x) c(0, diff(x)))
+
+
+highest<-by(hsb2.s, hsb2.s$prog, tail, n=1)
+# so kann man die letzten Replikationen bekommen und die probabilities daraus werden 
+# dann einfach wieder den anderen Daten als column hinzugefügt (dafür Datensatz 
+# reduzieren, sodass nur noch algorithm und problem da sind, weil man hierdurch 
+# alle Beobachtungen zuordnen kann)

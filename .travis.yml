@@ -8,14 +8,7 @@ r:
   - release
   - devel
   
-  
-r_github_packages: 
-  - JacintoCC/rNPBST
-bioc_packages:
-  - Rgraphviz
-  - graph  
-
-
+ 
 #script:
 #  - R CMD build . --compact-vignettes=gs+qpdf
 #  - R CMD check *tar.gz --as-cran
