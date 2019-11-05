@@ -76,3 +76,54 @@ test_that("get_results_htest returns a list", {
                           measure = "measure", data = "data"), "list")
 })
 
+# check if get_data_frame() returns list
+test_that("get_data_frame returns list", {
+  results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a", 
+                           baseline = "algo_1")
+  expect_type(results$data_frame, "list")
+})
+
+# check if get_data_frame_seq() returns list
+test_that("get_data_frame_seq returns list", {
+  results <- seq_b_corr_t_test(df= test_benchmark_small, problem = "problem_a", 
+                           baseline = "algo_1")
+  expect_type(results$data_frame, "list")
+})
+
+# check if get_data_frame_htest() returns list
+test_that("get_data_frame_htest returns list", {
+  results <- corr_t_test(df= test_benchmark_small, problem = "problem_a", 
+                         baseline = "algo_1", algorithm = "algo_2")
+  expect_type(results$data_frame, "list")
+})
+
+# check if get_data_frame_htest_small() returns list
+test_that("get_data_frame_htest_small returns list", {
+  results <- friedman_test(test_benchmark) 
+  expect_type(results$data_frame, "list")
+})
+
+# check if get_extras_scmamp() returns list 
+test_that("get_extras_scmamp returns list", {
+  results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
+    baseline = "algo_1", compare = "equal")
+  expect_type(results$extra, "list")
+})
+
+# check if get_rows() returns list 
+test_that("get_rows returns list", {
+  results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+    problem = "problem_b", baseline = "algo_1", compare = "better", 
+    max_repls = 10, min_repls = 5)
+  expect_type(results$data_frame, "list")
+})
+
+# check if get_probabilities() returns character 
+test_that("get_probabilities returns character", {
+  results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
+    problem = "problem_b", baseline = "algo_1", compare = "better", 
+    max_repls = 10, min_repls = 5)
+  expect_type(results$data_frame$probabilities, "character")
+  
+})
+

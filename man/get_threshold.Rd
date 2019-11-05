@@ -12,6 +12,9 @@ get_threshold(posterior, compare)
 \item{compare}{Defines whether the baseline should be tested for either 
 being better}
 }
+\value{
+List.
+}
 \description{
 This function defines the threshold for making any decisions 
     depending on the calculated posterior probabilities.

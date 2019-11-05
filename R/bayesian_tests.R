@@ -67,7 +67,7 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 }
 
 # results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
-#                        baseline = "algo_1")
+#                        baseline = "algo_1", compare = "equal")
 # results
 
 #' @title Bayesian Sign test 
@@ -322,7 +322,8 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
   rho = 0.1, compare = NULL, std.upper = 1000, d0.lower = NULL, d0.upper = NULL, 
   prob = 0.95, alpha.lower = 0.5, alpha.upper = 5, beta.lower = 0.05, 
   beta.upper = 0.15, rope = c(-0.01, 0.01), nsim = 2000, parallel = TRUE, 
-  stan.output.file = NULL, nchains = 8, seed = as.numeric(Sys.time())) {
+  stan.output.file = NULL, nchains = 8, seed = as.numeric(Sys.time()), 
+  adapt_delta = 0.8, max_treedepth = 10) {
   result <- data.frame()
   checkmate::assert_true(check_structure(df))
   checkmate::assert_true(check_names(df, baseline, algorithm = NULL, 
@@ -341,10 +342,10 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
     # check numbers in sample
     checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
     # Bayesian correlated t Test
-    b_hierarchical <- 
-      scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, std.upper, 
-        d0.lower, d0.upper, alpha.lower, alpha.upper, beta.lower, beta.upper, 
-        rope, nsim, nchains, parallel, stan.output.file, seed)
+    b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, 
+      std.upper, d0.lower, d0.upper, alpha.lower, alpha.upper, beta.lower, 
+      beta.upper, rope, nsim, nchains, parallel, stan.output.file, seed, 
+      control = list(adapt_delta = adapt_delta, max_treedepth = max_treedepth))
     # results
     test_result <- get_data_frame(k = k, 
       posterior = b_hierarchical$posterior.probabilities)
@@ -357,7 +358,6 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
   return(output)
 }
 
-# results <- b_hierarchical_test(df= test_benchmark_small,
-#                                baseline = "algo_1", rho=0.1,
-#                                rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
+# results <- b_hierarchical_test(df= test_benchmark_small, baseline = "algo_1",
+#   rho=0.1, rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 # results

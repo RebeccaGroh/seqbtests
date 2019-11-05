@@ -9,7 +9,8 @@ b_hierarchical_test(df, baseline, algorithm = NULL, measure = NULL,
   d0.upper = NULL, prob = 0.95, alpha.lower = 0.5, alpha.upper = 5,
   beta.lower = 0.05, beta.upper = 0.15, rope = c(-0.01, 0.01),
   nsim = 2000, parallel = TRUE, stan.output.file = NULL,
-  nchains = 8, seed = as.numeric(Sys.time()))
+  nchains = 8, seed = as.numeric(Sys.time()), adapt_delta = 0.8,
+  max_treedepth = 10)
 }
 \arguments{
 \item{df}{Input data frame.}

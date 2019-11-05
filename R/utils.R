@@ -248,13 +248,13 @@ get_probabilities <- function(result, compare, prob) {
       decision_algo <- "<="
     }
     if (threshold > prob) {
-      result$probabilities[i] <- paste("P(Baseline", decision_base,  
+      result$probabilities[i] <- paste("P(Baseline", decision_algo,  
         "Algorithm) >", prob, sep = " ")
     } else if (threshold_vv > prob) {
-      result$probabilities[i] <- paste("P(Baseline", decision_algo, 
+      result$probabilities[i] <- paste("P(Baseline", decision_base, 
         "Algorithm) >", prob, sep = " ")
     } else if (result[i, "rope"] > prob) {
-      result$probabilities[i] <- cat("P(Baseline = Algorithm) >", prob)
+      result$probabilities[i] <- paste("P(Baseline = Algorithm) >", prob)
     } else {
       result$probabilities[i] <- "no decision"
     }
@@ -269,30 +269,19 @@ get_probabilities <- function(result, compare, prob) {
 #' @param posterior Call for the posterior probabilities of the bayesian tests. 
 #' @param compare Defines whether the baseline should be tested for either 
 #'     being better 
+#' @return List. 
 get_threshold <- function(posterior, compare) {
+  thresholds <- list()
   if (compare == "better") { 
-    threshold <- posterior[1]
+    thresholds[1] <- posterior[1]
+    thresholds[2] <- posterior[2]
+    thresholds[3] <- posterior[3]
   } else if (compare == "equal") {
-    threshold <- posterior[2] + 
+    thresholds[1] <- posterior[2] + 
       posterior[1]
-  }
-  return(threshold)
-}
-
-
-#' @title Get threshold vice versa 
-#' @description This function defines the threshold for making any decisions 
-#'     depending on the calculated posterior probabilities. The threshold_vv 
-#'     defines where the Algorithm is better than the baseline. 
-#' @param posterior Call for the posterior probabilities of the bayesian tests. 
-#' @param compare Defines whether the baseline should be tested for either 
-#'     being better 
-get_threshold_vv <- function(posterior, compare) {
-  if (compare == "better") { 
-    threshold_vv <- posterior[3]
-  } else if (compare == "equal") {
-    threshold_vv <- posterior[2] + 
+    thresholds[2] <- posterior[2]
+    thresholds[3] <- posterior[2] + 
       posterior[3]
   }
-  return(threshold_vv)
+  return(thresholds)
 }

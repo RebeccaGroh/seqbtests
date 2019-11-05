@@ -20,8 +20,8 @@ result_small <- unique(result_small)
 colnames(result_small)[colnames(result_small) == "mmce"] <- "measure_mmce"
 colnames(result_small)[colnames(result_small) == "repl"] <- "replications"
 
-View(result)
-View(result_small)
+# View(result)
+# View(result_small)
 unique(result_small$algorithm)
 # knn_dtw_tuned | ranger_none_tuned | ranger_wavelet_tuned
 # lrn.cl_feat.extract.method_tune? 
@@ -38,90 +38,126 @@ unique(result_small$algorithm)
 # Algorithmen = alle 
 # Test = Sequential Correlated t test 
 
-
 # drop NAs 
 result_small <- na_drop(df = result_small, check_var = "algorithm")
 
 problems <- unique(result_small[["problem"]])
 problems
 data <- list()
-data_final <- list()
 
-for (datasets in problems) {
+for (i in problems) {
   for (start_iter in 2:10) {
     out_seq <- seq_b_corr_t_test(df = result_small, baseline = "ranger.pow_wavelet_tune", 
-                                 problem = datasets, max_repls = 10, min_num = start_iter)
+                                 problem = i, max_repls = 10, min_repls = start_iter, prob = 0.95)
     out_seq$data_frame$start_iter <- start_iter
-    out_seq$data_frame$problem <- datasets
+    out_seq$data_frame$problem <- i
     data <- rbind(data, out_seq$data_frame)
   }
-  data_final <- rbind(data_final, data)
 }
-data_final
+# data
 ## Ergebnis nach 10 Replikationen ist das richtige! 
 ## Also muss das Ergebnis mit den vorherigen Ergebnissen verglichen werdne (für 
 ## alle Zeilen die sich nur anhand von der Anzahl an Replikationen unterscheiden)
-## 
 
-# for (start_iter in 2:10) {
-#   out_seq <- seq_b_corr_t_test(df = result_small, baseline = "ranger.pow_wavelet_tune", 
-#                                problem = "Adiac", max_repls = 10, min_num = start_iter)
-#   out_seq$data_frame$start_iter <- start_iter
-#   data <- rbind(data, out_seq$data_frame)
-# }
-# data
+## letzte Beobachtung extrahieren 
+data_10 <- subset(data, start_iter == 10, 
+                  select = c(problem, algorithm, probabilities))
+# rename column to merge 
+colnames(data_10)[colnames(data_10) == "probabilities"] <- "probabilities_10"
 
-# funktioniert, allerdings wird der Datensatz beim Loop über alle Problemsets 
-# riesig! --> in (vermutlich) allen Problemsets wird dieselbe Entscheidung 
-# getroffen, also wäre es sinnvoll sich auf ein Problemset zu konzentrieren 
-# muss ich aber wahrscheinlich absprechen 
-# muss auch noch nachfragen, weil ich in dem Datensatz nur 10 Replikationen 
-# vorliegen habe statt 20 
+# merge 
+data_new <- merge(data, data_10)
 
-
-# Start: nur für einen Datensatz um alles aufzubauen 
-data <- list()
-for (start_iter in 2:10) {
-  out_seq <- seq_b_corr_t_test(df = result_small, baseline = "ranger.pow_wavelet_tune", 
-                               problem = "Adiac", max_repls = 10, min_num = start_iter)
-  out_seq$data_frame$start_iter <- start_iter
-  out_seq$data_frame$problem <- "Adiac"
-  data <- rbind(data, out_seq$data_frame)
-}
-data
-
-
-# Neue Spalte erstellen in der der Wert 0 ist, wenn das Ergebnis mit dem Ergebnis 
-# aus der letzten Repliaktion übereinstimmt und 1 wenn sie sich unterscheiden. 
-# In der letzten Replikation sind alle Werte bei 0 
-# zunächst Gruppen erstellen: Auf der Grundlage von "algorithm" (später kommt 
-# noch "problem" dazu.)
-# Bedingung formulieren: Innerhalb der festgelegten Gruppe, wenn probabilities 
-# gleich probabilities in der letzten Beobachtung der  Gruppe, dann erstelle 
-# data$decision = 0. Wenn sie sich unterscheiden, dann erstelle data$decision = 1. 
-# So können am Ende die falschen Entscheidungen gezählt werden. Die Anzahl der 
-# Entscheidungen wird durch die Algorithms bestimmt. 
-for (i in 1:nrow(data)) {
-  if (data$probabilities[i] == # hier muss das Ergebnis aus der letzten Replikation aufgerufen werden) {
-      data$decision == 0
-} else {
-  data$decision == 1
+## compare results 
+for (i in 1:nrow(data_new)) {
+  if (identical(data_new$probabilities[i], data_new$probabilities_10[i])) {
+    data_new$decision[i] <- 0 
+  } else {
+    data_new$decision[i] <- 1
   }
 }
-# für diese Gruppen muss dann die Anzahl an falschen Entscheidungen gezählt werden 
-# dann kann der Plot aufgebaut werden 
 
-# benötigt: Gruppen Variable (aber das ist eigentlich schond er Algorithmus) 
-# (später kann man über paste aus dem Algorithmus und dem Problem eine Gruppenvariable erstellen)
-# data <- data[order(data$start_iter),]
-# data_10 <- by(data, data$start_iter, tail, n=1)
-# highestd<-do.call("rbind", as.list(data_10))
+# plot error rate per iteration ------------------------------------------------
 
-data$diff <- ave(data$start_iter, data$algorithm, FUN=function(x) c(0, diff(x)))
+errors <- list()
+for (i in data_new$start_iter) {
+  number_errors <- subset(data_new, start_iter == i, select = c(decision))
+  errors[i] <- colMeans(number_errors)
+}
+errors
+start_iter <- 1:10
+
+plot_error <- cbind(start_iter, errors)
+plot_error <- as.data.frame((plot_error))
+plot_error <- plot_error[-c(1),] 
+plot(plot_error, type="o", col="black", ylim = c(0,1), 
+  xlab = "minimum number of iterations", ylab = "error rate")
+
+# plot saved time per iteration ------------------------------------------------
 
 
-highest<-by(hsb2.s, hsb2.s$prog, tail, n=1)
-# so kann man die letzten Replikationen bekommen und die probabilities daraus werden 
-# dann einfach wieder den anderen Daten als column hinzugefügt (dafür Datensatz 
-# reduzieren, sodass nur noch algorithm und problem da sind, weil man hierdurch 
-# alle Beobachtungen zuordnen kann)
+# wie wird die gesparte Zeit definiert? --> Die volle Zeit wäre 10 Repliaktionen 
+# also ist die gesparte Zeit in jeder Reihe 10-repls 
+for (i in 1:nrow(data_new)) {
+  data_new$time[i] <- 10 - data_new$repls[i]
+}
+time_saved <- list()
+for (i in data_new$start_iter) {
+  subset_iter <- subset(data_new, start_iter == i, select = c(time))
+  time_saved[i] <- colMeans(subset_iter)/10
+}
+time_saved
+start_iter <- 1:10
+
+plot_time <- cbind(start_iter, time_saved)
+plot_time <- as.data.frame((plot_time))
+plot_time <- plot_time[-c(1),] 
+plot(plot_time, type="o", col="black", ylim = c(0,1), 
+  xlab = "minimum number of iterations", ylab = "Time saved")
+
+# Bayesian Signed Rank Test ----------------------------------------------------
+
+data <- list()
+
+for (start_iter in 2:10) {
+  out_seq <- seq_b_signed_rank_test(df = result_small, baseline = "ranger.pow_wavelet_tune", 
+                                    max_repls = 10, min_repls = start_iter, prob = 0.95)
+  out_seq$data_frame$start_iter <- start_iter
+  data <- rbind(data, out_seq$data_frame)
+}
+
+
+
+## letzte Beobachtung extrahieren 
+data_10 <- subset(data, start_iter == 10, 
+                  select = c(algorithm, probabilities))
+# rename column to merge 
+colnames(data_10)[colnames(data_10) == "probabilities"] <- "probabilities_10"
+
+# merge 
+data_new <- merge(data, data_10)
+
+## compare results 
+for (i in 1:nrow(data_new)) {
+  if (identical(data_new$probabilities[i], data_new$probabilities_10[i])) {
+    data_new$decision[i] <- 0 
+  } else {
+    data_new$decision[i] <- 1
+  }
+}
+# error rate 
+errors <- list()
+for (i in data_new$start_iter) {
+  number_errors <- subset(data_new, start_iter == i, select = c(decision))
+  errors[i] <- colMeans(number_errors)
+}
+errors
+start_iter <- 1:10
+
+test <- cbind(start_iter, errors)
+test <- as.data.frame((test))
+test <- test[-c(1),] 
+plot(test, type="o", col="black", ylim = c(0,1), 
+     xlab = "minimum number of iterations", ylab = "error rate")
+
+# es treten überhaupt keine Fehler auf weil nie eine Entscheidung getroffen wird

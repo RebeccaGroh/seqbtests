@@ -1,11 +1,18 @@
 ---
-title: "Sequential Bayesian Comparison of ML Algorithm Performances"
-output: rmarkdown::html_vignette
+title: "A Sequential Bayesian Approach for Performance Comparison of Machine Learning Algorithms"
+output: pdf_document
 vignette: >
   %\VignetteIndexEntry{introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: refs.bib
+
 ---
+
+<style>
+body {
+text-align: justify}
+</style>
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -14,229 +21,270 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r load.libraries, message=FALSE, warning=FALSE}
+```{r load.libraries, message=FALSE, warning=FALSE, include=FALSE}
 library(ggplot2)
 library(seqbtests)
 ```
 
-This Vignette is supposed to give you a short an easy introduction to the 
-seqbtest package. 
-The purpose of the package is to provide a flexible and simple to use framework 
-to evaluate the performance of benchmark results.
+
+This Vignette provides a brief and simple introduction to the `seqbtests` 
+package. The purpose of the package is to provide a flexible and easy to use 
+framework to evaluate the performance of benchmark results.
+
 
 # Introduction 
 
-This package implements different Bayesian tests to compare the performance of 
-Machine Learning Algorithms. The performance of the algorithms to be compared 
-can be built up within the packages by a function written by the user and can be
-directly compared within the tests. For this purpose, the sequential Bayesian 
-tests are provided, in which the number of generated performance values does not
-have to be fixed at the beginning. Instead, after each replication it is checked 
-whether there is a 95% probability to determine which algorithm performs better. 
-If this threshold is reached, the build-up of replications is stopped early, 
-which can result in significant time savings. These tests work either on a 
-single or multiple data sets. Further, some standard Hypothesis tests are 
-provided. 
+This package implements statistical testing in order to assess statistical 
+differences between the performances of Machine Learning (ML) algorithms for 
+classification. The package and vignette are mainly based on [@benavoli2017].
+Benavoli et al. argue against the use of null hypothesis significance testing, 
+instead they are promoting the use of Bayesian testing. The seqbtests package 
+provides both frequentist and Bayesian tests for comparison of algorithms on one 
+or multiple data sets. As a new element, the package offers a sequential 
+approach to Bayesian testing. Since, evaluation of ML algorithms with performance
+measures like classification accuracy can be quite time consuming, the approach 
+offers new possibilities to save time. After each iteration of evaluation, 
+the sequential tests compare the estimated posterior probabilities to a defined 
+threshold and stop further testing, if an decision based on the probabilities 
+can be made. The package offers the possibility to evaluate the algorithms performance, while 
+simultaneously testing the results, thus, in the case of early stopping this 
+procedure can considerably save evaluation time.  
 
+This vignette is divided in four parts. The first introduces the data structure
+that needs to be provided for testing. The second and third part respectively 
+describe the included frequentist and Bayesian tests, as well as their graphical 
+visualization. The last section introduces the sequential approach to Bayesian 
+testing.
 
 # Data structure 
 
-The data needs to be in a specific form, to be used for all tests provided in 
-this package. The following table specifies the format: 
+For all tests and additional functions that are provided in the package, the 
+data must be in a particular format. The following table shows how such a 
+data frame should look like. The specified columns are mandatory.
+
 
 | problem | algorithm | replication | measure_\* |
 |:------:|:------:|:------:|:------:|
-| character | character |  integer | numeric |
-| mandatory | mandatory |  mandatory | mandatory |
+| problem_a | algo_1 | 1 | 0.4150943 |
+| problem_a | algo_2 | 1 | 0.7240566 |
+| problem_a | algo_1 | 2 | 0.4292453 |
+| problem_a | algo_2 | 2 | 0.7240566 |
+| problem_a | algo_1 | 3 | 0.4056604 |
+| problem_a | algo_2 | 3 | 0.7476415 |
+| ... | ... | ... | ... |
 
-There is a posibility to include more than one performance measure in the data 
-with just putting for example measure_acc and measure_mse for the performance 
-measure accuracy and F1-Score. It is mandatory to include at least one measure 
-column along with one column defining the problem set the algorithms were tested 
-on and one column containing the name of the algorithms. For the sequential 
-tests further important is the replication column, with specifies the number of 
-evaluation runs. The data frame can contain more than one measure column, 
-however, for each test or plot one measure column has to be defined since it is 
-not possible to compare multiple measures at once. If no column is defined, per 
-default the first measure column in the data frame is used. 
-FOr the sake of simplicity, the data frames containingf the evaluation data are
-referred to as data frames in the following, while the data sets used to 
-evaluate the classifiers performance are referred to as problem sets. 
-The package has one further advantage, within the sequential tests, no data 
-frame needs to be predefined. Instead the package provides the function 
-get_replications(). This function calls the replications within the sequential 
-tests if a data frame is provided. If no data frame is provided the user can 
-define the function himself, so each run of performance evaluation is only 
-called when the predefined threshold that determines which algorithm works 
-better is not reached, and further evaluation needs to be done. This can save 
-the user some time if not all runs have to be done for evaluation.  
+For the sake of simplicity, in the following, the data frame containing the 
+evaluation data and used to test the algorithms against one another is 
+referred to as data frame, while the data sets used to evaluate the classifiers 
+performance are referred to as problem sets and are stored in the `problem` 
+column.
 
-To run the tests the records must not contain any NAs. If the User provides a 
-complete data frame, the package provides functions to delete groups containing
-NAs based on either algorithms or problem sets and gives out a complete data 
-frame.
+The `algorithm` column contains the names of each algorithm. `replication` 
+describes the number of replication, i.e. the iteration of performance 
+evaluation. Finally, the results of evaluation are displayed in the 
+column named `measure_*`. The data format allows to include more than one 
+performance measure in the data frame by setting a specification after 
+`measure_`. For example one can include `measure_acc` and `measure_mse` for 
+accuracy and mean squared error of the algorithms performances. However, for 
+each test or plot one specific measure column has to be defined since it is not 
+possible to  compare multiple measures at once. 
+
+The package offers the advantage that there is no need to provide a complete data set 
+when using the sequential tests. The package includes the function 
+`get_replications`, the User can define the function himself in order to build 
+the data frame.  To be able to save time when evaluating the algorithms the sequential 
+tests are built in loops. In each loop the tests calls a new iteration through 
+`get_replications` to test the algorithms performances. Each run of 
+evaluation is only called if the predefined threshold that determines if an 
+algorithm works better than the competing one is not reached, and further 
+evaluation needs to be done. Thus, if a decision based on the estimated 
+posterior probabilities can be made, the evaluation for this algorithm is 
+stopped, which can save the User a lot of time. `get_replications` by default 
+accepts a complete data frame by specifying `df`. 
+
+To run the tests the data frame must not contain any NAs. If a complete data 
+frame is used, the package provides a function to search for and delete groups 
+containing NAs based on either `algorithm` or `problem` and returns a complete 
+data frame. 
 
 
 ```{r}
 data_with_na <- test_benchmark_small
-data_with_na$measure_col[1] <- "NA" 
+data_with_na$measure_col[1] <- NA
 
 na_check(df = data_with_na, check_var = "algorithm") 
-
 ```
 
-If there are NAs in the data frame, the package provides a function to drop the
-group of rows containing NAs. "check_var" allows the user to decide rather to 
-remove the specific problem set or algorithm. FOr this purpose the na_check 
-function gives important information, as you can see whether the problem set or 
-the algorithm shows a higher NA ration, i.e. which is most likely to be removed. 
+For each value of the defined `check_var` (either `problem` or `algorithm`) 
+`na_check` shows the number and ratio of NAs in the `measure` column. To perform
+any of the tests for each problem the same number of algorithms and replications
+must be included in the data frame. Thus, when comparing the results of 
+`na_check` for `problem` and `algorithm` one can decide rather to drop the 
+specific values of either `problem` or `algorithm`. To remove one specific group
+of values the package provides the function `na_drop`. Via the same `check_var` 
+the User can specify to either drop all values containing NAs for either 
+`problem` or `algorithm`. It is sensible to select the variable that the least 
+observations are lost by.
 
 ```{r}
 complete_data <- na_drop(df = data_with_na, check_var = "algorithm")
 ```
 
-To test if the data frame already is in the right format, one can check the 
-strucutre. 
+To test if the data frame is in the right format, one can check the 
+structure with `check_structure`.  If the data provided by the User is 
+in the specified format, the function returns TRUE. If there are any problems 
+concerning the format, a corresponding error message will be issued. 
 
 ```{r}
-check_structure(test_benchmark_small)
-
+check_structure(complete_data)
 ```
 
-While the tests are run, the correct format and whether all necessary columns 
-are available is internally checked. 
+When the frequentist or Bayesian tests are run, the correct format and whether 
+all necessary columns are available is checked internally.
 
 # Statistical testing 
+
+The package provides data that show examples for performance measures of 
+different algorithms evaluated on a number of different problem sets. They are 
+used to introduce the package functions.
 
 ```{r}
 data("test_benchmark_small")
 ```
 
-The data provided in this package show examples of performance measures for 
-different algorithms evaluated on a number of different data sets. They are used
-to introduce the package functions. 
 
 # Frequentist Hypothesis tests 
 
-To assess the statistical differences between the performance measure obtained 
+To assess statistical differences between the performance measures obtained 
 by different algorithms the package provides several frequentist hypothesis 
 tests. 
 
-One can differentiate parametric and non-parametric tests. The advantage of the 
-non-parametric tests is that ni assumptions need to be done. If the assumptions 
-for the parametric tests hold those tests a more powerful, if, however, the 
-assumptions do not apply one should rather use non-parametric tests. 
+One can differentiate between parametric and non-parametric tests. The advantage 
+of non-parametric tests is that no assumptions need to be done. If the 
+assumptions for the parametric tests hold, those tests are more powerful, if, 
+however, the assumptions do not apply one should rather use non-parametric tests 
+since in this case they are more powerful.
 
 Assumptions: 
-* Every parametric test assumes that the data follows a certain distribution. 
-    Most test assume it to be a normal distribution. 
+
+* Every parametric test assumes that the data follows a certain 
+    distribution. Most test assume it to be a normal distribution. 
 * Data from multiple groups should show equal standard deviations. 
 
-
-
 Before testing the differences one should always have a further look on the 
-algorithms using the plot function `plot_densities` to visualize the 
-distribution.
+algorithms by visualizing their performance with `plot_densities`. 
 
-```{r}
+```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 plot_densities(test_benchmark_small)
 ```
 
-The function plots the density of all algorithms performance in the considered 
-data frame. As an argument the user has to define the data frame, and if the 
-data contain more than one measure column the user should define which column 
-to use. On the basis of the denisties one can already determine whether each 
-algorithm is likely to have a normal distribution. 
+The function plots the density of all algorithms performances in the considered 
+data frame. As an argument the User has to define the data frame (`df`). If the 
+data frame contains more than one measure column the User should define which 
+column to use (per default the first column is used). Based on the densities one 
+can already determine whether an algorithm is likely to be normal distributed. 
 
-To investigate the mean performance measure of the algorithms, the User can take 
-a look at the boxplots. 
+For further visualization of the data the mean performance of the algorithms can 
+be observed using the function `plot_boxplot`.
 
-```{r} 
- plot_boxplot(df = test_benchmark_small)
+```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
+plot_boxplot(df = test_benchmark_small)
 ```
 
-The box plots show the mean performance of the algorithms across all problem 
-sets in the data frame. Here you can easily see if there are strong outliers. 
+The box plots show the mean performances of the algorithms across all problem 
+sets in the data frame. Thus, it's easy to observe strong outliers. 
 
-The frequentist hypothesis tests test for statistiacal differences among the 
-algorithms in a data frame. The null hypothesis in doing so is that there are 
-no differences among the algorithms, thus all algorithm score the same 
-performance. 
+After the visualization, statistical differences in the performances of the 
+algorithms can be tested by three frequentist tests implemented in the package, 
+namely, the correlated t test and the non-parametric Friedman and Wilcoxon
+Signed Ranks test. The null hypothesis for these tests states that there are no 
+differences among the algorithms, thus all algorithm score the same performance.
 
-The package implements three different tests for statistical differnences 
-namely, the correlated t-test and the non-parametric Friedman test and Wilcoxon 
-Signed Ranks test. 
 
-## Correlated t-test 
+## Correlated t test 
 
-The correlated t-test is an extension of the usual t-test that takes into 
-account that the performance of the algorithms is evaluated with overlapping 
-trainingssets. It is used for the analysis of performance results on a single 
-data set, while it accounts for correlation. 
+The correlated t test is an extension of the common t test that additionally takes into 
+account that the algorithms performances are evaluated on overlapping trainings 
+sets and are therefore correlated. It is used for the analysis of performance 
+results on a single problem set.
 
 ```{r}
 results_corr <- corr_t_test(df= test_benchmark_small, problem = "problem_a", 
-                       baseline = "algo_1", algorithm = "algo_2")
-
+  baseline = "algo_1", algorithm = "algo_3")
 ```
 
-The common practice in frequentict hypothesis testing is to declare a 
-significance level of p <= 0.05. If the p-value is below this threshold the 
-accuracy is significantly different on that problem set. 
+```{r, include = FALSE}
+results_corr
+```
 
-If no algorithm for comparing is defined, the baseline is tested against all 
-algorithms in the data frame. Note that one has to take the multiple testing 
-problem in account for the frequentist hypothesis tests and may correct the 
-significance levlel via Bonferroni correction or other correctiom procedures. 
+The common practice in frequentist hypothesis testing is to assume a 
+significance level of $\alpha = 0.05$. If the calculated p-value is below this 
+threshold ($p \le \alpha$) the accuracy of the considered algorithms is 
+significantly different in the specific problem set and the null hypothesis can 
+be rejected.
+
+For the test a baseline algorithm needs to be defined (`baseline`). The baseline
+is tested either against another defined algorithm (`algorithm`) or, if no 
+`algorithm` is defined, against all other algorithms in the data frame. Note 
+that, for the frequentist hypothesis tests, one has to take multiple testing 
+problems into account and may adjust the significance level via correction 
+procedures such as Bonferroni correction. 
+
 
 ## Wilcoxon Signed Ranks test 
 
 The Wilcoxon Signed Ranks test is recommended by Demsar [see @demsar2006] 
-for the comaprison of two classifiers on a single data set. It is a 
-non-parametric test that ranks and compares the performances of two classifiers. 
+for the comparison of two classifiers on multiple problem sets. It is a 
+non-parametric test that ranks and compares the performances of two classifiers.
 
 ```{r}
 results_wilcoxon <-  wilcoxon_signed_test(df = test_benchmark, 
-                                          baseline = "algo_1", 
-                                          algorithm = "algo_2", 
-                                          problem = "problem_a")  
+  baseline = "algo_1", algorithm = "algo_2", problem = "problem_a")  
 ```
 
-The Null-Hypothesis states that the algorithms performances on the problem set 
-are the same. If the p-value is smaller than 0.05 the Null-Hypothesis can be 
-rejected, i.e. there are significant differences among the compared algorithms. 
+```{r, include = FALSE}
+results_wilcoxon
+```
+
+The null hypothesis states that the algorithms performances on the considered 
+problem set are the same. If the computed p-value is smaller than 0.05 the 
+null hypothesis can be rejected, i.e. there are significant differences among 
+the compared algorithms. 
 
 ## Friedman test 
 
-The Friedman test is a non-parametric test that checks for differences among 
-the algorithms performances. It has been recommended by Demsar [see @demsar2006] 
-together with the corresponding post-hoc tests for comparison of classifiers 
-among multiple problem sets. Therefore, it checks if there is one or more 
-algorithm that perform significantly different from the others. 
-It is the non-parametric equivalent to the ANOVA test. 
+The Friedman test is a non-parametric test that checks whether differences among the 
+algorithms appear. It has been recommended by Demsar [see @demsar2006] together 
+with the corresponding post-hoc tests for pairwise comparison of classifiers 
+among multiple problem sets. The Friedman test checks if there is one or 
+multiple algorithm that perform significantly different from the others. 
+It is the non-parametric equivalent to the ANOVA test.
+
 
 ```{r}
 results_friedman <- friedman_test(test_benchmark) 
 ```
 
-The Null-Hyothesis states that all algorithms are equal. The p-value shows if 
-the Null-Hypothesis can safely be rejected, i.e showing that there are 
-significant differences among the algorithms. In the case of Rejection one can 
-proceed wiht a post-hoc test. 
+```{r, include = FALSE}
+results_friedman
+```
 
-
+The null hypothesis states that all algorithms are equal. The p-value shows if 
+the null hypothesis can safely be rejected, i.e. revealing that there are 
+significant differences among the algorithms. In case of rejection one can 
+proceed with a post-hoc test.
 
 
 ## Post-hoc tests
  
-The post hoc tests are pairwise comparison of all algorithms. When there are 
-significant differences among the algorithms the post-hoc tests finally shows 
+The post-hoc tests are pairwise comparison of all algorithms. When there are 
+significant differences among the algorithms the post-hoc tests finally show 
 among which algorithms the differences appear. 
 
 
-If the Null-Hypothesis that states that all algorithms are significant is 
+If the null hypothesis that states that all algorithms are equal is 
 rejected one can proceed with a post-hoc test. This package provides one 
-post-hoc test the Nemenyi post-hoc test which is recommended by Demsar 
+post-hoc test, the Nemenyi post-hoc test, which is recommended by Demsar 
 [see @demsar2006]. 
 
 ### Nemenyi post-hoc test 
@@ -247,172 +295,219 @@ least the value of Critical Difference (CD) the two algorithms are significantly
 different. 
 
 ```{r}
-nemenyi_test(test_benchmark_small)
+results_nemenyi <- nemenyi_test(test_benchmark_small)
 ```
 
+```{r, include = FALSE}
+results_nemenyi
+```
 
 The performance of all algorithms can be graphically visualized via the Critical 
 Differences (CD) plots, introduced by Demsar [see @demsar2006].
 
-```{r}
+```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 plot_cd(test_benchmark_small)
 ```
 
-Algorithms that are not significantly different are connected in the plot 
+In the plot the compared algorithms are lined up according to their ranks. 
+Algorithms that do not differ significantly are connected by horizontal lines. 
 
-It is possible that the Friedman test finds significant differences the post-hoc
-tests are not able to detect. This case happens quite rarely and is due to the 
-post-hocs lower power. With this, one can only state that there are significant 
-differences between the algorithms. 
+It is possible that the Friedman test finds significant differences that 
+post-hoc tests are not able to detect. This case happens quite rarely and is due 
+to the post-hocs lower power. When this case occurs one can only state that 
+there significant differences between the algorithms appear.
+
 
 # Bayesian Testing 
 
-In the analysis of the performance of alforithms, frequentist tests have been 
-used for may years, while in other scientific fields it has been establisghed 
-for a while now that Bayesian approaches have many advantages instead. Benavoli 
-et al. [@benavoli2017] propose the use of Bayesian tests for comparing the 
-performance of machine learning algorithms. The Bayesian tests model the 
-posterior probability of the parameters and can be used to the estimate the 
-probability of three different outcomes. While the null hypothesis of the 
-frequentist tests is that there are no differences between the performances of 
-the algorithms, the Bayesina approaches provide more information. On the one 
-hand, the results are calculated for hwether the baseline is better than the 
-compare algorithm (P(Baseline >> Algorithm)), the probability that the algorithm 
-perfroms better than the Baselien (P(Baseline << Algorithm)) and additional the 
-probability that the two algorithms are practically equivalent 
-(P(Baseline = Algorithm)). While the nulll hypothesis can only be rejected in 
-the frequentist tests, Bayesian tests allow to make a statement if the posterior 
-proability of the two classifiers is practically the same. This can be achieved 
-by determining teh ROPE (Region Of Practical Equivalende). Usually two 
-algorithms are practically equivalent if the mean differences of accuracies are 
-less than 1%. 
+While in many other scientific fields a shift from frequentist tests towards 
+Bayesian testing has taken place for some time now, the analysis of 
+benchmark results is still based on null hypothesis significance testing (i.e. 
+frequentist analysis). This package is based on the paper of Benavoli et al. 
+[@benavoli2017], which proposed the use of Bayesian tests for comparing the 
+performance of machine learning algorithms instead of frequentist tests. They 
+emphasize the many advantages of the Bayesian approach:
 
-The advantages of Baysesian tests are therefore: 
-* Estimation of the posterior probability for a meaningful Null Hypothesis 
-* If the algorithms are not practically the same, one can still make sensible 
-    statements about the behaviour of the algorithms
+* Estimation of the posterior probability for a meaningful null hypothesis 
+* If the algorithms are not practically the same, one can still make 
+    sensible statements about the behavior of the algorithms
 * The posterior probabilities display both the effects magnitude and the 
     uncertainty 
-* The posterior proabilities don't depend on the sampling intentions.
+* The posterior probabilities don't depend on the sampling intentions.
 
-The Bayesian Tests provided in this package, are the tests summarized and 
-recommended in Benavoli et al. [see @benavoli2017]. Its for tests, one, the
-Bayesian correlated t-test for the comparison of two algorithms on one data set
-and three tests, namely the Bayesian Sign test, the Bayesian Signed Rank test 
-and a Bayesian hierarchical correlated t-test for testing algorithms on multiple 
-data sets. 
+While the null hypothesis of the frequentist test states that there are no differences between 
+the algorithms performances, this hypothesis can only be rejected, in Bayesian testing further 
+information is available by querying the posterior distribution. 
+The posterior distribution is calculated using a prior distribution about a 
+parameter and a likelihood model providing actual information about the given 
+parameter through the observed data. Thus, it enables to evaluate 
+probabilities of different hypothesis. One can differentiate between three 
+different probabilities: the probability that the baseline algorithms is better 
+than the compared algorithm (P(baseline >> algorithm)), the probability that the
+algorithm performs better than the baseline (P(baseline << algorithm)). 
+Additional, through the ROPE (Region of Practical Equivalence) one is able to
+tell if two algorithms are practically equivalent (P(baseline = algorithm)). 
+Usually two algorithms are practically equivalent if the mean differences of 
+accuracy are less than 1%. 
 
-## Bayesian correlated t-test 
 
-The Bayesian correlated t-test compares the performance of two competign 
-classifiers on a single problem set. It is the Bayesian counterpart for the 
-frequentist correlated t-test and thus also takes correlation due to overlapping 
-trainings data into account. As the usual correlated t-test, the Bayesian 
-counterpart is a parametric test, which assumes Gaussian distribution of the 
-data. 
-For rho is 0 the Bayesian correlated t-test and the frequentist correlated 
-t-test are numerically equivalent. Yet, the approaches inferences are different. 
-The different interpretation of the same numerical values is different and thus, 
-changes the perspectives. 
+The package provides four Bayesian tests, which have been summarized and 
+recommended in Benavoli et al. [see @benavoli2017].  The Bayesian correlated t
+test, is used for the comparison of two algorithms on one data set. 
+The other three tests, namely the Bayesian Sign test, the Bayesian Signed Rank 
+test and the Bayesian hierarchical correlated t test are used to test 
+algorithms on multiple problem sets.
+
+
+## Bayesian correlated t test 
+
+The Bayesian correlated t test compares the performance of two competing 
+classifiers on a single problem set. It is the Bayesian counterpart to the 
+frequentist correlated t test and thus takes correlation due to overlapping 
+trainings data into account. Like the frequentist test, the 
+Bayesian counterpart is a parametric test, which assumes Gaussian distribution 
+of the data. If the correlation, denoted by `rho`, is 0 the Bayesian correlated
+t test and the frequentist correlated t test are numerically equivalent. Yet, 
+the approaches inferences are different. Thus, the interpretation of the same 
+numerical values differs.
 
 ```{r}
 results_b_corr <- b_corr_t_test(df= test_benchmark_small, 
-                                problem = "problem_a", 
-                                baseline = "algo_1", algorithm = "algo_5")
+  problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 ```
 
-The correlation "rho" has to be between 0 and 1, the variance needs to be > 0. 
-The "better" column shows either TRUE, if the Baseline performs better than the 
-compared algorithm for the given threshold, or else FALSE. 
-The function returns a dataframe with the results of each comparison in one row. 
-The User can either define an algorithm, that should be tested against the 
-Baseline, if no algorithm is defined, the Baseline will be tested against all 
-Algorithms in the data frame. 
-The columns for left, rope and rigth show the posterior probabilities. The 
-column labeled "left defines the posterior probability of the differences 
-between the baseline and the compared algorithm being below the bound of the 
-rope (P(Baseline >> Algorithm)). The column "rope" determines the posterior 
-probability being inside the rope (P(Baseline = Algorithm)). Thus, the "right" 
-column shows the probability of being above the upper bound 
-(P(Baseline << Algorithm)). The column "better" indicates if the Baseline 
-performs better with a probability defined by the User (per default 95% is 
-assumed).  
+```{r, include = FALSE}
+results_b_corr
+```
 
-```{r}
+The correlation `rho` has to be between 0 and 1, the variance needs to be > 0. 
+Just as with the frequentist tests, the baseline can be tested either against a 
+specific algorithm, or against all algorithms, if no specification for 
+`algorithm` is made. The test returns a data frame with each row containing the 
+results of one comparison. The column labeled `algorithm` displays the 
+algorithms names that are tested against the baseline. The posterior 
+probabilities are shown in the columns `left`, `rope` and `right`. The column 
+labeled `left` defines the posterior probability of the mean differences of 
+accuracy being below the bound of the rope (P(baseline >> algorithm)). 
+`rope` determines the posterior probability of the 
+classifiers being practically equivalent (P(baseline = algorithm)). Thus, the 
+`right` column shows the probability of the mean differences being above the 
+upper bound (P(baseline << algorithm)). 
+
+The column `probabilities` returns the 
+decisions that can be made based on the posterior probabilities. The decisions 
+are made according to the probability (`prob`) defined by the User (per default 
+95% is assumed). They also depend on whether the User has determined that the 
+algorithms should be tested to perform either better than or at least as good as
+the other. This can be defined via the argument `compare` by specifying either 
+`better` or `equal`. This is especially important when it comes to comparing two
+almost similar algorithms, which differ in their computational effort. In this 
+case it can often be helpful to know that the computationally less complex 
+algorithm performs at least as well as the other one. If no decision could be 
+made the column states `no decision` for the specific algorithm.
+
+
+The posterior probability can be plotted by the function `plot_posterior`. 
+It is a graphically visualization of the test results. 
+
+```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 plot_posterior(results_b_corr, method = "b_corr_t_test")
 ```
 
-The posterior probability can be plotted with the function "plot_posterior". It
-is a graphically visualization of the results. For the plot function two 
-arguments need to be defined. First the results that should be visualized. 
-Although the test allow to compare multiple algorithms against the Baseline, for 
-the plot function, the algorithm needs to be defined. The second argument is the 
-test that is performed via "method".
-The plot visualtizes the posterior probabilities, as well as the ROPE. 
-P(Baseline = Algorithm is the integral of the posterior distribution inbetween 
-the ROPE, which is defined by the twoe vertical lines. The width of the plots 
-corresponds to the uncertainty in the data. 
-If all the probability mass is inside the ROPE one can conclude that the 
-Baseline and ALgorithm are practically equivalent.  
+To plot the probabilities the User needs to define the Bayesian test that was 
+used (`method`). In addition, the test results that should be visualized needs to
+be labeled. Even though, the Bayesian tests allow the comparison of multiple 
+algorithms against the baseline, to plot the results one algorithm needs to be 
+defined. The plot visualizes the posterior probabilities, as well as the ROPE. 
+P(baseline = algorithm) is the integral of the posterior distribution in-between 
+the ROPE, which is defined by the two vertical lines. The width of the plots 
+corresponds to the uncertainty in the data. In case of high uncertainty, the 
+posterior has a larger width and encloses more parameter values. With decreasing 
+uncertainty, the plot becomes more narrow. 
+
+The probability mass that is in the interval (-$\infty$, -0.01) represents the 
+probability of algo_1 being better than algo_2. For the probability mass in the 
+interval (0.01, $\infty$) this equals the probability of algo_2 being better 
+than algo_1. The mass falling in the interval (-0.01, 0.01) can be interpreted 
+as the probability of both algorithms being practically equivalent. If all the 
+probability mass is inside the ROPE one can conclude that the Baseline and 
+compared algorithm are practically equivalent.
 
 
 ## Bayesian Sign test and Bayesian Signed Ranks test
 
 The Bayesian Sign and Signed Ranks tests compare classifiers on multiple problem 
-sets. They are based on the non-parametric frequentist counterparts the Sign and
-Wilcoxon Signed Ranks test and assume a Dirichlet Process (DP) prior. 
-Different than the correlated t-test these tests don't take the correlation into 
-account. But because of the non-parametric nature of the tests, they do not 
-assume normality of the samples mean, is robust regarding outliers and does not 
-assume commensurability.
+sets. They are respectively the Bayesian counterparts to the non-parametric Sign 
+and Wilcoxon Signed Ranks test and assume a Dirichlet Process (DP) prior. 
+Different than the Bayesian and frequentist correlated t test these tests don't 
+take correlation into account. However, due to their non-parametric nature, they do 
+not assume normality of the samples mean, are robust regarding outliers and do 
+not assume commensurability.
 
-The Bayesian Sign test is less powerful than the Bayesian Signed Rank test. 
-Since the Signed Ranks test does not only take the sign into account, but also 
+The Bayesian Sign test is less powerful than the Bayesian Signed Rank test, 
+since the Signed Ranks test does not only take the sign into account, but also 
 the size of differences. It ranks the absolute values of differences and 
-compares these ranks, while considering the signs. 
+compares these ranks, while considering the signs.
+
 
 ```{r}
 results_b_sign <- b_sign_test(df= test_benchmark_small, 
-                              problem = "problem_a", 
-                              baseline = "algo_1", algorithm = "algo_2")
+  problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 results_b_signed <- b_signed_rank_test(df= test_benchmark_small, 
-                                       baseline = "algo_1", 
-                                       algorithm = "algo_2")
+  baseline = "algo_1", algorithm = "algo_2")
 ```
 
-The graphical visualization can be called just the same way as for the 
-correlated t test via "plot_posterior" the User only needs to define the new 
-method used. 
-In this plot the posterior distributions of the probabilities are plotted for 
-"left", "rope" and "right" are displayed in a triangle plot. 
+```{r, include = FALSE}
+results_b_sign
+results_b_signed
+```
 
-```{r}
+The graphical visualization can be called the same way as for correlated 
+t tests by `plot_posterior`. 
+
+```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 plot_posterior(results_b_sign, method = "b_sign_test")
 plot_posterior(results_b_signed, method = "b_signed_rank_test")
 ```
 
+Different to the correlated t test the plot now corresponds to a large triangle, 
+which is divided in three different 
+regions. The posterior samples are represented by the cloud of points in the 
+triangle. The regions correspond to three probabilities. The bottom left region 
+matches the probability of algo_1 being more probable than rope or algo_2. The 
+region on the top corresponds to the probability of practical equivalence being
+more probable than either of the algorithms. If all the points fall in one 
+region, one can conclude that such hypothesis is true, with a probability of 
+almost 100%. 
 
-## Bayesian Hierarchical correlated t-test 
+## Bayesian Hierarchical correlated t test 
 
-The Bayesian hierarchical correlated t-test is an extension of the correlated 
-t-test that works for the compariosn of classifiers on multiple problem sets and 
-still takes correlation into account 
-```{r}
+The Bayesian hierarchical correlated t test is an extension of the correlated 
+t test that works for the comparison of classifiers on multiple problem sets and 
+still takes correlation into account. For every problem set a multivariate 
+normal distribution is assumed for the means. The aim is to estimate the mean 
+difference of accuracies on all considered problem sets. In Bayesian analysis 
+hierarchical models are particularly powerful and flexible. Computations are 
+obtained by Markov-Chain Monte Carlo sampling. 
+
+```{r, message = FALSE, warning = FALSE}
 results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
-                                            baseline = "algo_1", 
-                                            algorithm = "algo_2",  
-                                            rho=0.1, rope=c(-0.01, 0.01), 
-                                            nsim=2000,  nchains=5)
+  baseline = "algo_1", algorithm = "algo_2", rho=0.1, rope=c(-0.01, 0.01), 
+  nsim=2000,  nchains=5)
 ```
 
-The Hierarchical approach is recommende by Benavoli [@benavoli2017] over the 
+```{r, include = FALSE}
+results_b_hierarchical
+```
+
+The hierarchical approach is recommended by Benavoli [@benavoli2017] over the 
 Bayesian Signed test. Yet, it is quite time consuming, which is inconvenient if 
 the tests needs to be run often. 
 
 The graphical visualization shows a similar triangle plot as the Bayesian Sign 
-and Signed Ranks test. 
+and Signed Ranks test.
 
-```{r}
+```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 plot_posterior(results_b_hierarchical, method = "b_hierarchical_test")
 ```
 
@@ -420,69 +515,69 @@ plot_posterior(results_b_hierarchical, method = "b_hierarchical_test")
 
 # Sequential Bayesian Testing 
 
-While all the former tests have been implemented in different forms in other 
-packages, this packge is trying to otimize the process of evaluation of 
-different algorithms. 
-The procedure of assessing the algorithms performance is mostly quite time-
-consuming. To counteract this issue this package provides a sequential approach 
-for evaluating performance measure using Bayesian tests. Thereby the results of 
-the comparisons are checked after each run of evaluation of the performances. If 
-the baseline algorithm has high probability (the user can define the parameter 
-himself, by default 95% is used) to have a better performance than the compared 
-algorithm, all further testing is aborted after this run and the early results 
-are used. If all algorithms in the data frame are tested against the baseline 
-and the baseline outperforms on algorithms after a few runs, the analysis is 
-terminated for this specific algorithm, yet the procedure continues for the 
-other algorithms. 
-In this package the user has the possibility to generate each new run of 
-performance evaluation within the Bayesian tests. This works via the function 
-“get_replications” which can be used to build a data frame, where after each run
+While all the former tests have been implemented in similar forms in other 
+packages, this package is trying to optimize the process of performance 
+comparison. The procedure of assessing the algorithms performances is mostly 
+quiet time-consuming. To counteract this issue this package provides a 
+sequential approach for comparison while using Bayesian tests.
+
+Thus, the results of the comparisons are checked after each run of evaluation of 
+the performances. If the baseline has high probability (the User can 
+define the parameter himself, by default 95% is used) to have better 
+performance than the compared algorithm, all further testing is aborted after 
+this run and the prematurely results are used. If all algorithms in the data 
+frame are tested against the baseline and the baseline outperforms one algorithm
+after a few evaluations, or vice versa, the analysis is terminated for this specific algorithm,
+yet the procedure continues for the other algorithms. 
+
+Within this package the User has the possibility to generate each new run of 
+performance evaluation within the Bayesian tests. This works by the function 
+`get_replications` that can be used to build a data frame, where after each run 
 a Bayesian test is performed to check if the threshold has already been reached,
-i.e. that the Baseline performs better than the other algorithm with a 
-probability of 95%. If the User is working with an already complete data frame, 
-he does not have to use an own  function but can call the default function for 
-“get_replications”, where the complete data frame is called by the argument 
-“df =”. The “max_repls” can be used to specify the maximum number of runs that 
-should be generated. If a complete record is provided “max_repls” should 
-correspond to the number of runs in the record. 
-When customizing the test, the User also has the option to specify whether the 
-Baseline algorithm should be tested to be better or at least as good as the 
-algorithm being tested against. This can be defined via the argument "compare" 
-by specifying either "better" or "equal". This is especially important when it 
-comes to comparing two almost similar algorithms, which differ in their 
-computational effort. Here it can often be helpful to know that the 
-computationally less complex algorithm performs at least as well as the other 
-one.
-With Bayesian tests, multiple testing problems usually do not play a role. You 
-can either avoid this by multilevel analysis, like the hierarchical model. You 
-can also reduce the problem by using the rope. 
+i.e. a decision can be made corresponding to a predetermined probability. 
+
+If the User is working with an already complete data frame, he does not have to
+use an own function but can call the default function for `get_replications`. 
+Thus the complete data frame can be called by the tests argument `df`. 
+`max_repls` specifies the maximum amount of evaluations that should be 
+generated. If a complete record is provided `max_repls` should correspond to the 
+number of runs in the record. 
+
+With Bayesian tests, multiple testing problems usually do not play a role. One 
+can either avoid this through multilevel analysis, like the hierarchical model, 
+or reduce the problem by using the ROPE.  
 Extensive statistical experiments have shown that there is no early stopping 
 bias due to the sequential approach if a minimum number of replications is drawn
 before the stopping action is carried out. This minimum number is set to 5 in 
-this package after simulation studies have shown that this number is sufficient 
-to achieve valid results. However, the user can also set a minimum number 
-himself via "number_runs".
+this package, since simulation studies have shown that the number is sufficient 
+to achieve valid results. However, the User can also set a minimum number 
+himself via ` min_repls `.
 
-
-```{r}
+```{r, message = FALSE, warning = FALSE}
 results_seq_corr <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-                             problem = "problem_a", baseline = "algo_1", 
-                             compare = "equal", max_repls = 10)
+  problem = "problem_a", baseline = "algo_1", compare = "equal", max_repls = 10)
+
 results_seq_sign <- seq_b_sign_test(df = test_benchmark_small, 
-                                    baseline = "algo_1", max_repls = 10)
+  baseline = "algo_1", max_repls = 10)
+
 results_seq_ranks <- seq_b_signed_rank_test(df = test_benchmark_small,
-                                            baseline = 'algo_1', max_repls = 10)
+  baseline = 'algo_1', max_repls = 10)
+
 results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
-                                        baseline = 'algo_1', max_repls = 10)
-
-
+  baseline = 'algo_1', max_repls = 10)
 ```
 
-For further information regarding the sequential bayesian tests see Groh 
-[@groh2019]. 
+```{r, include = FALSE}
+results_seq_corr
+results_seq_sign
+results_seq_ranks
+results_seq_hierarchical
+```
 
+The results of the sequential tests are structured and can be interpreted the 
+same way as the non-sequential tests. The output also specifies the 
+number of replications that were considered. If no decision concerning the 
+probabilities could be made, the replications were examined up to `max_repls`.
 
- kann man vielleicht noch irgendwo einfügen 
-Measure --> measuring the classification accuracy, precision/recall, mean 
-squared eroor or further. Samplign method annd measures used for evaluating the 
-performance are not that relevant for the package.  
+# References
+

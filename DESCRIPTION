@@ -2,7 +2,7 @@ Package: seqbtests
 Type: Package
 Title: Sequential Bayesian Comparison of ML Algorithm Performances
 Version: 0.1.0
-Author: person("Rebecca", "Groh", email = "rebeccagroh@hotmail.de",
+Authors@R: person("Rebecca", "Groh", email = "rebeccagroh@hotmail.de",
                   role = c("aut", "cre"))
 Description: This package implements different Bayesian tests to compare the 
     performance of Machine Learning Algorithms. The performance of the 
@@ -25,13 +25,11 @@ Imports:
     ggplot2,
     metRology,
     remotes,
-    rNPBST,
     rstan,
-    scmamp,
-    tidyr
+    tidyr, 
+    tidyverse
 Suggests: 
     testthat (>= 2.1.0),
-    devtools,
     knitr,
     rmarkdown,
     roxygen2
@@ -39,6 +37,7 @@ RoxygenNote: 6.1.1
 Remotes: 
     bioc::3.8/graph, 
     bioc::3.8/Rgraphviz,
+    b0rxa/scmamp,
     JacintoCC/rNPBST
 VignetteBuilder: 
     knitr

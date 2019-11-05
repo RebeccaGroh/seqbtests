@@ -1,4 +1,4 @@
-#' @title Plot Posterior 
+#' @title Plot Posterior.
 #' @description Plot of the projection of 3-simplex points of a posterior 
 #'     Dirichlet distribution into a 2D triangle. The function is used from the 
 #'     package rNPBST. Since it is a numeric function, the code was copied for

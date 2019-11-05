@@ -86,3 +86,4 @@ friedman_post <- function(df, measure = NULL, control = NULL) {
   class(output) <- "h_test_small"
   return(output)
 }
+

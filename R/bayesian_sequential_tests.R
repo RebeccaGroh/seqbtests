@@ -21,7 +21,7 @@
 #' @param rope Region of practical equivalence.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is 0.95. 
-#'  @param min_num The minimum number of replications that is either generated 
+#'  @param min_repls The minimum number of replications that is either generated 
 #'      or used to perform the first Bayesian test in the sequential approach. 
 #'      To prevent an bias through early stopping a minimum number of 5 runs 
 #'      (default) is recommended. 
@@ -50,9 +50,9 @@
 #' @export
 seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL, 
   measure = NULL, compare = NULL, rho = 0.1, rope = c(-0.01, 0.01), 
-  max_repls = 20, prob = 0.95, min_num = 5, ...) {
+  max_repls = 20, prob = 0.95, min_repls = 5, ...) {
   result <- data.frame()
-  for (i in min_num:max_repls) {
+  for (i in min_repls:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
@@ -65,7 +65,7 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
     x <- data[data[["problem"]] == problem 
       & data[["algorithm"]] == baseline, measure]
     algorithms <- unique(data[["algorithm"]])
-    if (i == min_num) {
+    if (i == min_repls) {
       liste <- c()
     }
     if (!is.null(algorithm)) {
@@ -81,11 +81,9 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
         posterior = b_test$posterior.probabilities, repls = i)
       result <- rbind(result, test_result)
       if (is.null(compare)) {compare <- "better"}
-      threshold <- get_threshold(compare, 
+      thresholds <- get_threshold(compare = compare, 
         posterior = b_test$posterior.probabilities)
-      threshold_vv <- get_threshold_vv(compare, 
-        posterior = b_test$posterior.probabilities)
-      if (threshold > prob | threshold_vv > prob) {
+      if (thresholds[1] > prob | thresholds[2] > prob | thresholds[3] > prob) {
         liste <- rbind(liste, k)
       }
     }
@@ -98,8 +96,8 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 }
 
 # results <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
-#                              problem = "problem_b", baseline = "algo_1", algorithm = "algo_3",
-#                              compare = "better", max_repls = 10, min_num = 5)
+#                              problem = "problem_b", baseline = "algo_1",
+#                              compare = "better", max_repls = 10, min_repls = 5)
 # results
 
 #' @title Sequential Bayesian Sign test 
@@ -129,7 +127,7 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is 0.95. 
-#'  @param min_num The minimum number of replications that is either generated 
+#'  @param min_repls The minimum number of replications that is either generated 
 #'      or used to perform the first Bayesian test in the sequential approach. 
 #'      To prevent an bias through early stopping a minimum number of 5 runs 
 #'      (default) is recommended. 
@@ -156,7 +154,7 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL, 
   measure = NULL, compare = NULL, s = 1, z_0 = 0, rope = c(-0.01, 0.01),
   weights = c(s/2, rep(1, length(x))), mc_samples = 1e+05, max_repls = 20, 
-  prob = 0.95, min_num = 5, ...) {
+  prob = 0.95, min_repls = 5, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
       (min, max), but the values are not orderd. They will be swapped to follow 
@@ -166,7 +164,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
   rope.min <- rope[1]
   rope.max <- rope[2]
   result <- data.frame()
-  for (i in min_num:max_repls) {
+  for (i in min_repls:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
@@ -177,7 +175,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
     }
     ## alle "algorithm" mit k ersetzen? 
     algorithms <- unique(data[["algorithm"]])
-    if (i == min_num) {
+    if (i == min_repls) {
       liste <- c()
     }
     if (!is.null(algorithm)) {
@@ -207,10 +205,9 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
         posterior = b_sign$probabilities, repls = i)
       result <- rbind(result, test_result)
       if (is.null(compare)) {compare <- "better"}
-      threshold <- get_threshold(compare, posterior = b_sign$probabilities)
-      threshold_vv <- get_threshold_vv(compare, 
+      thresholds <- get_threshold(compare = compare, 
         posterior = b_sign$probabilities)
-      if (threshold > prob | threshold_vv > prob) {
+      if (thresholds[1] > prob | thresholds[2] > prob | thresholds[3] > prob) {
         liste <- rbind(liste, k)
       }
     }
@@ -255,7 +252,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is 0.95. 
-#'  @param min_num The minimum number of replications that is either generated 
+#'  @param min_repls The minimum number of replications that is either generated 
 #'      or used to perform the first Bayesian test in the sequential approach. 
 #'      To prevent an bias through early stopping a minimum number of 5 runs 
 #'      (default) is recommended. 
@@ -282,7 +279,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 seq_b_signed_rank_test <- function(problem = NULL, baseline, 
   algorithm = NULL, measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
   weights = NULL, mc_samples = 1e+05, rope = c(-0.01, 0.01), max_repls = 20, 
-  prob = 0.95, min_num = 5, ...) {
+  prob = 0.95, min_repls = 5, ...) {
   if (rope[2] < rope[1]) {
     warning("The rope paremeter has to contain the ordered limits of the rope 
       (min, max), but the values are not orderd. They will be swapped to follow 
@@ -292,7 +289,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
   rope.min <- rope[1]
   rope.max <- rope[2]
   result <- data.frame()
-  for (i in min_num:max_repls) {
+  for (i in min_repls:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
@@ -303,7 +300,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
     }
     ## alle "algorithm" mit k ersetzen? 
     algorithms <- unique(data[["algorithm"]])
-    if (i == min_num) {
+    if (i == min_repls) {
       liste <- c()
     }
     if (!is.null(algorithm)) {
@@ -333,11 +330,9 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
         posterior = b_signed_rank$probabilities, repls = i)
       result <- rbind(result, test_result)
       if (is.null(compare)) {compare <- "better"}
-      threshold <- get_threshold(compare, 
+      thresholds <- get_threshold(compare = compare, 
         posterior = b_signed_rank$probabilities)
-      threshold_vv <- get_threshold_vv(compare, 
-        posterior = b_signed_rank$probabilities)
-      if (threshold > prob | threshold_vv > prob) {
+      if (thresholds[1] > prob | thresholds[2] > prob | thresholds[3] > prob) {
         liste <- rbind(liste, k)
       }
     }
@@ -349,7 +344,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
   return(output)
 }
 
-# results <- seq_b_signed_rank_test(df = test_benchmark_small, 
+# results <- seq_b_signed_rank_test(df = test_benchmark_small,
 #                                   baseline = 'algo_1', max_repls = 10, compare = "equal")
 # results
 
@@ -385,7 +380,6 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #'     hyperparameter. Default value set at 0.5.
 #' @param z0 Position of the pseudo-observation associated to the prior 
 #'     Dirichlet Process. The default value is set to 0 (inside the rope).
-#' @param rope Interval for the difference considered as 'irrelevant'.
 #' @param nsim Number of samples (per chain) used to estimate the posterior 
 #'     distribution. Note that, by default, half the simulations are used for 
 #'     the burn-in.
@@ -396,7 +390,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #'     parallel.
 #' @param stan.output.file String containing the base name for the output files 
 #'     produced by Stan. If \code{NULL}, no files are stored.
-#' @param seed Optional parameter used to fix the random seed
+#' @param seed Optional parameter used to fix the random seed.
 #' @param max_repls Maximum number of replications that should be build in 
 #'     get_replications. Or maximum number of replications in data frame, if 
 #'     a data frame that has already been built is being used.  
@@ -405,7 +399,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #'     can define it with code{df}.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is 0.95. 
-#'  @param min_num The minimum number of replications that is either generated 
+#'  @param min_repls The minimum number of replications that is either generated 
 #'      or used to perform the first Bayesian test in the sequential approach. 
 #'      To prevent an bias through early stopping a minimum number of 5 runs 
 #'      (default) is recommended. 
@@ -434,9 +428,10 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
   std.upper = 1000, d0.lower = NULL, d0.upper = NULL, alpha.lower = 0.5, 
   alpha.upper = 5, beta.lower = 0.05, beta.upper = 0.15, nsim = 2000, 
   nchains = 8, parallel = TRUE, stan.output.file = NULL, prob = 0.95, 
-  seed = as.numeric(Sys.time()), min_num = 5, ...) {
+  seed = as.numeric(Sys.time()), min_repls = 5, adapt_delta = 0.8, 
+  max_treedepth = 10, ...) {
   result <- data.frame()
-  for (i in min_num:max_repls) {
+  for (i in min_repls:max_repls) {
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
@@ -446,7 +441,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       measure <- get_measure_columns(data)[1]
     }
     algorithms <- unique(data[["algorithm"]])
-    if (i == min_num) {
+    if (i == min_repls) {
       liste <- c()
     }
     if (!is.null(algorithm)) {
@@ -462,18 +457,18 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       # Bayesian correlated t Test
       b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, 
         std.upper, d0.lower, d0.upper, alpha.lower, alpha.upper, beta.lower,
-        beta.upper, rope, nsim, nchains, parallel, stan.output.file, seed)
+        beta.upper, rope, nsim, nchains, parallel, stan.output.file, seed, 
+        control = list(adapt_delta = adapt_delta, 
+          max_treedepth = max_treedepth))
       test_result <- get_data_frame_seq(k = k, 
         posterior = b_hierarchical$posterior.probabilities, repls = i)
       result <- rbind(result, test_result)
       if (is.null(compare)) {
         compare <- "better"
       }
-      threshold <- get_threshold(compare, 
+      thresholds <- get_threshold(compare = compare, 
         posterior = b_hierarchical$posterior.probabilities)
-      threshold_vv <- get_threshold_vv(compare, 
-        posterior = b_hierarchical$posterior.probabilities)
-      if (threshold > prob | threshold_vv > prob) {
+      if (thresholds[1] > prob | thresholds[2] > prob | thresholds[3] > prob) {
         liste <- rbind(liste, k)
       }
     }
@@ -485,7 +480,15 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
   return(output)
 }
 
-
-# results <- seq_b_hierarchical_test(df = test_benchmark_small, algorithm = "algo_4",
-#                                    baseline = 'algo_1', max_repls = 10)
+# results <- seq_b_hierarchical_test(df = test_benchmark_small,
+#   baseline = 'algo_1', max_repls = 10, adapt_delta = 0.9999)
 # results
+
+
+
+
+
+
+
+
+

@@ -26,7 +26,6 @@ plot_densities <- function(df, measure = NULL) {
 }
 
 
-
 #' @title Boxplot  
 #' @description This function plots the performance of every algorithm in each 
 #'     data frame in boxplots.
@@ -43,14 +42,18 @@ plot_boxplot <- function(df, measure = NULL) {
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   }
-  ggplot(df, aes_string(x = as.factor(df[["algorithm"]]), y = measure)) +
-    geom_boxplot(aes(fill = df[["algorithm"]])) + 
-    scale_fill_discrete(name="Algorithms") +
-    scale_y_continuous(name = "Measure") +
-    scale_x_discrete(name = "Algorithms") +
-    ggtitle("Boxplot of mean measure by algorithms") +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    facet_wrap(. ~ problem) 
+  ggplot2::ggplot(df, ggplot2::aes_string(x = as.factor(df[["algorithm"]]), 
+    y = measure)) +
+    ggplot2::geom_boxplot(ggplot2::aes(fill = df[["algorithm"]])) + 
+    ggplot2::scale_fill_discrete(name="Algorithms") +
+    ggplot2::scale_y_continuous(name = "Measure") +
+    ggplot2::scale_x_discrete(name = "Algorithms") +
+    ggplot2::ggtitle("Boxplot of mean measure by algorithms") +
+    ggplot2::theme(plot.title = element_text(hjust = 0.5)) +
+    ggplot2::facet_wrap(. ~ problem) +
+    theme(axis.title.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank())
 }
 
 
@@ -122,16 +125,16 @@ plot_posterior <- function(results, method, points = 1000){
     tdist.sd <- as.numeric(results$extra[9])
     ppos <- function(mu) {
       #Standarize the value and get the density
-      x <- (mu-tdist.mean)/tdist.sd
-      return(pt(x,tdist.df))
+      x <- (mu - tdist.mean)/tdist.sd
+      return(pt(x, tdist.df))
     }
     qpos <- function(q) {
-      return(qt(q,tdist.df) * tdist.sd + tdist.mean)
+      return(qt(q, tdist.df) * tdist.sd + tdist.mean)
     }
     dpos <- function(mu) {
       #Standarize the value and get the density
-      x <- (mu-tdist.mean)/tdist.sd
-      return(dt(x,tdist.df))
+      x <- (mu - tdist.mean)/tdist.sd
+      return(dt(x, tdist.df))
     }
     test[["additional"]] <- list(pposterior = ppos, 
       qposterior = qpos, posterior.df = tdist.df, posterior.mean = tdist.mean,
@@ -152,4 +155,3 @@ plot_posterior <- function(results, method, points = 1000){
     warning("Method must be correctly specified.")
   }
 }
-

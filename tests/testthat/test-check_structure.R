@@ -4,8 +4,7 @@ context("check_structure")
 # check if check_names() works correctly for test_benchmark_small 
 test_that("check_names for test_benchmark_small", {
   expect_true(check_names(test_benchmark_small, problem = "problem_a", 
-                          baseline = "algo_1", algorithm = "algo_2", 
-                          measure = "measure_col"))
+    baseline = "algo_1", algorithm = "algo_2", measure = "measure_col"))
 })
 
 # check if check_column_names() works correctly for test_benchmark 
@@ -68,16 +67,6 @@ test_that("check if paste_algo_pars returns list", {
   data <- paste_algo_pars(df = test_benchmark)
   expect_type(data, "list")
 })
-
-
-
-
-#-------------------------------------------------------------------------------
-
-
-
-
-
 
 
 

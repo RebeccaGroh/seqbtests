@@ -10,7 +10,8 @@ seq_b_hierarchical_test(baseline, algorithm = NULL, measure = NULL,
   alpha.lower = 0.5, alpha.upper = 5, beta.lower = 0.05,
   beta.upper = 0.15, nsim = 2000, nchains = 8, parallel = TRUE,
   stan.output.file = NULL, prob = 0.95,
-  seed = as.numeric(Sys.time()), min_num = 5, ...)
+  seed = as.numeric(Sys.time()), min_num = 5, adapt_delta = 0.8,
+  max_treedepth = 10, ...)
 }
 \arguments{
 \item{baseline}{First algorithm.}
@@ -30,7 +31,7 @@ algorithms. If not defined, the default is to test for 'better'.}
 get_replications. Or maximum number of replications in data frame, if 
 a data frame that has already been built is being used.}
 
-\item{rope}{Interval for the difference considered as 'irrelevant'.}
+\item{rope}{Region of practical equivalence.}
 
 \item{std.upper}{Factor to set the upper bound for both sigma_i and sigma_0.}
 
@@ -66,7 +67,7 @@ produced by Stan. If \code{NULL}, no files are stored.}
     To prevent an bias through early stopping a minimum number of 5 runs 
     (default) is recommended.}
 
-\item{seed}{Optional parameter used to fix the random seed}
+\item{seed}{Optional parameter used to fix the random seed.}
 
 \item{...}{Additional arguments. When already built dataset is used the User 
 can define it with code{df}.}
@@ -80,8 +81,6 @@ Dirichlet Process. The default value is set to 0 (inside the rope).}
 \item{nchain}{Number of MC chains to be simulated. As half the simulations 
 are used for the warm-up, the total number of simulations will 
 be \code{nchain}*\code{nsim}/2.}
-
-\item{rope}{Region of practical equivalence.}
 }
 \value{
 A list containing the following components:

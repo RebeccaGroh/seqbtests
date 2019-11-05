@@ -18,7 +18,7 @@ test_that("plot_cd creates a list", {
 # check  if plot_posterior() creates a list
 test_that("plot_posterior creates a list", {
   results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a", 
-                           baseline = "algo_1", algorithm = "algo_2")
+    baseline = "algo_1", algorithm = "algo_2")
   expect_type(plot_posterior(results, method = "b_corr_t_test"), "list")
 })
 

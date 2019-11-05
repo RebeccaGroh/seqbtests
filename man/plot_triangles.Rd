@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_plotting.R
 \name{plot_triangles}
 \alias{plot_triangles}
-\title{Plot Posterior}
+\title{Plot Posterior.}
 \usage{
 plot_triangles(x, num.points = nrow(x$sample), ...)
 }
