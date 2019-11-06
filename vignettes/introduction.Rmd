@@ -388,7 +388,7 @@ results of one comparison. The column labeled `algorithm` displays the
 algorithms names that are tested against the baseline. The posterior 
 probabilities are shown in the columns `left`, `rope` and `right`. The column 
 labeled `left` defines the posterior probability of the mean differences of 
-accuracy being below the bound of the rope (P(baseline >> algorithm)). 
+accuracy being below the bound of the ROPE (P(baseline >> algorithm)). 
 `rope` determines the posterior probability of the 
 classifiers being practically equivalent (P(baseline = algorithm)). Thus, the 
 `right` column shows the probability of the mean differences being above the 
@@ -474,7 +474,7 @@ Different to the correlated t test the plot now corresponds to a large triangle,
 which is divided in three different 
 regions. The posterior samples are represented by the cloud of points in the 
 triangle. The regions correspond to three probabilities. The bottom left region 
-matches the probability of algo_1 being more probable than rope or algo_2. The 
+matches the probability of algo_1 being more probable than ROPE or algo_2. The 
 region on the top corresponds to the probability of practical equivalence being
 more probable than either of the algorithms. If all the points fall in one 
 region, one can conclude that such hypothesis is true, with a probability of 
