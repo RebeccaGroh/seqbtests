@@ -23,4 +23,4 @@ bioc_packages:
 #  - rm -rf RTest.Rcheck
 #  - Rscript -e 'pkgdown::build_site()'
 
-install: travis_wait mvn install
+# install: travis_wait mvn install
