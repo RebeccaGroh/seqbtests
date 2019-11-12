@@ -23,16 +23,16 @@ benchmark_data$algorithm <-
   paste(benchmark_data$algorithm, benchmark_data$tune, sep = "_")
 
 # drop unnecessary variables (keep only tuned algorithms)
-benchmark_small <- subset(benchmark_data, tune == "tune", 
-  select= -c(time.queued, time.running, n, ntrain, ntest, length, nclasses, 
-    feat.extract.method, minorityclass_size, algo.type, ber, timeboth, job.id, 
-    tune, lrn.cl, algo.pars))
-
-# # drop unnecessary variables (keep all algorithms)
-# benchmark_small <- subset(benchmark_data,
+# benchmark_small <- subset(benchmark_data, tune == "tune", 
 #   select= -c(time.queued, time.running, n, ntrain, ntest, length, nclasses, 
 #     feat.extract.method, minorityclass_size, algo.type, ber, timeboth, job.id, 
 #     tune, lrn.cl, algo.pars))
+
+# # drop unnecessary variables (keep all algorithms)
+benchmark_small <- subset(benchmark_data,
+  select= -c(time.queued, time.running, n, ntrain, ntest, length, nclasses,
+    feat.extract.method, minorityclass_size, algo.type, ber, timeboth, job.id,
+    tune, lrn.cl, algo.pars))
 
 
 ## check for duplicates (drops rows that are duplicated)
@@ -44,7 +44,7 @@ colnames(benchmark_small)[colnames(benchmark_small) == "repl"] <- "replications"
 
 # drop NAs 
 benchmark_small <- na_drop(df = benchmark_small, check_var = "algorithm") 
-# 8670 obs. 
+# 27030 obs. 
 
 #------------------------------------------------------------------------------#
 # Bayesian correlated t-test ---------------------------------------------------
@@ -60,10 +60,11 @@ for (i in unique(benchmark_small$problem)) {
     b_corr_results <- rbind(b_corr_results, b_corr_out$data_frame)
   }
 }
-# 7344 obs.
+
+# 23.868 obs.
 benchmark_b_corr_results <- b_corr_results
-setwd("H:/MA/simulation_data")
-write.csv(benchmark_b_corr_results, file = "benchmark_b_corr_results.csv", row.names = FALSE)
+# setwd("H:/MA/simulation_data")
+# write.csv(benchmark_b_corr_results, file = "benchmark_b_corr_results.csv", row.names = FALSE)
 
 # Compare to ground truth ------------------------------------------------------
 ground_truth <- subset(b_corr_results, start_iter == 10, 
