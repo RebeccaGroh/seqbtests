@@ -111,7 +111,7 @@ data_transformation <- function(df, algo, measure) {
 #' @return List. 
 get_results <- function(baseline, method, measure, data = NULL, extra = NULL) {
   output <- list(baseline = baseline, method = method, measure = measure, 
-    data_frame = data, extra = extra)
+                 data_frame = data, extra = extra)
   class(output) <- "b_test"
   return(output)
 }
@@ -127,9 +127,9 @@ get_results <- function(baseline, method, measure, data = NULL, extra = NULL) {
 #'     average rankings.
 #' @return List. 
 get_results_htest <- function(baseline = NULL, method, measure, data = NULL, 
-  matrix = NULL) {
+                              matrix = NULL) {
   output <- list(baseline = baseline, method = method, measure = measure, 
-    data_frame = data, matrix = matrix)
+                 data_frame = data, matrix = matrix)
   return(output)
 }
 

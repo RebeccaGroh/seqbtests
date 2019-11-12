@@ -56,8 +56,8 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
-    checkmate::assert_true(check_names(df = data, problem, baseline, 
-      algorithm = NULL, measure = NULL))
+    checkmate::assert_true(check_names(df = data, problem, baseline, algorithm, 
+      measure))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
@@ -169,7 +169,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problem = NULL, baseline, 
-      algorithm = NULL, measure = NULL))
+      algorithm, measure))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
@@ -294,7 +294,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problem = NULL, baseline, 
-      algorithm = NULL, measure = NULL))
+      algorithm, measure))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }
@@ -435,8 +435,8 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
     data <- get_replications(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
-    checkmate::assert_true(check_names(df = data, baseline, algorithm = NULL, 
-      measure = NULL, problem = NULL))
+    checkmate::assert_true(check_names(df = data, baseline, algorithm, 
+      measure, problem = NULL))
     if (is.null(measure)) {
       measure <- get_measure_columns(data)[1]
     }

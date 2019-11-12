@@ -13,7 +13,7 @@ if (!require("devtools")) {
   install.packages("devtools")
 }
 
-install_github("RebeccaGroh/seqbtests")
+devtools::install_github("RebeccaGroh/seqbtests")
 ```
 
 ## Documentation

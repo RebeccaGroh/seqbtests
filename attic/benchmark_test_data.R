@@ -54,7 +54,7 @@ for (i in unique(benchmark_small$problem)) {
   for (start_iter in 2:10) {
     b_corr_out <- seq_b_corr_t_test(df = benchmark_small, 
       baseline = "ranger.pow_wavelet_tune", problem = i, min_repls = start_iter, 
-      prob = 0.95, max_repls = 10)
+      prob = 0.99, max_repls = 10)
     b_corr_out$data_frame$start_iter <- start_iter
     b_corr_out$data_frame$problem <- i
     b_corr_results <- rbind(b_corr_results, b_corr_out$data_frame)
@@ -108,9 +108,9 @@ start_iter <- 1:10
 plot_error <- cbind(start_iter, errors)
 plot_error <- as.data.frame((plot_error))
 plot_error <- plot_error[-c(1),] 
+par(mgp = c(2, 1, 0))
 plot(plot_error, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of iterations", ylab = "error rate", 
-  main = "Benchmark Data")
+  xlab = "minimum number of replications", ylab = "error rate")
 
 
 # plot time saved per iteration ------------------------------------------------
@@ -118,9 +118,9 @@ plot(plot_error, type="o", col="black", ylim = c(0,1),
 plot_time <- cbind(start_iter, time_saved)
 plot_time <- as.data.frame((plot_time))
 plot_time <- plot_time[-c(1),] 
+par(mgp = c(2, 1, 0))
 plot(plot_time, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of iterations", ylab = "time saved",
-  main = "Bayesian Correlated t-test")
+  xlab = "minimum number of replications", ylab = "time saving (%)")
 
 #------------------------------------------------------------------------------#
 # Bayesian Signed Ranks test ---------------------------------------------------
@@ -135,7 +135,7 @@ for (start_iter in 2:10) {
 }
 # setwd("H:/MA/simulation_data")
 # write.csv(b_signed_results, file = "b_signed_results.csv", row.names = FALSE)
-
+b_signed_results <- benchmark_b_signed_results_all_data
 # Compare to ground truth ------------------------------------------------------
 ground_truth <- subset(b_signed_results, start_iter == 10, 
   select = c(algorithm, probabilities))
@@ -161,38 +161,36 @@ for (i in 1:nrow(b_signed_comp)) {
 # (average errors over problemsets )
 par(mfrow=c(1,2))
 
+for (i in 1:nrow(b_signed_comp)) {
+  b_signed_comp$time[i] <- 10 - b_signed_comp$repls[i]
+}
+
+time_saved <- list()
 errors <- list()
 for (i in b_signed_comp$start_iter) {
   number_errors <- subset(b_signed_comp, start_iter == i, select = c(decision))
   errors[i] <- colMeans(number_errors)
+  subset_iter <- subset(b_signed_comp, start_iter == i, select = c(time))
+  time_saved[i] <- colMeans(subset_iter)/10
 }
 
 start_iter <- 1:10
 plot_error <- cbind(start_iter, errors)
 plot_error <- as.data.frame((plot_error))
 plot_error <- plot_error[-c(1),] 
+par(mgp = c(2, 1, 0))
 plot(plot_error, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of iterations", ylab = "error rate", 
-  main = "Benchmark Data")
+  xlab = "minimum number of replications", ylab = "error rate",)
 
 
 # plot time saved per iteration ------------------------------------------------
-for (i in 1:nrow(b_signed_comp)) {
-  b_signed_comp$time[i] <- 10 - b_signed_comp$repls[i]
-}
-
-time_saved <- list()
-for (i in b_signed_comp$start_iter) {
-  subset_iter <- subset(b_signed_comp, start_iter == i, select = c(time))
-  time_saved[i] <- colMeans(subset_iter)/10
-}
 
 plot_time <- cbind(start_iter, time_saved)
 plot_time <- as.data.frame((plot_time))
 plot_time <- plot_time[-c(1),] 
+par(mgp = c(2, 1, 0))
 plot(plot_time, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of iterations", ylab = "time saved",
-  main = "Bayesian Signed Ranks test")
+  xlab = "minimum number of replications", ylab = "time saving (%)")
 
 
 #------------------------------------------------------------------------------#
@@ -212,11 +210,6 @@ for (start_iter in 2:10) {
 }
 # setwd("H:/MA/simulation_data")
 # write.csv(b_hierarchical_results, file = "b_hierarchical_results.csv", row.names = FALSE)
-## Anpassungen vornehmen: (testen wegen adapt_delta und max_treedepth)
-b_hierarchical_out <- seq_b_hierarchical_test(df = benchmark_small,
-  baseline = "ranger.pow_wavelet_tune", min_repls = 3, prob = 0.95, 
-  max_repls = 10, adapt_delta = 0.9, max_treedepth = 15)
-b_hierarchical_out
 
 
 
@@ -276,7 +269,7 @@ plot_time <- cbind(start_iter, time_saved)
 plot_time <- as.data.frame((plot_time))
 plot_time <- plot_time[-c(1),] 
 plot(plot_time, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of iterations", ylab = "time saved",
+  xlab = "minimum number of iterations", ylab = "time saving (%)",
   main = "Bayesian Signed Ranks test")
 
 

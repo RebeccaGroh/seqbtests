@@ -493,13 +493,13 @@ hierarchical models are particularly powerful and flexible. Computations are
 obtained by Markov-Chain Monte Carlo sampling. 
 
 ```{r, message = FALSE, warning = FALSE}
-results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
-  baseline = "algo_1", algorithm = "algo_2", rho=0.1, rope=c(-0.01, 0.01), 
-  nsim=2000,  nchains=5)
+#results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
+#  baseline = "algo_1", algorithm = "algo_2", rho=0.1, rope=c(-0.01, 0.01), 
+#  nsim=2000,  nchains=5)
 ```
 
 ```{r, include = FALSE}
-results_b_hierarchical
+#results_b_hierarchical
 ```
 
 The hierarchical approach is recommended by Benavoli [@benavoli2017] over the 
@@ -510,7 +510,7 @@ The graphical visualization shows a similar triangle plot as the Bayesian Sign
 and Signed Ranks test.
 
 ```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
-plot_posterior(results_b_hierarchical, method = "b_hierarchical_test")
+# plot_posterior(results_b_hierarchical, method = "b_hierarchical_test")
 ```
 
 
@@ -565,15 +565,15 @@ results_seq_sign <- seq_b_sign_test(df = test_benchmark_small,
 results_seq_ranks <- seq_b_signed_rank_test(df = test_benchmark_small,
   baseline = 'algo_1', max_repls = 10)
 
-results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
-  baseline = 'algo_1', max_repls = 10)
+# results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
+#   baseline = 'algo_1', max_repls = 10)
 ```
 
 ```{r, include = FALSE}
 results_seq_corr
 results_seq_sign
 results_seq_ranks
-results_seq_hierarchical
+# results_seq_hierarchical
 ```
 
 The results of the sequential tests are structured and can be interpreted the 
