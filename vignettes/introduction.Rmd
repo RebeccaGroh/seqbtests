@@ -24,6 +24,8 @@ knitr::opts_chunk$set(
 ```{r load.libraries, message=FALSE, warning=FALSE, include=FALSE}
 library(ggplot2)
 library(seqbtests)
+library(scmamp)
+library(rNPBST)
 ```
 
 
