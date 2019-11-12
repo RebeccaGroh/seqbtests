@@ -22,3 +22,5 @@ bioc_packages:
 #  - tar -C .. -xf $PKG_TARBALL
 #  - rm -rf RTest.Rcheck
 #  - Rscript -e 'pkgdown::build_site()'
+
+install: travis_wait mvn install
