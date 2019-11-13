@@ -332,8 +332,42 @@ for (i in 1:3) {
       sigma <- sigma_all[k]
       set.seed(123456)
       df <- generate_data(num = 250, mu, delta_mean, sigma)
-      out_seq <- b_corr_t_test(df = df, baseline = "algo_a",
-        problem = "problem_1")
+
+      }
+   }
+}
+
+out_seq <- b_corr_t_test(df = df, baseline = "algo_a",
+                         problem = "problem_1")
+row_id <- paste(mu, delta_mean, sigma, sep = "_")
+test_result[row_id, "algorithm"] <- out_seq$data_frame[1]
+test_result[row_id, "left"] <- out_seq$data_frame[2]
+test_result[row_id, "rope"] <- out_seq$data_frame[3]
+test_result[row_id, "right"] <- out_seq$data_frame[4]
+test_result[row_id, "probabilities"] <- out_seq$data_frame[5]
+test_result[row_id, "mu"] <- mu
+test_result[row_id, "delta"] <- delta_mean
+test_result[row_id, "sigma"] <- sigma
+test_result[row_id, "start_iter"] <- 250
+
+#------------------------------------------------------------------------------#
+# Bayesian Signed Ranks test 250 Replications ----------------------------------
+#------------------------------------------------------------------------------#
+
+
+test_result <- data.frame()
+for (i in 1:3) {
+  mu_all <- c(0.4, 0.5, 0.6)
+  mu <- mu_all[i]
+  for (j in 1:5) {
+    delta_mean_all <- c(0, 0.01, 0.05, 0.1, 0.2)
+    delta_mean <- delta_mean_all[j]
+    for (k in 1:5) {
+      sigma_all <- c(0.01, 0.02, 0.05, 0.1, 0.2)
+      sigma <- sigma_all[k]
+      set.seed(123456)
+      df <- generate_data(num = 250, mu, delta_mean, sigma)
+      out_seq <- b_signed_rank_test(df = df, baseline = "algo_a")
       row_id <- paste(mu, delta_mean, sigma, sep = "_")
       test_result[row_id, "algorithm"] <- out_seq$data_frame[1]
       test_result[row_id, "left"] <- out_seq$data_frame[2]
@@ -345,10 +379,6 @@ for (i in 1:3) {
       test_result[row_id, "sigma"] <- sigma
       test_result[row_id, "start_iter"] <- 250
     }
-   }
+  }
 }
-
-
-
-
 
