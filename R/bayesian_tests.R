@@ -41,8 +41,7 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
     prob = 0.95) {
   result <- data.frame()
   checkmate::assert_true(check_structure(df))
-  checkmate::assert_true(check_names(df, problem, baseline, 
-    algorithm = NULL, measure = NULL))
+  checkmate::assert_true(check_names(df, problem, baseline, algorithm, measure))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   }
@@ -72,6 +71,7 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 # results <- b_corr_t_test(df= test_benchmark_small, problem = "problem_a",
 #                        baseline = "algo_1", compare = "equal")
 # results
+
 
 #' @title Bayesian Sign test 
 #' @description 
@@ -127,8 +127,7 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
   rope.min <- rope[1]
   rope.max <- rope[2]
   checkmate::assert_true(check_structure(df))
-  checkmate::assert_true(check_names(df, problem, baseline, algorithm, 
-    measure = NULL))
+  checkmate::assert_true(check_names(df, problem = NULL, baseline, algorithm, measure))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   }
@@ -167,7 +166,7 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
 }
 
 # results <- b_sign_test(df= test_benchmark_small,
-#                        problem = "problem_a", baseline = "algo_1", compare = "equal")
+#                        baseline = "algo_1", compare = "equal")
 # results
 
 #' @title Bayesian Signed Rank test 
@@ -223,8 +222,7 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
   rope.min <- rope[1]
   rope.max <- rope[2]
   checkmate::assert_true(check_structure(df))
-  checkmate::assert_true(check_names(df, problem = NULL, baseline, 
-    algorithm, measure = NULL))
+  checkmate::assert_true(check_names(df, problem  = NULL, baseline, algorithm, measure))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   }
@@ -338,8 +336,7 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
   adapt_delta = 0.8, max_treedepth = 10) {
   result <- data.frame()
   checkmate::assert_true(check_structure(df))
-  checkmate::assert_true(check_names(df, baseline, algorithm = NULL, 
-    measure = NULL, problem = NULL))
+  checkmate::assert_true(check_names(df, baseline, algorithm, measure, problem = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   }

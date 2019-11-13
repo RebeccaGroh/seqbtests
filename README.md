@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/RebeccaGroh/seqbtests.svg?branch=master)](https://travis-ci.org/RebeccaGroh/seqbtests)
+
 # seqbtests: A Sequential Bayesian Approach for Performance Comparison of Machine Learning Algorithms. 
 
 This is a package for sequential Bayesian tests. 
@@ -11,7 +13,7 @@ if (!require("devtools")) {
   install.packages("devtools")
 }
 
-install_github("RebeccaGroh/seqbtests")
+devtools::install_github("RebeccaGroh/seqbtests")
 ```
 
 ## Documentation
