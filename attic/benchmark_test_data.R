@@ -198,12 +198,20 @@ plot(plot_time, type="o", col="black", ylim = c(0,1),
 #------------------------------------------------------------------------------#
 # Überlegen ob vielleicht nur jede zweite Iteration durchgeführt werden sollte, 
 # um Zeit zu sparen? 2, 4, 6, 8, 9, 10
+benchmark_small_bhier <- subset(benchmark_small, algorithm!="xgboost_multires_default" & 
+                                  algorithm!="ksvm_wavelet_default" &
+                                  algorithm!="glmnet_wavelet_default" &
+                                  algorithm!="xgboost_none_tune" &
+                                  algorithm!="xgboost_multires_tune" &
+                                  algorithm!="xgboost_wavelet_tune" &
+                                  algorithm!="ranger.pow_wavelet_default")
+
 
 b_hierarchical_results <- list()
 for (start_iter in 2:10) {
-  b_hierarchical_out <- seq_b_hierarchical_test(df = benchmark_small, 
+  b_hierarchical_out <- seq_b_hierarchical_test(df = benchmark_small_bhier, 
     baseline = "ranger.pow_wavelet_tune", min_repls = start_iter, prob = 0.95, 
-    max_repls = 10, adapt_delta = 0.99, max_treedepth = 15)
+    max_repls = 10)
   b_hierarchical_out$data_frame$start_iter <- start_iter
   b_hierarchical_results <- rbind(b_hierarchical_results, 
     b_hierarchical_out$data_frame)

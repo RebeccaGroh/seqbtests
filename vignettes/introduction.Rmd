@@ -1,14 +1,20 @@
 ---
 title: "A Sequential Bayesian Approach for Performance Comparison of Machine Learning Algorithms"
-output: pdf_document
+output: 
+  pdf_document
 vignette: >
   %\VignetteIndexEntry{introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: refs.bib
-
+suppress-bibliography: true
 ---
+<!-- suppress-bibliography: true -> unterdrückt die Bibiliografie  -->
+<!-- Am Ende vom Blatt muss wieder # References eingefügt werden  -->
+<!-- \pagenumbering{gobble} -> unterdrückt die Seitennummerierung -->
 
+\pagenumbering{gobble} 
+<!-- \renewcommand*{\nameyeardelim}{\addcomma\space} -->
 <style>
 body {
 text-align: justify}
@@ -38,7 +44,7 @@ framework to evaluate the performance of benchmark results.
 
 This package implements statistical testing in order to assess statistical 
 differences between the performances of Machine Learning (ML) algorithms for 
-classification. The package and vignette are mainly based on [@benavoli2017].
+classification. The package and vignette are mainly based on @benavoli2017.
 Benavoli et al. argue against the use of null hypothesis significance testing, 
 instead they are promoting the use of Bayesian testing. The seqbtests package 
 provides both frequentist and Bayesian tests for comparison of algorithms on one 
@@ -93,7 +99,7 @@ possible to  compare multiple measures at once.
 
 The package offers the advantage that there is no need to provide a complete data set 
 when using the sequential tests. The package includes the function 
-`get_replications`, the User can define the function himself in order to build 
+`get_replications`, the user can define the function himself in order to build 
 the data frame.  To be able to save time when evaluating the algorithms the sequential 
 tests are built in loops. In each loop the tests calls a new iteration through 
 `get_replications` to test the algorithms performances. Each run of 
@@ -101,7 +107,7 @@ evaluation is only called if the predefined threshold that determines if an
 algorithm works better than the competing one is not reached, and further 
 evaluation needs to be done. Thus, if a decision based on the estimated 
 posterior probabilities can be made, the evaluation for this algorithm is 
-stopped, which can save the User a lot of time. `get_replications` by default 
+stopped, which can save the user a lot of time. `get_replications` by default 
 accepts a complete data frame by specifying `df`. 
 
 To run the tests the data frame must not contain any NAs. If a complete data 
@@ -124,7 +130,7 @@ must be included in the data frame. Thus, when comparing the results of
 `na_check` for `problem` and `algorithm` one can decide rather to drop the 
 specific values of either `problem` or `algorithm`. To remove one specific group
 of values the package provides the function `na_drop`. Via the same `check_var` 
-the User can specify to either drop all values containing NAs for either 
+the user can specify to either drop all values containing NAs for either 
 `problem` or `algorithm`. It is sensible to select the variable that the least 
 observations are lost by.
 
@@ -133,7 +139,7 @@ complete_data <- na_drop(df = data_with_na, check_var = "algorithm")
 ```
 
 To test if the data frame is in the right format, one can check the 
-structure with `check_structure`.  If the data provided by the User is 
+structure with `check_structure`.  If the data provided by the user is 
 in the specified format, the function returns TRUE. If there are any problems 
 concerning the format, a corresponding error message will be issued. 
 
@@ -181,8 +187,8 @@ plot_densities(test_benchmark_small)
 ```
 
 The function plots the density of all algorithms performances in the considered 
-data frame. As an argument the User has to define the data frame (`df`). If the 
-data frame contains more than one measure column the User should define which 
+data frame. As an argument the user has to define the data frame (`df`). If the 
+data frame contains more than one measure column the user should define which 
 column to use (per default the first column is used). Based on the densities one 
 can already determine whether an algorithm is likely to be normal distributed. 
 
@@ -235,7 +241,7 @@ procedures such as Bonferroni correction.
 
 ## Wilcoxon Signed Ranks test 
 
-The Wilcoxon Signed Ranks test is recommended by Demsar [see @demsar2006] 
+The Wilcoxon Signed Ranks test is recommended by @demsar2006 
 for the comparison of two classifiers on multiple problem sets. It is a 
 non-parametric test that ranks and compares the performances of two classifiers.
 
@@ -256,7 +262,7 @@ the compared algorithms.
 ## Friedman test 
 
 The Friedman test is a non-parametric test that checks whether differences among the 
-algorithms appear. It has been recommended by Demsar [see @demsar2006] together 
+algorithms appear. It has been recommended by @demsar2006 together 
 with the corresponding post-hoc tests for pairwise comparison of classifiers 
 among multiple problem sets. The Friedman test checks if there is one or 
 multiple algorithm that perform significantly different from the others. 
@@ -286,8 +292,7 @@ among which algorithms the differences appear.
 
 If the null hypothesis that states that all algorithms are equal is 
 rejected one can proceed with a post-hoc test. This package provides one 
-post-hoc test, the Nemenyi post-hoc test, which is recommended by Demsar 
-[see @demsar2006]. 
+post-hoc test, the Nemenyi post-hoc test, which is recommended by @demsar2006. 
 
 ### Nemenyi post-hoc test 
 
@@ -305,7 +310,7 @@ results_nemenyi
 ```
 
 The performance of all algorithms can be graphically visualized via the Critical 
-Differences (CD) plots, introduced by Demsar [see @demsar2006].
+Differences (CD) plots, introduced by @demsar2006.
 
 ```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 plot_cd(test_benchmark_small)
@@ -325,8 +330,8 @@ there significant differences between the algorithms appear.
 While in many other scientific fields a shift from frequentist tests towards 
 Bayesian testing has taken place for some time now, the analysis of 
 benchmark results is still based on null hypothesis significance testing (i.e. 
-frequentist analysis). This package is based on the paper of Benavoli et al. 
-[@benavoli2017], which proposed the use of Bayesian tests for comparing the 
+frequentist analysis). This package is based on the paper of @benavoli2017, 
+which proposed the use of Bayesian tests for comparing the 
 performance of machine learning algorithms instead of frequentist tests. They 
 emphasize the many advantages of the Bayesian approach:
 
@@ -354,7 +359,7 @@ accuracy are less than 1%.
 
 
 The package provides four Bayesian tests, which have been summarized and 
-recommended in Benavoli et al. [see @benavoli2017].  The Bayesian correlated t
+recommended in @benavoli2017.  The Bayesian correlated t
 test, is used for the comparison of two algorithms on one data set. 
 The other three tests, namely the Bayesian Sign test, the Bayesian Signed Rank 
 test and the Bayesian hierarchical correlated t test are used to test 
@@ -398,8 +403,8 @@ upper bound (P(baseline << algorithm)).
 
 The column `probabilities` returns the 
 decisions that can be made based on the posterior probabilities. The decisions 
-are made according to the probability (`prob`) defined by the User (per default 
-95% is assumed). They also depend on whether the User has determined that the 
+are made according to the probability (`prob`) defined by the user (per default 
+95% is assumed). They also depend on whether the user has determined that the 
 algorithms should be tested to perform either better than or at least as good as
 the other. This can be defined via the argument `compare` by specifying either 
 `better` or `equal`. This is especially important when it comes to comparing two
@@ -416,7 +421,7 @@ It is a graphically visualization of the test results.
 plot_posterior(results_b_corr, method = "b_corr_t_test")
 ```
 
-To plot the probabilities the User needs to define the Bayesian test that was 
+To plot the probabilities the user needs to define the Bayesian test that was 
 used (`method`). In addition, the test results that should be visualized needs to
 be labeled. Even though, the Bayesian tests allow the comparison of multiple 
 algorithms against the baseline, to plot the results one algorithm needs to be 
@@ -502,7 +507,7 @@ obtained by Markov-Chain Monte Carlo sampling.
 #results_b_hierarchical
 ```
 
-The hierarchical approach is recommended by Benavoli [@benavoli2017] over the 
+The hierarchical approach is recommended by @benavoli2017 over the 
 Bayesian Signed test. Yet, it is quite time consuming, which is inconvenient if 
 the tests needs to be run often. 
 
@@ -524,7 +529,7 @@ quiet time-consuming. To counteract this issue this package provides a
 sequential approach for comparison while using Bayesian tests.
 
 Thus, the results of the comparisons are checked after each run of evaluation of 
-the performances. If the baseline has high probability (the User can 
+the performances. If the baseline has high probability (the user can 
 define the parameter himself, by default 95% is used) to have better 
 performance than the compared algorithm, all further testing is aborted after 
 this run and the prematurely results are used. If all algorithms in the data 
@@ -532,13 +537,13 @@ frame are tested against the baseline and the baseline outperforms one algorithm
 after a few evaluations, or vice versa, the analysis is terminated for this specific algorithm,
 yet the procedure continues for the other algorithms. 
 
-Within this package the User has the possibility to generate each new run of 
+Within this package the user has the possibility to generate each new run of 
 performance evaluation within the Bayesian tests. This works by the function 
 `get_replications` that can be used to build a data frame, where after each run 
 a Bayesian test is performed to check if the threshold has already been reached,
 i.e. a decision can be made corresponding to a predetermined probability. 
 
-If the User is working with an already complete data frame, he does not have to
+If the user is working with an already complete data frame, he does not have to
 use an own function but can call the default function for `get_replications`. 
 Thus the complete data frame can be called by the tests argument `df`. 
 `max_repls` specifies the maximum amount of evaluations that should be 
@@ -552,7 +557,7 @@ Extensive statistical experiments have shown that there is no early stopping
 bias due to the sequential approach if a minimum number of replications is drawn
 before the stopping action is carried out. This minimum number is set to 5 in 
 this package, since simulation studies have shown that the number is sufficient 
-to achieve valid results. However, the User can also set a minimum number 
+to achieve valid results. However, the user can also set a minimum number 
 himself via ` min_repls `.
 
 ```{r, message = FALSE, warning = FALSE}
@@ -581,5 +586,5 @@ same way as the non-sequential tests. The output also specifies the
 number of replications that were considered. If no decision concerning the 
 probabilities could be made, the replications were examined up to `max_repls`.
 
-# References
+<!-- # References -->
 
