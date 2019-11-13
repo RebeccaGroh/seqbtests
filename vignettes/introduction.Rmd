@@ -24,6 +24,8 @@ knitr::opts_chunk$set(
 ```{r load.libraries, message=FALSE, warning=FALSE, include=FALSE}
 library(ggplot2)
 library(seqbtests)
+library(scmamp)
+library(rNPBST)
 ```
 
 
@@ -196,14 +198,14 @@ sets in the data frame. Thus, it's easy to observe strong outliers.
 
 After the visualization, statistical differences in the performances of the 
 algorithms can be tested by three frequentist tests implemented in the package, 
-namely, the correlated t test and the non-parametric Friedman and Wilcoxon
+namely, the correlated t-test and the non-parametric Friedman and Wilcoxon
 Signed Ranks test. The null hypothesis for these tests states that there are no 
 differences among the algorithms, thus all algorithm score the same performance.
 
 
-## Correlated t test 
+## Correlated t-test 
 
-The correlated t test is an extension of the common t test that additionally takes into 
+The correlated t-test is an extension of the common t-test that additionally takes into 
 account that the algorithms performances are evaluated on overlapping trainings 
 sets and are therefore correlated. It is used for the analysis of performance 
 results on a single problem set.
@@ -355,19 +357,19 @@ The package provides four Bayesian tests, which have been summarized and
 recommended in Benavoli et al. [see @benavoli2017].  The Bayesian correlated t
 test, is used for the comparison of two algorithms on one data set. 
 The other three tests, namely the Bayesian Sign test, the Bayesian Signed Rank 
-test and the Bayesian hierarchical correlated t test are used to test 
+test and the Bayesian hierarchical correlated t-test are used to test 
 algorithms on multiple problem sets.
 
 
-## Bayesian correlated t test 
+## Bayesian correlated t-test 
 
-The Bayesian correlated t test compares the performance of two competing 
+The Bayesian correlated t-test compares the performance of two competing 
 classifiers on a single problem set. It is the Bayesian counterpart to the 
-frequentist correlated t test and thus takes correlation due to overlapping 
+frequentist correlated t-test and thus takes correlation due to overlapping 
 trainings data into account. Like the frequentist test, the 
 Bayesian counterpart is a parametric test, which assumes Gaussian distribution 
 of the data. If the correlation, denoted by `rho`, is 0 the Bayesian correlated
-t test and the frequentist correlated t test are numerically equivalent. Yet, 
+t-test and the frequentist correlated t-test are numerically equivalent. Yet, 
 the approaches inferences are different. Thus, the interpretation of the same 
 numerical values differs.
 
@@ -439,7 +441,7 @@ compared algorithm are practically equivalent.
 The Bayesian Sign and Signed Ranks tests compare classifiers on multiple problem 
 sets. They are respectively the Bayesian counterparts to the non-parametric Sign 
 and Wilcoxon Signed Ranks test and assume a Dirichlet Process (DP) prior. 
-Different than the Bayesian and frequentist correlated t test these tests don't 
+Different than the Bayesian and frequentist correlated t-test these tests don't 
 take correlation into account. However, due to their non-parametric nature, they do 
 not assume normality of the samples mean, are robust regarding outliers and do 
 not assume commensurability.
@@ -463,14 +465,14 @@ results_b_signed
 ```
 
 The graphical visualization can be called the same way as for correlated 
-t tests by `plot_posterior`. 
+t-tests by `plot_posterior`. 
 
 ```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 plot_posterior(results_b_sign, method = "b_sign_test")
 plot_posterior(results_b_signed, method = "b_signed_rank_test")
 ```
 
-Different to the correlated t test the plot now corresponds to a large triangle, 
+Different to the correlated t-test the plot now corresponds to a large triangle, 
 which is divided in three different 
 regions. The posterior samples are represented by the cloud of points in the 
 triangle. The regions correspond to three probabilities. The bottom left region 
@@ -480,10 +482,10 @@ more probable than either of the algorithms. If all the points fall in one
 region, one can conclude that such hypothesis is true, with a probability of 
 almost 100%. 
 
-## Bayesian Hierarchical correlated t test 
+## Bayesian Hierarchical correlated t-test 
 
-The Bayesian hierarchical correlated t test is an extension of the correlated 
-t test that works for the comparison of classifiers on multiple problem sets and 
+The Bayesian hierarchical correlated t-test is an extension of the correlated 
+t-test that works for the comparison of classifiers on multiple problem sets and 
 still takes correlation into account. For every problem set a multivariate 
 normal distribution is assumed for the means. The aim is to estimate the mean 
 difference of accuracies on all considered problem sets. In Bayesian analysis 

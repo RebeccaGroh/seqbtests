@@ -13,6 +13,9 @@
 #' @param rope Region of practical equivalence. 
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is 0.95. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms. If not defined, the default is to test for 'better'.
 #' @return A list containing the following components:
 #' \itemize{
 #'     \item{code{measure}} A string with the name of the measure column used.
@@ -88,6 +91,9 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 #' @param rope Region of practical equivalence. 
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is 0.95. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms. If not defined, the default is to test for 'better'.
 #' @return A list containing the following components:
 #' \itemize{
 #'     \item{code{measure}} A string with the name of the measure column used.
@@ -182,6 +188,9 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
 #' @param rope Region of practical equivalence. 
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is 0.95. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms. If not defined, the default is to test for 'better'.
 #' @return A list containing the following components:
 #' \itemize{
 #'     \item{code{measure}} A string with the name of the measure column used.
@@ -298,6 +307,9 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #' @param seed Optional parameter used to fix the random seed.
 #' @param prob Probability, which the decision that the Baseline is better than 
 #'     the algorithm is based on. The default is 0.95. 
+#' @param compare Defines whether the baseline should be tested for either 
+#'     being better ('better') or being just as good ('equal') as the other 
+#'     algorithms. If not defined, the default is to test for 'better'.
 #' @return A list containing the following components:
 #' \itemize{
 #'     \item{code{measure}} A string with the name of the measure column used.
