@@ -17,6 +17,21 @@ table(b_corr_comp$time)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Notes ------------------------------------------------------------------------
 b_hierarchical_out <- b_hierarchical_test(df = benchmark_small, 
   baseline = "ranger.pow_wavelet_tune")
 b_hierarchical_out
@@ -117,6 +132,97 @@ b_hierarchical_out <- seq_b_hierarchical_test(df = benchmark_small_bhier,
   baseline = "ranger.pow_wavelet_tune", 
   min_repls = 8, prob = 0.95, max_repls = 10)
 b_hierarchical_out
+
+
+
+#------------------------------------------------------------------------------#
+# Bayesian Hierarchical correlated t-test --------------------------------------
+#------------------------------------------------------------------------------#
+# Überlegen ob vielleicht nur jede zweite Iteration durchgeführt werden sollte, 
+# um Zeit zu sparen? 2, 4, 6, 8, 9, 10
+benchmark_small_bhier <- subset(benchmark_small, algorithm!="xgboost_multires_default" & 
+                                  algorithm!="ksvm_wavelet_default" &
+                                  algorithm!="glmnet_wavelet_default" &
+                                  algorithm!="xgboost_none_tune" &
+                                  algorithm!="xgboost_multires_tune" &
+                                  algorithm!="xgboost_wavelet_tune" &
+                                  algorithm!="ranger.pow_wavelet_default")
+
+
+b_hierarchical_results <- list()
+for (start_iter in 2:10) {
+  b_hierarchical_out <- seq_b_hierarchical_test(df = benchmark_small_bhier, 
+                                                baseline = "ranger.pow_wavelet_tune", min_repls = start_iter, prob = 0.95, 
+                                                max_repls = 10)
+  b_hierarchical_out$data_frame$start_iter <- start_iter
+  b_hierarchical_results <- rbind(b_hierarchical_results, 
+                                  b_hierarchical_out$data_frame)
+}
+# setwd("H:/MA/simulation_data")
+# write.csv(b_hierarchical_results, file = "b_hierarchical_results.csv", row.names = FALSE)
+
+
+
+# Compare to ground truth ------------------------------------------------------
+ground_truth <- subset(b_hierarchical_results, start_iter == 10, 
+                       select = c(algorithm, probabilities))
+
+# rename column to merge 
+colnames(ground_truth)[colnames(ground_truth) == "probabilities"] <- 
+  "probabilities_10"
+
+# merge 
+b_hierarchical_comp <- merge(b_hierarchical_results, ground_truth)
+
+# compare (1 = wrong, 0 = right <- no differences found)
+for (i in 1:nrow(b_hierarchical_comp)) {
+  if (identical(b_hierarchical_comp$probabilities[i], 
+                b_hierarchical_comp$probabilities_10[i])){
+    b_hierarchical_comp$decision[i] <- 0 
+  } else {
+    b_hierarchical_comp$decision[i] <- 1
+  }
+}
+
+# plot error rate per iteration ------------------------------------------------
+# (average errors over problemsets )
+par(mfrow=c(1,2))
+
+errors <- list()
+for (i in b_hierarchical_comp$start_iter) {
+  number_errors <- subset(b_hierarchical_comp, start_iter == i, 
+                          select = c(decision))
+  errors[i] <- colMeans(number_errors)
+}
+
+start_iter <- 1:10
+plot_error <- cbind(start_iter, errors)
+plot_error <- as.data.frame((plot_error))
+plot_error <- plot_error[-c(1),] 
+plot(plot_error, type="o", col="black", ylim = c(0,1), 
+     xlab = "minimum number of iterations", ylab = "error rate", 
+     main = "Benchmark Data")
+
+
+# plot time saved per iteration ------------------------------------------------
+for (i in 1:nrow(b_hierarchical_comp)) {
+  b_hierarchical_comp$time[i] <- 10 - b_hierarchical_comp$repls[i]
+}
+
+time_saved <- list()
+for (i in b_hierarchical_comp$start_iter) {
+  subset_iter <- subset(b_hierarchical_comp, start_iter == i, select = c(time))
+  time_saved[i] <- colMeans(subset_iter)/10
+}
+
+plot_time <- cbind(start_iter, time_saved)
+plot_time <- as.data.frame((plot_time))
+plot_time <- plot_time[-c(1),] 
+plot(plot_time, type="o", col="black", ylim = c(0,1), 
+     xlab = "minimum number of iterations", ylab = "time saving (%)",
+     main = "Bayesian Signed Ranks test")
+
+
 
 
 
