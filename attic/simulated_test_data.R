@@ -57,7 +57,8 @@ for (start_iter in 2:30) {
     }
   }
 }
-# simulation_b_corr_results <- test_result
+
+b_corr <- test_result
 # setwd("H:/MA/simulation_data")
 # write.csv(simulation_b_corr_results, file = "simulation_b_corr_results.csv", row.names = FALSE)
 b_corr <- simulation_b_corr_results
@@ -320,7 +321,7 @@ plot(plot_time, type="o", col="black", ylim = c(0,1),
 # Bayesian correlated t-test 250 Replications ----------------------------------
 #------------------------------------------------------------------------------#
 
-test_result <- data.frame()
+test_result_250 <- data.frame()
 for (i in 1:3) {
   mu_all <- c(0.4, 0.5, 0.6)
   mu <- mu_all[i]
@@ -332,30 +333,73 @@ for (i in 1:3) {
       sigma <- sigma_all[k]
       set.seed(123456)
       df <- generate_data(num = 250, mu, delta_mean, sigma)
-
+      out_seq <- b_corr_t_test(df = df, baseline = "algo_a",
+                               problem = "problem_1")
+      row_id <- paste(mu, delta_mean, sigma, sep = "_")
+      test_result_250[row_id, "algorithm"] <- out_seq$data_frame[1]
+      test_result_250[row_id, "left"] <- out_seq$data_frame[2]
+      test_result_250[row_id, "rope"] <- out_seq$data_frame[3]
+      test_result_250[row_id, "right"] <- out_seq$data_frame[4]
+      test_result_250[row_id, "probabilities"] <- out_seq$data_frame[5]
+      test_result_250[row_id, "mu"] <- mu
+      test_result_250[row_id, "delta"] <- delta_mean
+      test_result_250[row_id, "sigma"] <- sigma
+      test_result_250[row_id, "start_iter"] <- 250
+      test_result_250[row_id, "repls"] <- 250
       }
    }
 }
 
-out_seq <- b_corr_t_test(df = df, baseline = "algo_a",
-                         problem = "problem_1")
-row_id <- paste(mu, delta_mean, sigma, sep = "_")
-test_result[row_id, "algorithm"] <- out_seq$data_frame[1]
-test_result[row_id, "left"] <- out_seq$data_frame[2]
-test_result[row_id, "rope"] <- out_seq$data_frame[3]
-test_result[row_id, "right"] <- out_seq$data_frame[4]
-test_result[row_id, "probabilities"] <- out_seq$data_frame[5]
-test_result[row_id, "mu"] <- mu
-test_result[row_id, "delta"] <- delta_mean
-test_result[row_id, "sigma"] <- sigma
-test_result[row_id, "start_iter"] <- 250
+# merge data 
+b_corr_250 <- subset(test_result_250, select = c(algorithm, mu, delta, sigma, probabilities))
+
+# rename column to merge 
+colnames(b_corr_250)[colnames(b_corr_250) == "probabilities"] <- 
+  "probabilities_250"
+
+# merge 
+b_corr_comp <- merge(b_corr, b_corr_250)
+
+# check for errors 
+
+# compare (1 = wrong, 0 = right <- no differences found)
+for (i in 1:nrow(b_corr_comp)) {
+  if (identical(b_corr_comp$probabilities[i], b_corr_comp$probabilities_250[i])){
+    b_corr_comp$decision[i] <- 0 
+  } else {
+    b_corr_comp$decision[i] <- 1
+  }
+}
+
+# plot error rate per iteration ------------------------------------------------
+# (average errors over problemsets )
+par(mfrow=c(1,2))
+
+
+
+errors <- list()
+for (i in b_corr_comp$start_iter) {
+  number_errors <- subset(b_corr_comp, start_iter == i, select = c(decision))
+  errors[i] <- colMeans(number_errors)
+}
+
+start_iter <- 1:30
+plot_error <- cbind(start_iter, errors)
+plot_error <- as.data.frame((plot_error))
+plot_error <- plot_error[-c(1),] 
+par(mgp = c(2, 1, 0))
+plot(plot_error, type="o", col="black", ylim = c(0,1), 
+     xlab = "minimum number of replications", ylab = "error rate")
+
+
 
 #------------------------------------------------------------------------------#
 # Bayesian Signed Ranks test 250 Replications ----------------------------------
 #------------------------------------------------------------------------------#
+# 30 repls: 
+b_signed <- simulation_b_signed_results
 
-
-test_result <- data.frame()
+test_result_250 <- data.frame()
 for (i in 1:3) {
   mu_all <- c(0.4, 0.5, 0.6)
   mu <- mu_all[i]
@@ -369,16 +413,57 @@ for (i in 1:3) {
       df <- generate_data(num = 250, mu, delta_mean, sigma)
       out_seq <- b_signed_rank_test(df = df, baseline = "algo_a")
       row_id <- paste(mu, delta_mean, sigma, sep = "_")
-      test_result[row_id, "algorithm"] <- out_seq$data_frame[1]
-      test_result[row_id, "left"] <- out_seq$data_frame[2]
-      test_result[row_id, "rope"] <- out_seq$data_frame[3]
-      test_result[row_id, "right"] <- out_seq$data_frame[4]
-      test_result[row_id, "probabilities"] <- out_seq$data_frame[5]
-      test_result[row_id, "mu"] <- mu
-      test_result[row_id, "delta"] <- delta_mean
-      test_result[row_id, "sigma"] <- sigma
-      test_result[row_id, "start_iter"] <- 250
+      test_result_250[row_id, "algorithm"] <- out_seq$data_frame[1]
+      test_result_250[row_id, "left"] <- out_seq$data_frame[2]
+      test_result_250[row_id, "rope"] <- out_seq$data_frame[3]
+      test_result_250[row_id, "right"] <- out_seq$data_frame[4]
+      test_result_250[row_id, "probabilities"] <- out_seq$data_frame[5]
+      test_result_250[row_id, "mu"] <- mu
+      test_result_250[row_id, "delta"] <- delta_mean
+      test_result_250[row_id, "sigma"] <- sigma
     }
   }
 }
+
+
+# merge data 
+b_signed_250 <- subset(test_result_250, select = c(algorithm, mu, delta, sigma, probabilities))
+
+# rename column to merge 
+colnames(b_signed_250)[colnames(b_signed_250) == "probabilities"] <- 
+  "probabilities_250"
+
+
+
+# Bayesian signed rank test 
+# merge 
+b_signed_comp <- merge(b_signed, b_signed_250)
+
+# check for errors 
+for (i in 1:nrow(b_signed_comp)) {
+  if (identical(as.character(b_signed_comp$probabilities[i]), b_signed_comp$probabilities_250[i])){
+    b_signed_comp$decision[i] <- 0 
+  } else {
+    b_signed_comp$decision[i] <- 1
+  }
+}
+
+# plot error rate per iteration ------------------------------------------------
+# (average errors over problemsets )
+par(mfrow=c(1,2))
+
+errors <- list()
+for (i in b_signed_comp$start_iter) {
+  number_errors <- subset(b_signed_comp, start_iter == i, select = c(decision))
+  errors[i] <- colMeans(number_errors)
+}
+
+start_iter <- 1:30
+plot_error <- cbind(start_iter, errors)
+plot_error <- as.data.frame((plot_error))
+plot_error <- plot_error[-c(1),] 
+par(mgp = c(2, 1, 0))
+plot(plot_error, type="o", col="black", ylim = c(0,1), 
+     xlab = "minimum number of replications", ylab = "error rate")
+
 
