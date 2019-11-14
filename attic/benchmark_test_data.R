@@ -87,6 +87,9 @@ for (i in 1:nrow(b_corr_comp)) {
   }
 }
 
+
+
+
 # plot error rate per iteration ------------------------------------------------
 # (average errors over problemsets )
 par(mfrow=c(1,2))
@@ -112,6 +115,12 @@ par(mgp = c(2, 1, 0))
 plot(plot_error, type="o", col="black", ylim = c(0,1), 
   xlab = "minimum number of replications", ylab = "error rate")
 
+#### GGPLOT
+ggplot(data=plot_error, aes(x=as.numeric(start_iter), y=as.numeric(errors), group=1)) +
+  geom_line()+
+  geom_point(size = 1) + 
+  xlab("minimum number of replications") + ylab("error rate") + 
+  ylim(0, 1)
 
 # plot time saved per iteration ------------------------------------------------
 
