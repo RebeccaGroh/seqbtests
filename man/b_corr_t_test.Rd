@@ -19,6 +19,10 @@ baseline is compared to every algorithm in the data frame.}
 
 \item{measure}{Measure column.}
 
+\item{compare}{Defines whether the baseline should be tested for either 
+being better ('better') or being just as good ('equal') as the other 
+algorithms. If not defined, the default is to test for 'better'.}
+
 \item{rho}{Correlation factor.}
 
 \item{rope}{Region of practical equivalence.}

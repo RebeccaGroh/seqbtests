@@ -11,9 +11,6 @@ plot_boxplot(df, measure = NULL)
 
 \item{measure}{Measure column.}
 }
-\value{
-A \code{\linkS4class{ggplot}} object.
-}
 \description{
 This function plots the performance of every algorithm in each 
     data frame in boxplots.

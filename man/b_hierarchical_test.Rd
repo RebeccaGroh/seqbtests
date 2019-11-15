@@ -24,6 +24,10 @@ tested against baseline.}
 
 \item{rho}{Correlation factor.}
 
+\item{compare}{Defines whether the baseline should be tested for either 
+being better ('better') or being just as good ('equal') as the other 
+algorithms. If not defined, the default is to test for 'better'.}
+
 \item{std.upper}{Factor to set the upper bound for both sigma_i and sigma_0.}
 
 \item{d0.lower}{Lower bound for the prior for mu_0. If not provided, 

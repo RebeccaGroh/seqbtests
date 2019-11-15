@@ -20,6 +20,10 @@ tested against baseline.}
 
 \item{measure}{Measure column.}
 
+\item{compare}{Defines whether the baseline should be tested for either 
+being better ('better') or being just as good ('equal') as the other 
+algorithms. If not defined, the default is to test for 'better'.}
+
 \item{prob}{Probability, which the decision that the Baseline is better than 
 the algorithm is based on. The default is 0.95.}
 

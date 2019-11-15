@@ -16,6 +16,10 @@ b_signed_rank_test(df, problem = NULL, baseline, compare = NULL,
 
 \item{baseline}{First algorithm.}
 
+\item{compare}{Defines whether the baseline should be tested for either 
+being better ('better') or being just as good ('equal') as the other 
+algorithms. If not defined, the default is to test for 'better'.}
+
 \item{algorithm}{Second algorithm. If not defined, every algorithm will be 
 tested against baseline.}
 

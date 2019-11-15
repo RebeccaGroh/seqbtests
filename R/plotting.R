@@ -3,7 +3,6 @@
 #' performances of each algorithm in the data frame  
 #' @param df Input data frame.
 #' @param measure Measure column. 
-#' @return A \code{\linkS4class{ggplot}} object.
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
@@ -31,7 +30,6 @@ plot_densities <- function(df, measure = NULL) {
 #'     data frame in boxplots.
 #' @param df Input data frame. 
 #' @param measure Measure column. 
-#' @return A \code{\linkS4class{ggplot}} object.
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
@@ -64,7 +62,6 @@ plot_boxplot <- function(df, measure = NULL) {
 #' @param measure Measure column. 
 #' @param alpha Significance level to get the critical difference.
 #' @param cex Numeric value to control the size of the font. 
-#' @return A \code{\linkS4class{ggplot}} object.
 #' @details 
 #'     The test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
@@ -102,7 +99,6 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
 #'     "b_corr_t_test", b_sign_test", "b_signed_rank_test" or 
 #'     "b_hierarchical_test".
 #' @param points Number of points used to plot the function. 
-#' @return A \code{\linkS4class{ggplot}} object.
 #' @details 
 #'     The plot for Bayesian correlated t tests has first been implemented in 
 #'     scmamp. The plots for the other Bayesian tests have first been 

@@ -15,9 +15,6 @@ plot_posterior(results, method, points = 1000)
 
 \item{points}{Number of points used to plot the function.}
 }
-\value{
-A \code{\linkS4class{ggplot}} object.
-}
 \description{
 This function plots the posterior densities obtained in Bayesian 
     analyses. It plots either univariately the posterior densities obtained 

@@ -10,7 +10,7 @@ seq_b_hierarchical_test(baseline, algorithm = NULL, measure = NULL,
   alpha.lower = 0.5, alpha.upper = 5, beta.lower = 0.05,
   beta.upper = 0.15, nsim = 2000, nchains = 8, parallel = TRUE,
   stan.output.file = NULL, prob = 0.95,
-  seed = as.numeric(Sys.time()), min_num = 5, adapt_delta = 0.8,
+  seed = as.numeric(Sys.time()), min_repls = 5, adapt_delta = 0.8,
   max_treedepth = 10, ...)
 }
 \arguments{
@@ -62,7 +62,7 @@ produced by Stan. If \code{NULL}, no files are stored.}
 
 \item{prob}{Probability, which the decision that the Baseline is better than 
    the algorithm is based on. The default is 0.95. 
-@param min_num The minimum number of replications that is either generated 
+@param min_repls The minimum number of replications that is either generated 
     or used to perform the first Bayesian test in the sequential approach. 
     To prevent an bias through early stopping a minimum number of 5 runs 
     (default) is recommended.}

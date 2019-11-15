@@ -11,9 +11,6 @@ plot_densities(df, measure = NULL)
 
 \item{measure}{Measure column.}
 }
-\value{
-A \code{\linkS4class{ggplot}} object.
-}
 \description{
 This function estimates and plots the densities of the 
 performances of each algorithm in the data frame

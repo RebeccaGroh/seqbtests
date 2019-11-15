@@ -7,7 +7,7 @@
 seq_b_signed_rank_test(problem = NULL, baseline, algorithm = NULL,
   measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
   weights = NULL, mc_samples = 1e+05, rope = c(-0.01, 0.01),
-  max_repls = 20, prob = 0.95, min_num = 5, ...)
+  max_repls = 20, prob = 0.95, min_repls = 5, ...)
 }
 \arguments{
 \item{problem}{Problem set on which the test should be performed.}
@@ -39,7 +39,7 @@ a data frame that has already been built is being used.}
 
 \item{prob}{Probability, which the decision that the Baseline is better than 
    the algorithm is based on. The default is 0.95. 
-@param min_num The minimum number of replications that is either generated 
+@param min_repls The minimum number of replications that is either generated 
     or used to perform the first Bayesian test in the sequential approach. 
     To prevent an bias through early stopping a minimum number of 5 runs 
     (default) is recommended.}

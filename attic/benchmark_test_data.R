@@ -1,17 +1,18 @@
 
-## Test Sequential Bayesian Tests on Real Data ---------------------------------
+# Chapter 5 - Experiments ------------------------------------------------------
+
+# Subsection 5.1 - Application on real data ------------------------------------
+
+# Packages 
+library(stringr)
+library(gridExtra)
+# Set-up ----------------------------------------------------------------------- 
 
 # Used Data: Benchmark Data 
-# Tests: Bayesian Correlated t-test, Bayesian Signed Ranks Test, Bayesian 
-# Hierarchichal Correlated t-test 
-# Algorithms: Tuned algorithms 
+# Tests: Bayesian Correlated t-test, Bayesian Signed Ranks Test
 # Baseline = ranger.pow_wavelet_tune
 # Ground Truth: Decision after the maximum number of replications 
 
-# Packages ---------------------------------------------------------------------
-library(stringr)
-
-# Set up data ------------------------------------------------------------------
 benchmark_data <- result  
 
 benchmark_data$lrn.cl <- str_sub(benchmark_data$lrn.cl, start=9L, end=30L)
@@ -28,7 +29,7 @@ benchmark_data$algorithm <-
 #     feat.extract.method, minorityclass_size, algo.type, ber, timeboth, job.id, 
 #     tune, lrn.cl, algo.pars))
 
-# # drop unnecessary variables (keep all algorithms)
+# drop unnecessary variables (keep all algorithms)
 benchmark_small <- subset(benchmark_data,
   select= -c(time.queued, time.running, n, ntrain, ntest, length, nclasses,
     feat.extract.method, minorityclass_size, algo.type, ber, timeboth, job.id,
@@ -46,9 +47,8 @@ colnames(benchmark_small)[colnames(benchmark_small) == "repl"] <- "replications"
 benchmark_small <- na_drop(df = benchmark_small, check_var = "algorithm") 
 # 27030 obs. 
 
-#------------------------------------------------------------------------------#
-# Bayesian correlated t-test ---------------------------------------------------
-#------------------------------------------------------------------------------#
+# 5.1.1 Bayesian correlated t-test ---------------------------------------------
+
 b_corr_results <- list()
 for (i in unique(benchmark_small$problem)) {
   for (start_iter in 2:10) {
@@ -60,12 +60,13 @@ for (i in unique(benchmark_small$problem)) {
     b_corr_results <- rbind(b_corr_results, b_corr_out$data_frame)
   }
 }
-
 # 23.868 obs.
-benchmark_b_corr_results <- b_corr_results
-# setwd("H:/MA/simulation_data")
-# write.csv(benchmark_b_corr_results, file = "benchmark_b_corr_results.csv", row.names = FALSE)
 
+# SAVE DATA 
+# benchmark_b_corr_results_all_data <- b_corr_results
+# setwd("H:/MA/simulation_data")
+# write.csv(benchmark_b_corr_results_all_data, file = "benchmark_b_corr_results_all_data.csv", row.names = FALSE)
+# b_corr_results <- benchmark_b_corr_results_all_data 
 
 # Compare to ground truth ------------------------------------------------------
 ground_truth <- subset(b_corr_results, start_iter == 10, 
@@ -87,12 +88,8 @@ for (i in 1:nrow(b_corr_comp)) {
   }
 }
 
-
-
-
-# plot error rate per iteration ------------------------------------------------
-# (average errors over problemsets )
-par(mfrow=c(1,2))
+# PLOTS ------------------------------------------------------------------------
+# (aggregate over problemsets and algorithms)
 
 for (i in 1:nrow(b_corr_comp)) {
   b_corr_comp$time[i] <- 10 - b_corr_comp$repls[i]
@@ -111,29 +108,35 @@ start_iter <- 1:10
 plot_error <- cbind(start_iter, errors)
 plot_error <- as.data.frame((plot_error))
 plot_error <- plot_error[-c(1),] 
-par(mgp = c(2, 1, 0))
-plot(plot_error, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of replications", ylab = "error rate")
-
-#### GGPLOT
-ggplot(data=plot_error, aes(x=as.numeric(start_iter), y=as.numeric(errors), group=1)) +
-  geom_line()+
-  geom_point(size = 1) + 
-  xlab("minimum number of replications") + ylab("error rate") + 
-  ylim(0, 1)
-
-# plot time saved per iteration ------------------------------------------------
 
 plot_time <- cbind(start_iter, time_saved)
 plot_time <- as.data.frame((plot_time))
 plot_time <- plot_time[-c(1),] 
-par(mgp = c(2, 1, 0))
-plot(plot_time, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of replications", ylab = "time saving (%)")
 
-#------------------------------------------------------------------------------#
-# Bayesian Signed Ranks test ---------------------------------------------------
-#------------------------------------------------------------------------------#
+
+error_plot <- ggplot(data=plot_error, aes(x=as.numeric(start_iter), 
+                       y=as.numeric(errors), group=1)) +
+  geom_line()+
+  geom_point() + 
+  xlab("minimum number of replications") + ylab("error rate") + 
+  ylim(0, 1)
+
+time_plot <- ggplot(data=plot_time, aes(x=as.numeric(start_iter), 
+                      y=as.numeric(time_saved), group=1)) +
+  geom_line()+
+  geom_point() + 
+  xlab("minimum number of replications") + ylab("time saving (%)") + 
+  ylim(0, 1)
+
+
+benchmark_b1 <- grid.arrange(error_plot, time_plot, nrow = 1)
+
+ggsave("benchmark_b1.pdf", plot = benchmark_b1, device = "pdf", 
+  path = "H:/MA/simulation_data/plots_thesis", width = 6, height = 3)
+
+
+# 5.1.2 Bayesian Signed Ranks test ---------------------------------------------
+
 b_signed_results <- list()
 for (start_iter in 2:10) {
   b_signed_out <- seq_b_signed_rank_test(df = benchmark_small, 
@@ -142,9 +145,14 @@ for (start_iter in 2:10) {
   b_signed_out$data_frame$start_iter <- start_iter
   b_signed_results <- rbind(b_signed_results, b_signed_out$data_frame)
 }
+
+# SAVE DATA 
+# benchmark_b_signed_results_all_data <- b_signed_results
 # setwd("H:/MA/simulation_data")
-# write.csv(b_signed_results, file = "b_signed_results.csv", row.names = FALSE)
-b_signed_results <- benchmark_b_signed_results_all_data
+# write.csv(benchmark_b_signed_results_all_data, file = "benchmark_b_signed_results_all_data.csv", row.names = FALSE)
+# b_signed_results <- benchmark_b_signed_results_all_data
+
+
 # Compare to ground truth ------------------------------------------------------
 ground_truth <- subset(b_signed_results, start_iter == 10, 
   select = c(algorithm, probabilities))
@@ -166,9 +174,8 @@ for (i in 1:nrow(b_signed_comp)) {
   }
 }
 
-# plot error rate per iteration ------------------------------------------------
-# (average errors over problemsets )
-par(mfrow=c(1,2))
+# PLOTS ------------------------------------------------------------------------
+# (aggregate over problemsets and algorithms)
 
 for (i in 1:nrow(b_signed_comp)) {
   b_signed_comp$time[i] <- 10 - b_signed_comp$repls[i]
@@ -187,17 +194,28 @@ start_iter <- 1:10
 plot_error <- cbind(start_iter, errors)
 plot_error <- as.data.frame((plot_error))
 plot_error <- plot_error[-c(1),] 
-par(mgp = c(2, 1, 0))
-plot(plot_error, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of replications", ylab = "error rate",)
-
-
-# plot time saved per iteration ------------------------------------------------
 
 plot_time <- cbind(start_iter, time_saved)
 plot_time <- as.data.frame((plot_time))
 plot_time <- plot_time[-c(1),] 
 par(mgp = c(2, 1, 0))
-plot(plot_time, type="o", col="black", ylim = c(0,1), 
-  xlab = "minimum number of replications", ylab = "time saving (%)")
 
+error_plot <- ggplot(data=plot_error, aes(x=as.numeric(start_iter), 
+                                          y=as.numeric(errors), group=1)) +
+  geom_line()+
+  geom_point() + 
+  xlab("minimum number of replications") + ylab("error rate") + 
+  ylim(0, 1)
+
+time_plot <- ggplot(data=plot_time, aes(x=as.numeric(start_iter), 
+                                        y=as.numeric(time_saved), group=1)) +
+  geom_line()+
+  geom_point() + 
+  xlab("minimum number of replications") + ylab("time saving (%)") + 
+  ylim(0, 1)
+
+
+benchmark_b2 <- grid.arrange(error_plot, time_plot, nrow = 1)
+
+ggsave("benchmark_b2.pdf", plot = benchmark_b2, device = "pdf", 
+       path = "H:/MA/simulation_data/plots_thesis", width = 6, height = 3)

@@ -6,7 +6,7 @@
 \usage{
 seq_b_corr_t_test(problem, baseline, algorithm = NULL, measure = NULL,
   compare = NULL, rho = 0.1, rope = c(-0.01, 0.01), max_repls = 20,
-  prob = 0.95, min_num = 5, ...)
+  prob = 0.95, min_repls = 5, ...)
 }
 \arguments{
 \item{problem}{Problem set on which the test should be performed.}
@@ -32,7 +32,7 @@ a data frame that has already been built is being used.}
 
 \item{prob}{Probability, which the decision that the Baseline is better than 
    the algorithm is based on. The default is 0.95. 
-@param min_num The minimum number of replications that is either generated 
+@param min_repls The minimum number of replications that is either generated 
     or used to perform the first Bayesian test in the sequential approach. 
     To prevent an bias through early stopping a minimum number of 5 runs 
     (default) is recommended.}

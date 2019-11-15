@@ -15,9 +15,6 @@ plot_cd(df, measure = NULL, alpha = 0.05, cex = 0.75, ...)
 
 \item{cex}{Numeric value to control the size of the font.}
 }
-\value{
-A \code{\linkS4class{ggplot}} object.
-}
 \description{
 This function implements the critical difference plots 
     introduced in Demsar (2006).
