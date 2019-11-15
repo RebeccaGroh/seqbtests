@@ -67,7 +67,7 @@ for (start_iter in 2:30) {
 }
 
 # SAVE DATA 
-# simulation_b_corr_results <- test_result_b1
+simulation_b_corr_results <- test_result_b1
 # setwd("H:/MA/simulation_data")
 # write.csv(simulation_b_corr_results, file = "simulation_b_corr_results.csv", row.names = FALSE)
 b_corr <- simulation_b_corr_results
@@ -196,9 +196,9 @@ errors <- list()
 time_saved <- list()
 
 for (i in b_corr_comp$start_iter) {
-  number_errors <- subset(b_corr_comp, start_iter == i, select = c(decision))
+  number_errors <- subset(b_corr_comp, start_iter == i1, select = c(decision))
   errors[i] <- colMeans(number_errors)
-  subset_iter <- subset(b_corr_comp, start_iter == i, select = c(time))
+  subset_iter <- subset(b_corr_comp, start_iter == i1, select = c(time))
   time_saved[i] <- colMeans(subset_iter)/30
 }
 

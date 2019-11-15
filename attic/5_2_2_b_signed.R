@@ -65,7 +65,7 @@ for (start_iter in c(2, 5, 10, 15, 20, 25, 30)) {
 # setwd("H:/MA/simulation_data")
 # write.csv(simulation_b_signed_multiple_data_mu, 
 # file = "simulation_b_signed_multiple_data_mu.csv", row.names = FALSE)
-# b_signed <- simulation_b_signed_multiple_data_mu
+b_signed <- simulation_b_signed_multiple_data_mu
 
 # Compare to ground truth 1 ----------------------------------------------------
 
