@@ -6,6 +6,13 @@
 \usage{
 get_data_frame_htest_small(p_value, test, statistic)
 }
+\arguments{
+\item{p_value}{the p-value for the test.}
+
+\item{test}{the hypothesis test.}
+
+\item{statistic}{the value of the statistic used in the test.}
+}
 \value{
 List.
 }

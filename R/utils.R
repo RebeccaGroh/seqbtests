@@ -170,9 +170,9 @@ get_data_frame_seq <- function(k, posterior, repls) {
 #' @description This function collects the part of the results shown in the data 
 #'     frame. 
 #' @param k algorithm tested against the baseline.    
-#' @param p_value
-#' @param test
-#' @param statistic
+#' @param p_value the p-value for the test. 
+#' @param test the hypothesis test. 
+#' @param statistic the value of the statistic used in the test.
 #' @return List. 
 get_data_frame_htest <- function(k, p_value, test, statistic) {
   result <- data.frame()
@@ -186,9 +186,9 @@ get_data_frame_htest <- function(k, p_value, test, statistic) {
 #' @title Get test results (for frequentist tests)
 #' @description This function collects the part of the results shown in the data 
 #'     frame. Not depending on algorithms.  
-#' @param p_value
-#' @param test
-#' @param statistic
+#' @param p_value the p-value for the test. 
+#' @param test the hypothesis test. 
+#' @param statistic the value of the statistic used in the test. 
 #' @return List. 
 get_data_frame_htest_small <- function(p_value, test, statistic) {
   result <- data.frame()

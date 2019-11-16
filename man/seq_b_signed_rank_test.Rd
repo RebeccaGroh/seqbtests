@@ -76,7 +76,7 @@ The basis for this test has first been implemented in rNPBST. For testing
 \examples{
     
     results <- seq_b_signed_rank_test(df = test_benchmark_small, 
-    baseline = 'algo_1', max_repls = 10)
+    baseline = 'algo_1', algorithm = "algo_2", max_repls = 10)
 }
 \references{
 \url{https://github.com/JacintoCC/rNPBST}

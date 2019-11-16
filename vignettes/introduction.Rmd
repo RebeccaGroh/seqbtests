@@ -53,7 +53,7 @@ approach to Bayesian testing. Since, evaluation of ML algorithms with performanc
 measures like classification accuracy can be quite time consuming, the approach 
 offers new possibilities to save time. After each iteration of evaluation, 
 the sequential tests compare the estimated posterior probabilities to a defined 
-threshold and stop further testing, if an decision based on the probabilities 
+threshold and stop further testing, if a decision based on the probabilities 
 can be made. The package offers the possibility to evaluate the algorithms performance, while 
 simultaneously testing the results, thus, in the case of early stopping this 
 procedure can considerably save evaluation time.  
@@ -88,12 +88,12 @@ performance are referred to as problem sets and are stored in the `problem`
 column.
 
 The `algorithm` column contains the names of each algorithm. `replication` 
-describes the number of replication, i.e. the iteration of performance 
+describes the number of the replication, i.e. the iteration of performance 
 evaluation. Finally, the results of evaluation are displayed in the 
 column named `measure_*`. The data format allows to include more than one 
 performance measure in the data frame by setting a specification after 
-`measure_`. For example one can include `measure_acc` and `measure_mse` for 
-accuracy and mean squared error of the algorithms performances. However, for 
+`measure_`. For example one can include `measure_acc` and `measure_f1` for 
+accuracy and F1 Score, the harmonic mean of precision and recall, of the algorithms performances. However, for 
 each test or plot one specific measure column has to be defined since it is not 
 possible to  compare multiple measures at once. 
 
@@ -168,7 +168,7 @@ by different algorithms the package provides several frequentist hypothesis
 tests. 
 
 One can differentiate between parametric and non-parametric tests. The advantage 
-of non-parametric tests is that no assumptions need to be done. If the 
+of non-parametric tests is that no assumptions need to be made If the 
 assumptions for the parametric tests hold, those tests are more powerful, if, 
 however, the assumptions do not apply one should rather use non-parametric tests 
 since in this case they are more powerful.
@@ -176,11 +176,11 @@ since in this case they are more powerful.
 Assumptions: 
 
 * Every parametric test assumes that the data follows a certain 
-    distribution. Most test assume it to be a normal distribution. 
+    distribution. Most tests assume it to be a normal distribution. 
 * Data from multiple groups should show equal standard deviations. 
 
 Before testing the differences one should always have a further look on the 
-algorithms by visualizing their performance with `plot_densities`. 
+algorithms by visualizing their aggregated performance on all problem sets with `plot_densities`. 
 
 ```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 plot_densities(test_benchmark_small)
@@ -190,7 +190,7 @@ The function plots the density of all algorithms performances in the considered
 data frame. As an argument the user has to define the data frame (`df`). If the 
 data frame contains more than one measure column the user should define which 
 column to use (per default the first column is used). Based on the densities one 
-can already determine whether an algorithm is likely to be normal distributed. 
+can already determine whether an algorithm is likely to be normally distributed. 
 
 For further visualization of the data the mean performance of the algorithms can 
 be observed using the function `plot_boxplot`.
@@ -213,7 +213,7 @@ differences among the algorithms, thus all algorithm score the same performance.
 
 The correlated t-test is an extension of the common t-test that additionally takes into 
 account that the algorithms performances are evaluated on overlapping trainings 
-sets and are therefore correlated. It is used for the analysis of performance 
+sets and are therefore correlated. It is used, for the analysis of performance 
 results on a single problem set.
 
 ```{r}
@@ -243,7 +243,7 @@ procedures such as Bonferroni correction.
 
 The Wilcoxon Signed Ranks test is recommended by @demsar2006 
 for the comparison of two classifiers on multiple problem sets. It is a 
-non-parametric test that ranks and compares the performances of two classifiers.
+non-parametric test that ranks and compares the performances of two classifiers, based on their ranks.
 
 ```{r}
 results_wilcoxon <-  wilcoxon_signed_test(df = test_benchmark, 
@@ -297,7 +297,7 @@ post-hoc test, the Nemenyi post-hoc test, which is recommended by @demsar2006.
 ### Nemenyi post-hoc test 
 
 The Nemenyi test is close to the Tukey test for the ANVOA, it compares each 
-algorithm to one another. If the average ranks of two algorithms differs by at 
+algorithm to one another. If the average ranks of two algorithms differ by at 
 least the value of Critical Difference (CD) the two algorithms are significantly 
 different. 
 
@@ -321,7 +321,7 @@ Algorithms that do not differ significantly are connected by horizontal lines.
 
 It is possible that the Friedman test finds significant differences that 
 post-hoc tests are not able to detect. This case happens quite rarely and is due 
-to the post-hocs lower power. When this case occurs one can only state that 
+to the post-hoc tests lower power. When this case occurs one can only state that 
 there significant differences between the algorithms appear.
 
 
@@ -376,7 +376,7 @@ Bayesian counterpart is a parametric test, which assumes Gaussian distribution
 of the data. If the correlation, denoted by `rho`, is 0 the Bayesian correlated
 t-test and the frequentist correlated t-test are numerically equivalent. Yet, 
 the approaches inferences are different. Thus, the interpretation of the same 
-numerical values differs.
+numerical values differs. The default value for `rho` is 0.01. 
 
 ```{r}
 results_b_corr <- b_corr_t_test(df= test_benchmark_small, 
@@ -509,7 +509,7 @@ obtained by Markov-Chain Monte Carlo sampling.
 
 The hierarchical approach is recommended by @benavoli2017 over the 
 Bayesian Signed test. Yet, it is quite time consuming, which is inconvenient if 
-the tests needs to be run often. 
+tests needs to be run often. 
 
 The graphical visualization shows a similar triangle plot as the Bayesian Sign 
 and Signed Ranks test.
@@ -524,8 +524,7 @@ and Signed Ranks test.
 
 While all the former tests have been implemented in similar forms in other 
 packages, this package is trying to optimize the process of performance 
-comparison. The procedure of assessing the algorithms performances is mostly 
-quiet time-consuming. To counteract this issue this package provides a 
+comparison. The procedure of assessing the algorithms performances is mostly time-consuming. To counteract this issue this package provides a 
 sequential approach for comparison while using Bayesian tests.
 
 Thus, the results of the comparisons are checked after each run of evaluation of 

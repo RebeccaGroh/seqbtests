@@ -32,7 +32,9 @@ Suggests:
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
-    roxygen2
+    roxygen2, 
+    rNPBST,
+    scmamp
 RoxygenNote: 6.1.1
 Remotes: 
     bioc::3.8/graph, 
@@ -41,3 +43,4 @@ Remotes:
     JacintoCC/rNPBST
 VignetteBuilder: 
     knitr
+    

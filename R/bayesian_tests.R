@@ -139,7 +139,7 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
     # define samples when testing on multiple datasets
     if (is.null(problem)) {
       data_wide <- tidyr::spread(df, algorithm, measure)
-      sum_data <- aggregate(data_wide[, c(baseline, k)], 
+      sum_data <- stats::aggregate(data_wide[, c(baseline, k)], 
         by = list(data_wide[["problem"]]), FUN = mean)
       x <- sum_data[, baseline]
       y <- sum_data[, k]
@@ -234,7 +234,7 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
     # define samples when testing on multiple datasets
     if (is.null(problem)) {
       data_wide <- tidyr::spread(df, algorithm, measure)
-      sum_data <- aggregate(data_wide[, c(baseline, k)], 
+      sum_data <- stats::aggregate(data_wide[, c(baseline, k)], 
         by = list(data_wide[["problem"]]), FUN = mean)
       x <- sum_data[, baseline]
       y <- sum_data[, k]

@@ -149,7 +149,7 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @examples     
 #'     results <- seq_b_sign_test(df = test_benchmark_small, 
-#'     baseline = "algo_1", max_repls = 10)
+#'     baseline = "algo_1", algorithm = "algo_2", max_repls = 10)
 #' @export
 seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL, 
   measure = NULL, compare = NULL, s = 1, z_0 = 0, rope = c(-0.01, 0.01),
@@ -186,7 +186,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
       # define samples when testing on multiple datasets
       if (is.null(problem)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
-        sum_data <- aggregate(data_wide[, c(baseline, k)], 
+        sum_data <- stats::aggregate(data_wide[, c(baseline, k)], 
           by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, baseline]
         y <- sum_data[, k]
@@ -274,7 +274,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @examples     
 #'     results <- seq_b_signed_rank_test(df = test_benchmark_small, 
-#'     baseline = 'algo_1', max_repls = 10)
+#'     baseline = 'algo_1', algorithm = "algo_2", max_repls = 10)
 #' @export
 seq_b_signed_rank_test <- function(problem = NULL, baseline, 
   algorithm = NULL, measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
@@ -311,7 +311,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
       # define samples when testing on multiple datasets
       if (is.null(problem)) {
         data_wide <- tidyr::spread(data, algorithm, measure)
-        sum_data <- aggregate(data_wide[, c(baseline, k)], 
+        sum_data <- stats::aggregate(data_wide[, c(baseline, k)], 
           by = list(data_wide[["problem"]]), FUN = mean)
         x <- sum_data[, baseline]
         y <- sum_data[, k]
@@ -421,7 +421,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
 #'     results <- seq_b_hierarchical_test(df = test_benchmark_small,
-#'     baseline = 'algo_1', max_repls = 10)
+#'     baseline = "algo_1", algorithm = "algo_2", max_repls = 10, min_repls = 8)
 #' @export
 seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL, 
   compare = NULL, rho = 0.1, max_repls = 20, rope = c(-0.01, 0.01), 

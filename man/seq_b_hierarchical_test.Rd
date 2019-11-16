@@ -110,7 +110,7 @@ The basis for this test has first been implemented in scmamp.
 }
 \examples{
     results <- seq_b_hierarchical_test(df = test_benchmark_small,
-    baseline = 'algo_1', max_repls = 10)
+    baseline = "algo_1", algorithm = "algo_2", max_repls = 10, min_repls = 8)
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

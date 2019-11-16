@@ -86,7 +86,7 @@ friedman_test <- function(df, measure = NULL) {
   }
   algo_names <- unique(df$algorithm)
   data_wide <- tidyr::spread(df, algorithm, measure)
-  sum_data <- aggregate(data_wide[, algo_names], 
+  sum_data <- stats::aggregate(data_wide[, algo_names], 
     by = list(data_wide[["problem"]]), FUN = mean)
   # define dataset
   data <- data.frame(sum_data[, -1], row.names = sum_data[, 1])
