@@ -7,13 +7,17 @@
 plot_posterior(results, method, points = 1000)
 }
 \arguments{
-\item{results}{Results of the Bayesian analysis performed before.}
+\item{results}{(`character`)\cr Results of the Bayesian analysis performed 
+before.}
 
-\item{method}{The Bayesian test that has been performed. Either
-"b_corr_t_test", b_sign_test", "b_signed_rank_test" or 
+\item{method}{(`character`)\cr The Bayesian test that has been performed. 
+Either "b_corr_t_test", b_sign_test", "b_signed_rank_test" or 
 "b_hierarchical_test".}
 
-\item{points}{Number of points used to plot the function.}
+\item{points}{(`double`)\cr Number of points used to plot the function.}
+}
+\value{
+(`list`) \cr List containing a `gg` object.
 }
 \description{
 This function plots the posterior densities obtained in Bayesian 

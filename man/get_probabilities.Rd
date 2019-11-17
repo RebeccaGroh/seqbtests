@@ -7,17 +7,19 @@
 get_probabilities(result, compare, prob)
 }
 \arguments{
-\item{result}{Data frame with all the results within in the tests.}
+\item{result}{(`list`)\cr Data frame with all the results within in the 
+tests.}
 
-\item{compare}{Defines whether the baseline should be tested for either 
-being better ('better') or being just as good ('equal') as the other 
-algorithms.}
+\item{compare}{(`character`)\cr Defines if one algorithm needs to perform 
+better ({\code{better}}) for decisions based on the posterior 
+distribution or whether it is sufficient to perform not worse 
+({\code{equal}}).}
 
-\item{prob}{Probability, which the decision that the Baseline is better than 
-the algorithm is based on.}
+\item{prob}{(`double`)\cr Threshold probability that decision rely on. 
+Default is 0.95.}
 }
 \value{
-Column of result data frame.
+(`list`)\cr Column of result data frame.
 }
 \description{
 This function defines the probabilities resulting from the

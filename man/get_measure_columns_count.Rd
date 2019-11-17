@@ -7,11 +7,11 @@
 get_measure_columns_count(df)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-A numeric vector displaying the number of columns containing 
-    performance measures.
+(`list`)\cr A numeric vector displaying the number of columns  
+    containing performance measures.
 }
 \description{
 Get the number parameter columns in the data frame.

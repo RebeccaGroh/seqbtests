@@ -7,12 +7,15 @@
 check_column_names(df)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-TRUE if test was successful.
+(`logical`)\cr TRUE if test was successful.
 }
 \description{
 Check if data frame only contains legit columns and whether any
     compulsory columns exist.
+}
+\examples{
+    check_column_names(test_benchmark_small)
 }

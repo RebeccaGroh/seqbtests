@@ -10,53 +10,74 @@ seq_b_signed_rank_test(problem = NULL, baseline, algorithm = NULL,
   max_repls = 20, prob = 0.95, min_repls = 5, ...)
 }
 \arguments{
-\item{problem}{Problem set on which the test should be performed.}
+\item{problem}{(`character`)\cr Problem set used to evaluate the algorithms 
+performance. Value in 'problem' column.}
 
-\item{baseline}{First algorithm.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{algorithm}{Second algorithm. If not defined, every algorithm will be 
-tested against baseline.}
+\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+column. If not defined, the baseline is tested against all algorithms 
+in the data frame.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{compare}{Defines whether the baseline should be tested for either 
-being better ('better') or being just as good ('equal') as the other 
-algorithms. If not defined, the default is to test for 'better'.}
+\item{compare}{(`character`)\cr Defines if one algorithm needs to perform 
+better ({\code{better}}) for decisions based on the posterior 
+distribution or whether it is sufficient to perform not worse 
+({\code{equal}}).}
 
-\item{s}{Prior pseudo-observation probability.}
+\item{s}{(`double`)\cr Scale parameter of the prior Dirichlet Process. 
+Default is 0.5}
 
-\item{z_0}{Prior pseudo-observation.}
+\item{z_0}{(`double`)\cr Position of the pseudo-observation associated to 
+the prior Dirichlet Process. Default is 0.}
 
-\item{weights}{A-priori weights.}
+\item{weights}{(`any`)\cr A prior weights.}
 
-\item{mc_samples}{Number of samples of the distribution.}
+\item{mc_samples}{(`double`)\cr Number of samples used to estimate the 
+posterior probability distribution.}
 
-\item{rope}{Region of practical equivalence.}
+\item{rope}{(`double`)\cr Region of practical equivalence. Default is 
+c(-0.01, 0.01).}
 
-\item{max_repls}{Maximum number of replications that should be build in 
-get_replications. Or maximum number of replications in data frame, if 
-a data frame that has already been built is being used.}
+\item{max_repls}{(`double`)\cr Maximum number of replications. If a complete 
+data frame is passed ({\code{max_repls}}) should correspond to the 
+maximum number of replications that are built. Default is 20.}
 
-\item{prob}{Probability, which the decision that the Baseline is better than 
-   the algorithm is based on. The default is 0.95. 
-@param min_repls The minimum number of replications that is either generated 
-    or used to perform the first Bayesian test in the sequential approach. 
-    To prevent an bias through early stopping a minimum number of 5 runs 
-    (default) is recommended.}
+\item{prob}{(`double`)\cr Threshold probability that decision rely on. 
+Default is 0.95.}
 
-\item{...}{Additional arguments. When already built dataset is used the User 
-can define it with code{df}.}
+\item{min_repls}{(`double`)\cr Minimum number of replications that is 
+used/generated before an optional stopping rule is activated. Default is 
+5.}
+
+\item{...}{(any)\cr Additional arguments for ({\code{get_replications}}). 
+To pass a complete data frame, set ({\code{df}}) (`character`).}
+
+\item{rho}{(`double`)\cr Correlation factor. Default is 0.1.}
 }
 \value{
-A list containing the following components:
+(`list`)\cr A list containing the following components:
 \itemize{
-    \item{code{measure}} A string with the name of the measure column used.
-    \item{code{method}} A string with the name of the method used.
-    \item{code{baseline}} A string with the name of the baseline algorithm.
-    \item{code{posteriror_probabilities}} A data frame with one row for every 
-        algorithm that is compared to the baseline. The columns show the 
-        posterior probabilities and whether significance appears.
-    \item{code{repls}} Number of the considered replications.
+    \item{\code{measure}} (`character`)\cr A string with the name of the 
+        measure column. 
+    \item{\code{method}} (`character`)\cr A string with the name of the 
+        method. 
+    \item{\code{baseline}} (`character`)\cr A string with the name of the 
+        first algorithm. Value in 'algorithm' column. 
+    \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+        components:
+    \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+        'algorithm' column. If not defined, the baseline is tested against 
+        all algorithms in the data frame. 
+    \item{\code{left}} (`double`)\cr Left probability. 
+    \item{\code{rope}} (`double`)\cr Rope probability. 
+    \item{\code{right}} (`double`)\cr Right probability. 
+    \item{\code{repls}} (`double`)\cr Number of evaluated replications. 
+    \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+        probabilities and threshold probability. 
 }
 }
 \description{
@@ -64,14 +85,12 @@ This function implements a sequential approach of the Bayesian version of
     the signed rank test to compare the performance of machine learning 
     algorithms to one another. Sample size is not fixed in advance, data are 
     evaluated as they are collected. Further sampling is stopped in 
-    accordance with a pre-defined stopping rule as soon as significant 
-    results are obtained.
+    accordance with a pre-defined stopping rule.
 }
 \details{
 The basis for this test has first been implemented in rNPBST. For testing
     over multiple datasets, don´t specify the problem set argument in the 
-    function. Note that if no measure column is defined per default the first
-    column defined as measure_* in the data frame is used.
+    function.
 }
 \examples{
     

@@ -1,8 +1,8 @@
 #' @title Summary
 #' @description Short summary of the data frame, 
 #'     including the columns names and number of rows.
-#' @param df Input data frame.
-#' @return A vector containing the columns names and number of rows.
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @return (`list`)\cr A vector containing the columns names and number of rows.
 #' @export
 data_summary <- function(df) {
   rows <- nrow(df)
@@ -18,11 +18,13 @@ data_summary <- function(df) {
 #'     function specifies the ratio of existing NAs. If there are any NAs the 
 #'     User can decide to drop all observations for that specific value, since 
 #'     the data frame needs to be complete for testing. 
-#' @param df Input data frame.
-#' @param measure Measure column.
-#' @param check_var Column in data frame used to check for NAs. Either 
-#'     "problem" (default) or "algorithm". 
-#' @return List of Cases, NAs and the NA ratio according to check_var. 
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used.
+#' @param check_var (`character`)\cr Column in data frame used to check for NAs. 
+#'     Either "problem" (default) or "algorithm". 
+#' @return (`list`)\cr List of Cases, NAs and the NA ratio according to 
+#'     check_var. 
 #' @export 
 na_check <- function(df, measure = NULL, check_var = NULL){
   result <- data.frame()
@@ -51,11 +53,12 @@ na_check <- function(df, measure = NULL, check_var = NULL){
 #' @title Drop NAs by groups 
 #' @description 
 #'     Drop group of rows that contain any NA depending on values of check_var. 
-#' @param df Input data frame.
-#' @param measure Measure column.
-#' @param check_var Column in data frame used to check for NAs. Either 
-#'     "problem" (default) or "algorithm".
-#' @return New data frame without NAs. 
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used.
+#' @param check_var (`character`)\cr Column in data frame used to check for NAs. 
+#'     Either "problem" (default) or "algorithm". 
+#' @return (`list`)\cr New data frame without NAs. 
 #' @export 
 na_drop <- function(df, check_var = NULL, measure = NULL) {
   if (is.null(measure)) {

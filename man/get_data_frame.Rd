@@ -7,12 +7,13 @@
 get_data_frame(k, posterior)
 }
 \arguments{
-\item{k}{Algorithm tested against the baseline.}
+\item{k}{(`character`)\cr Algorithm tested against the baseline.}
 
-\item{posterior}{Call for the posterior probabilities of the bayesian tests.}
+\item{posterior}{(`character`)\cr Call for the posterior probabilities of the 
+Bayesian tests.}
 }
 \value{
-List.
+(`list`)\cr List.
 }
 \description{
 This function collects the part of the results shown in the data 

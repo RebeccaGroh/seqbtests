@@ -7,13 +7,16 @@
 get_threshold(posterior, compare)
 }
 \arguments{
-\item{posterior}{Call for the posterior probabilities of the bayesian tests.}
+\item{posterior}{(`character`)\cr Call for the posterior probabilities of the 
+Bayesian tests.}
 
-\item{compare}{Defines whether the baseline should be tested for either 
-being better}
+\item{compare}{(`character`)\cr Defines if one algorithm needs to perform 
+better ({\code{better}}) for decisions based on the posterior 
+distribution or whether it is sufficient to perform not worse 
+({\code{equal}}).}
 }
 \value{
-List.
+(`list`)\cr List.
 }
 \description{
 This function defines the threshold for making any decisions 

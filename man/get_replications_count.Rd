@@ -7,12 +7,12 @@
 get_replications_count(x, y)
 }
 \arguments{
-\item{x}{First sample.}
+\item{x}{(`list`)\cr First sample.}
 
-\item{y}{Second sample.}
+\item{y}{(`list`)\cr Second sample.}
 }
 \value{
-TRUE if both samples are of same length.
+(`logical`)\cr TRUE if both samples are of same length.
 }
 \description{
 Check if number of observations in the first and second 

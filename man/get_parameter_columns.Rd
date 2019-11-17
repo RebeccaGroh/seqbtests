@@ -7,10 +7,10 @@
 get_parameter_columns(df)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-A vector containing all parameter columns.
+(`list`)\cr A vector containing all parameter columns.
 }
 \description{
 Get the list of names for all parameter columns within the 

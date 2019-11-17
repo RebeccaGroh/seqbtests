@@ -1,12 +1,19 @@
 #' @title Check column names 
 #' @description Check if column names that were passed by User are contained 
 #'     in the data frame. 
-#' @param df Input data frame.
-#' @param problem Problem set on which the test should be performed. 
-#' @param baseline First algorithm.
-#' @param algorithm Second algorithm. If not defined, every algorithm will be 
-#'     tested against baseline. 
-#' @param measure Measure column. 
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param problem (`character`)\cr Problem set used to evaluate the algorithms 
+#'     performance. Value in 'problem' column. 
+#' @param baseline (`character`)\cr First algorithm. Value in 'algorithm'  
+#'     column. 
+#' @param algorithm (`character`)\cr Second algorithm. Value in 'algorithm' 
+#'     column. If not defined, the baseline is tested against all algorithms 
+#'     in the data frame. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used.  
+#' @return (`logical`)\cr TRUE if test was successful.
+#' @examples 
+#'     check_names(test_benchmark_small)
 #' @export
 check_names <- function(df, problem = NULL, baseline = NULL, 
   algorithm = NULL, measure = NULL) {
@@ -30,8 +37,10 @@ check_names <- function(df, problem = NULL, baseline = NULL,
 #' @title Check Columns of data frame 
 #' @description Check if data frame only contains legit columns and whether any
 #'     compulsory columns exist. 
-#' @param df Input data frame.
-#' @return TRUE if test was successful.
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @return (`logical`)\cr TRUE if test was successful.
+#' @examples 
+#'     check_column_names(test_benchmark_small)
 #' @export
 check_column_names <- function(df) {
   checkmate::assert_true(get_main_columns_count(df) + 
@@ -46,8 +55,10 @@ check_column_names <- function(df) {
 #' @title Check Structure 
 #' @description Check if the structure of the data frame satisfies the 
 #'     requirements. 
-#' @param df Input data frame,
-#' @return TRUE if test was successful.
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @return (`logical`)\cr TRUE if test was successful.
+#' @examples 
+#'     check_structure(test_benchmark_small)
 #' @export
 check_structure <- function(df) {
   # check column and row count: at least 4 cols (problem, algorithm, 
@@ -75,10 +86,11 @@ check_structure <- function(df) {
 #' @title Paste algorithm and parameter
 #' @description If there is a parameter additional to the algorithm, both can 
 #'     be combined, when using this function. 
-#' @param df Input data frame,
-#' @param parameter_algorithm Algorithm parameter in data frame. 
-#' @return New data frame, where the algorithm and parameter_algorithm column, 
-#'     as well as the value names are combined. 
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param parameter_algorithm df (`character`)\cr Algorithm parameter in data 
+#'     frame. 
+#' @return df (`list`)\cr New data frame, where the algorithm and 
+#'     parameter_algorithm column, as well as the value names are combined. 
 #' @export 
 paste_algo_pars <- function(df, parameter_algo = NULL) {
   df[["algorithm"]] <- 
@@ -96,6 +108,8 @@ paste_algo_pars <- function(df, parameter_algo = NULL) {
 #' @title Table test results (Bayesian tests)
 #' @description Create a list containing the Bayesian test results based on a 
 #'     generic function.
+#' @param x (`list`)\cr Test results. 
+#' @param ... (any)\cr Additional arguments.
 print.b_test <- function(x, ...) {
   cat("\n", "Results of the", x$method, "\n", "Measure column =", x$measure, 
     "\n", "Baseline algorithm =", x$baseline, "\n", "\n" )
@@ -107,6 +121,8 @@ print.b_test <- function(x, ...) {
 #' @title Table test results (Frequentist tests)
 #' @description Create a list containing the Frequentist test results based on a 
 #'     generic function.
+#' @param x (`list`)\cr Test results. 
+#' @param ... (any)\cr Additional arguments.
 print.h_test <- function(x, ...) {
   cat("\n", "Results of the", x$method, "\n", "Measure column =", x$measure, 
     "\n", "Baseline algorithm =", x$baseline, "\n", "\n" )
@@ -118,6 +134,8 @@ print.h_test <- function(x, ...) {
 #' @title Table test results (Frequentist tests)
 #' @description Create a list containing the Frequentist test results based on a 
 #'     generic function. Not containing the Baseline. 
+#' @param x (`list`)\cr Test results. 
+#' @param ... (any)\cr Additional arguments.
 print.h_test_small <- function(x, ...) {
   cat("\n", "Results of the", x$method, "\n", "Measure column =", x$measure, 
     "\n", "\n" )
@@ -129,6 +147,8 @@ print.h_test_small <- function(x, ...) {
 #' @title Table test results (Nemenyi tests)
 #' @description Create a list containing the Nemenyi test results based on a 
 #'     generic function. 
+#' @param x (`list`)\cr Test results. 
+#' @param ... (any)\cr Additional arguments.
 print.nemenyi <- function(x, ...){
   cat("\n", "Results of the", x$method, "\n", "Measure column =", x$measure, 
     "\n", "\n" )

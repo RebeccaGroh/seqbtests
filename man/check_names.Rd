@@ -8,18 +8,28 @@ check_names(df, problem = NULL, baseline = NULL, algorithm = NULL,
   measure = NULL)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{problem}{Problem set on which the test should be performed.}
+\item{problem}{(`character`)\cr Problem set used to evaluate the algorithms 
+performance. Value in 'problem' column.}
 
-\item{baseline}{First algorithm.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{algorithm}{Second algorithm. If not defined, every algorithm will be 
-tested against baseline.}
+\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+column. If not defined, the baseline is tested against all algorithms 
+in the data frame.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
+}
+\value{
+(`logical`)\cr TRUE if test was successful.
 }
 \description{
 Check if column names that were passed by User are contained 
     in the data frame.
+}
+\examples{
+    check_names(test_benchmark_small)
 }

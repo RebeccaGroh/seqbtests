@@ -7,10 +7,10 @@
 data_summary(df)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-A vector containing the columns names and number of rows.
+(`list`)\cr A vector containing the columns names and number of rows.
 }
 \description{
 Short summary of the data frame, 

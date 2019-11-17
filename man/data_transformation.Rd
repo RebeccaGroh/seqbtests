@@ -7,14 +7,17 @@
 data_transformation(df, algo, measure)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{algo}{Name of the algorithm that shall be compared.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{measure}{Measure column.}
+\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+column. If not defined, the baseline is tested against all algorithms 
+in the data frame.}
 }
 \value{
-Matrix.
+(`matrix`)\cr Matrix.
 }
 \description{
 Extract a data matrix out of the original dataset. The matrix 

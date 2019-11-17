@@ -7,22 +7,24 @@
 plot_cd(df, measure = NULL, alpha = 0.05, cex = 0.75, ...)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{alpha}{Significance level to get the critical difference.}
+\item{alpha}{(`double`)\cr Significance level to get the critical difference.}
 
-\item{cex}{Numeric value to control the size of the font.}
+\item{cex}{(`double`)\cr Numeric value to control the size of the font.}
+}
+\value{
+(`list`) \cr List containing a `gg` object.
 }
 \description{
 This function implements the critical difference plots 
     introduced in Demsar (2006).
 }
 \details{
-The test has first been implemented in scmamp. 
-    Note that if no measure column is defined per default the first column 
-    defined as measure_* in the data frame is used. By default, the alpha 
+The test has first been implemented in scmamp. By default, the alpha 
     value is 0.05 and the default for cex is 0.75.
 }
 \examples{

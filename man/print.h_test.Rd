@@ -6,6 +6,11 @@
 \usage{
 \method{print}{h_test}(x, ...)
 }
+\arguments{
+\item{x}{(`list`)\cr Test results.}
+
+\item{...}{(any)\cr Additional arguments.}
+}
 \description{
 Create a list containing the Frequentist test results based on a 
     generic function.

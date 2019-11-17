@@ -8,19 +8,21 @@ get_results_htest(baseline = NULL, method, measure, data = NULL,
   matrix = NULL)
 }
 \arguments{
-\item{baseline}{Baseline algorithms that every algorithm can be compared to.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{method}{Frequentist test.}
+\item{method}{(`character`)\cr Bayesian test.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{data}{Data frame containing the posterior probabilities.}
+\item{data}{(`list`)\cr Data frame containing the posterior probabilities.}
 
-\item{matrix}{A matrix with all the pair wise differences of 
+\item{matrix}{(`matrix`)\cr A matrix with all the pair wise differences of 
 average rankings.}
 }
 \value{
-List.
+(`list`)\cr List.
 }
 \description{
 This function collects the results of the Frequentist tests.

@@ -7,15 +7,17 @@
 na_check(df, measure = NULL, check_var = NULL)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{check_var}{Column in data frame used to check for NAs. Either 
-"problem" (default) or "algorithm".}
+\item{check_var}{(`character`)\cr Column in data frame used to check for NAs. 
+Either "problem" (default) or "algorithm".}
 }
 \value{
-List of Cases, NAs and the NA ratio according to check_var.
+(`list`)\cr List of Cases, NAs and the NA ratio according to 
+    check_var.
 }
 \description{
 Check if the measure column is complete. 

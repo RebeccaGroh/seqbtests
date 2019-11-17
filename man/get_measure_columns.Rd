@@ -7,10 +7,10 @@
 get_measure_columns(df)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-A vector containing all measure columns.
+(`list`)\cr A vector containing all measure columns.
 }
 \description{
 Get the list of names for all columns containing performance 

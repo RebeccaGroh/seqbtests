@@ -10,43 +10,64 @@ b_signed_rank_test(df, problem = NULL, baseline, compare = NULL,
   0.01))
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{problem}{Problem set on which the test should be performed.}
+\item{problem}{(`character`)\cr Problem set used to evaluate the algorithms 
+performance. Value in 'problem' column.}
 
-\item{baseline}{First algorithm.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{compare}{Defines whether the baseline should be tested for either 
-being better ('better') or being just as good ('equal') as the other 
-algorithms. If not defined, the default is to test for 'better'.}
+\item{compare}{(`character`)\cr Defines if one algorithm needs to perform 
+better ({\code{better}}) for decisions based on the posterior 
+distribution or whether it is sufficient to perform not worse 
+({\code{equal}}).}
 
-\item{algorithm}{Second algorithm. If not defined, every algorithm will be 
-tested against baseline.}
+\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+column. If not defined, the baseline is tested against all algorithms 
+in the data frame.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{prob}{Probability, which the decision that the Baseline is better than 
-the algorithm is based on. The default is 0.95.}
+\item{prob}{(`double`)\cr Threshold probability that decision rely on. 
+Default is 0.95.}
 
-\item{s}{Prior pseudo-observation probability.}
+\item{s}{(`double`)\cr Scale parameter of the prior Dirichlet Process. 
+Default is 0.5}
 
-\item{z_0}{Prior pseudo-observation.}
+\item{z_0}{(`double`)\cr Position of the pseudo-observation associated to 
+the prior Dirichlet Process. Default is 0.}
 
-\item{weights}{A-priori weights.}
+\item{weights}{(`any`)\cr A prior weights.}
 
-\item{mc_samples}{Number of samples of the distribution.}
+\item{mc_samples}{(`double`)\cr Number of samples used to estimate the 
+posterior probability distribution.}
 
-\item{rope}{Region of practical equivalence.}
+\item{rope}{(`double`)\cr Region of practical equivalence. Default is 
+c(-0.01, 0.01).}
+
+\item{rho}{(`double`)\cr Correlation factor. Default is 0.1.}
 }
 \value{
-A list containing the following components:
+(`list`)\cr A list containing the following components:
 \itemize{
-    \item{code{measure}} A string with the name of the measure column used.
-    \item{code{method}} A string with the name of the method used.
-    \item{code{baseline}} A string with the name of the baseline algorithm.
-    \item{code{posteriror_probabilities}} A data frame with one row for every 
-        algorithm that is compared to the baseline. The columns show the 
-        posterior probabilities and whether significance appears.
+    \item{\code{measure}} (`character`)\cr A string with the name of the 
+        measure column. 
+    \item{\code{method}} (`character`)\cr A string with the name of the 
+        method. 
+    \item{\code{baseline}} (`character`)\cr A string with the name of the 
+        first algorithm. Value in 'algorithm' column. 
+    \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+        components:
+    \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+        'algorithm' column. If not defined, the baseline is tested against 
+        all algorithms in the data frame. 
+    \item{\code{left}} (`double`)\cr Left probability. 
+    \item{\code{rope}} (`double`)\cr Rope probability. 
+    \item{\code{right}} (`double`)\cr Right probability. 
+    \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+        probabilities and threshold probability. 
 }
 }
 \description{
@@ -55,10 +76,7 @@ This function implements the Bayesian version of the signed rank test.
     compared to either one or multiple algorithms.
 }
 \details{
-The test has first been implemented in rNPBST. For testing over multiple 
-    datasets, don´t specify the problem set argument in the function. Note 
-    that if no measure column is defined per default the first column 
-    defined as measure_* in the data frame is used.
+The test has first been implemented in rNPBST.
 }
 \examples{
     results <- b_signed_rank_test(df= test_benchmark_small,

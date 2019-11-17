@@ -7,12 +7,12 @@
 get_replications(i, df)
 }
 \arguments{
-\item{i}{Number of replications in data frame.}
+\item{i}{(`double`)\cr Number of replications in data frame.}
 
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-Data frame containing defined the number of replications.
+(`list`)\cr Data frame containing defined the number of replications.
 }
 \description{
 When not defined by user, it calls the replications in a 

@@ -7,15 +7,16 @@
 na_drop(df, check_var = NULL, measure = NULL)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{check_var}{Column in data frame used to check for NAs. Either 
-"problem" (default) or "algorithm".}
+\item{check_var}{(`character`)\cr Column in data frame used to check for NAs. 
+Either "problem" (default) or "algorithm".}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 }
 \value{
-New data frame without NAs.
+(`list`)\cr New data frame without NAs.
 }
 \description{
 Drop group of rows that contain any NA depending on values of check_var.

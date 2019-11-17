@@ -7,10 +7,10 @@
 get_extras_scmamp(x, ...)
 }
 \arguments{
-\item{x}{result of test in function.}
+\item{x}{(`list`)\cr Test results.}
 }
 \value{
-List.
+(`list`)\cr List.
 }
 \description{
 This function collects additional information from the test 

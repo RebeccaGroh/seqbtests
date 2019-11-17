@@ -7,10 +7,10 @@
 get_main_columns_count(df)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-A numeric vector displaying the number of main columns.
+(`list`)\cr A numeric vector displaying the number of main columns.
 }
 \description{
 Count the number of main columns in the data frame.

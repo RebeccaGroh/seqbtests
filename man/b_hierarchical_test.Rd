@@ -13,74 +13,92 @@ b_hierarchical_test(df, baseline, algorithm = NULL, measure = NULL,
   max_treedepth = 10)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{baseline}{First algorithm.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{algorithm}{Second algorithm. If not defined, every algorithm will be 
-tested against baseline.}
+\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+column. If not defined, the baseline is tested against all algorithms 
+in the data frame.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{rho}{Correlation factor.}
+\item{rho}{(`double`)\cr Correlation factor. Default is 0.1.}
 
-\item{compare}{Defines whether the baseline should be tested for either 
-being better ('better') or being just as good ('equal') as the other 
-algorithms. If not defined, the default is to test for 'better'.}
+\item{compare}{(`character`)\cr Defines if one algorithm needs to perform 
+better ({\code{better}}) for decisions based on the posterior 
+distribution or whether it is sufficient to perform not worse 
+({\code{equal}}).}
 
-\item{std.upper}{Factor to set the upper bound for both sigma_i and sigma_0.}
+\item{std.upper}{(`double`)\cr Factor to set the upper bound for both sigma_i 
+and sigma_0. Default is 1000.}
 
-\item{d0.lower}{Lower bound for the prior for mu_0. If not provided, 
-the smallest observed difference is used.}
+\item{d0.lower}{(`any`)\cr Lower bound for the prior for mu_0. If not 
+provided, the smallest observed difference is used.}
 
-\item{d0.upper}{Upper bound for the prior for mu_0. If not provided, 
-the biggest observed difference is used.}
+\item{d0.upper}{(`any`)\cr Upper bound for the prior for mu_0. If not 
+provided, the biggest observed difference is used.}
 
-\item{prob}{Probability, which the decision that the Baseline is better than 
-the algorithm is based on. The default is 0.95.}
+\item{prob}{(`double`)\cr Threshold probability that decision rely on. 
+Default is 0.95.}
 
-\item{alpha.lower}{Lower bound for the (uniform) prior for the alpha 
-hyperparameter. Default value set at 0.5.}
+\item{alpha.lower}{(`double`)\cr Lower bound for the (uniform) prior for the 
+alpha hyperparameter. Default is 0.5.}
 
-\item{alpha.upper}{Upper bound for the (uniform) prior for the alpha 
-hyperparameter. Default value set at 0.5.}
+\item{alpha.upper}{(`double`)\cr Upper bound for the (uniform) prior for the 
+alpha hyperparameter. Default is 0.5.}
 
-\item{beta.lower}{Lower bound for the (uniform) prior for the beta 
-hyperparameter. Default value set at 0.5.}
+\item{beta.lower}{(`double`)\cr Lower bound for the (uniform) prior for the
+beta hyperparameter. Default is 0.5.}
 
-\item{rope}{Interval for the difference considered as 'irrelevant'.}
+\item{beta.upper}{(`double`)\cr Upper bound for the (uniform) prior for the
+beta hyperparameter. Default is 0.5.}
 
-\item{nsim}{Number of samples (per chain) used to estimate the posterior 
-distribution. Note that, by default, half the simulations are used for 
-the burn-in.}
+\item{rope}{(`double`)\cr Region of practical equivalence. Default is 
+c(-0.01, 0.01).}
 
-\item{parallel}{Logical value. If \code{true}, Stan code is executed in 
+\item{nsim}{(`double`)\cr Number of samples (per chain) used to estimate the 
+posterior distribution. Note that, by default, half the simulations are 
+used for the burn-in.}
+
+\item{parallel}{(`logical`)\cr If \code{true}, Stan code is executed in 
 parallel.}
 
-\item{stan.output.file}{String containing the base name for the output files 
-produced by Stan. If \code{NULL}, no files are stored.}
+\item{stan.output.file}{(`character`)\cr String containing the base name for 
+the output files produced by Stan. If \code{NULL}, no files are stored.}
 
-\item{seed}{Optional parameter used to fix the random seed.}
+\item{seed}{(`double`)\cr Optional parameter used to fix the random seed.}
 
-\item{beta.lower}{Upper bound for the (uniform) prior for the beta 
-hyperparameter. Default value set at 0.5.}
+\item{adapt_delta}{(`double`)\cr Average proposal acceptance probability 
+during Stan’s adaptation period.}
 
-\item{z0}{Position of the pseudo-observation associated to the prior 
-Dirichlet Process. The default value is set to 0 (inside the rope).}
+\item{max_treedepth}{(`double`)\cr  Maximum treedepth parameter.}
 
-\item{nchain}{Number of MC chains to be simulated. As half the simulations 
-are used for the warm-up, the total number of simulations will 
-be \code{nchain}*\code{nsim}/2.}
+\item{nchain}{(`double`)\cr Number of MC chains to be simulated. As half the 
+simulations are used for the warm-up, the total number of simulations  
+will be \code{nchain}*\code{nsim}/2.}
 }
 \value{
-A list containing the following components:
+(`list`)\cr A list containing the following components:
 \itemize{
-    \item{code{measure}} A string with the name of the measure column used.
-    \item{code{method}} A string with the name of the method used.
-    \item{code{baseline}} A string with the name of the baseline algorithm.
-    \item{code{posteriror_probabilities}} A data frame with one row for every 
-        algorithm that is compared to the baseline. The columns show the 
-        posterior probabilities and whether significance appears.
+    \item{\code{measure}} (`character`)\cr A string with the name of the 
+        measure column. 
+    \item{\code{method}} (`character`)\cr A string with the name of the 
+        method. 
+    \item{\code{baseline}} (`character`)\cr A string with the name of the 
+        first algorithm. Value in 'algorithm' column. 
+    \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+        components:
+    \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+        'algorithm' column. If not defined, the baseline is tested against 
+        all algorithms in the data frame. 
+    \item{\code{left}} (`double`)\cr Left probability. 
+    \item{\code{rope}} (`double`)\cr Rope probability. 
+    \item{\code{right}} (`double`)\cr Right probability. 
+    \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+        probabilities and threshold probability. 
 }
 }
 \description{

@@ -3,33 +3,47 @@
 #'     This function implements the Bayesian version of the correlated t-test. 
 #'     The performance of one baseline algorithm on one data set is compared to 
 #'     either one or multiple algorithms.  
-#' @param df Input data frame. 
-#' @param problem Problem set on which the test should be performed. 
-#' @param baseline First algorithm. 
-#' @param algorithm Algorithm to be compared. If no algorithm is defined, the 
-#'     baseline is compared to every algorithm in the data frame. 
-#' @param measure Measure column. 
-#' @param rho Correlation factor. 
-#' @param rope Region of practical equivalence. 
-#' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is 0.95. 
-#' @param compare Defines whether the baseline should be tested for either 
-#'     being better ('better') or being just as good ('equal') as the other 
-#'     algorithms. If not defined, the default is to test for 'better'.
-#' @return A list containing the following components:
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param problem (`character`)\cr Problem set used to evaluate the algorithms 
+#'     performance. Value in 'problem' column. 
+#' @param baseline (`character`)\cr First algorithm. Value in 'algorithm'  
+#'     column. 
+#' @param algorithm (`character`)\cr Second algorithm. Value in 'algorithm' 
+#'     column. If not defined, the baseline is tested against all algorithms 
+#'     in the data frame. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used. 
+#' @param compare (`character`)\cr Defines if one algorithm needs to perform 
+#'     better ({\code{better}}) for decisions based on the posterior 
+#'     distribution or whether it is sufficient to perform not worse 
+#'     ({\code{equal}}). 
+#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
+#' @param rope (`double`)\cr Region of practical equivalence. Default is 
+#'     c(-0.01, 0.01).
+#' @param prob (`double`)\cr Threshold probability that decision rely on. 
+#'     Default is 0.95. 
+#' @return (`list`)\cr A list containing the following components:
 #' \itemize{
-#'     \item{code{measure}} A string with the name of the measure column used.
-#'     \item{code{method}} A string with the name of the method used.
-#'     \item{code{baseline}} A string with the name of the baseline algorithm.
-#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'         algorithm that is compared to the baseline. The columns show the 
-#'         posterior probabilities and whether significance appears.
+#'     \item{\code{measure}} (`character`)\cr A string with the name of the 
+#'         measure column. 
+#'     \item{\code{method}} (`character`)\cr A string with the name of the 
+#'         method. 
+#'     \item{\code{baseline}} (`character`)\cr A string with the name of the 
+#'         first algorithm. Value in 'algorithm' column. 
+#'     \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+#'         components:
+#'     \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+#'         'algorithm' column. If not defined, the baseline is tested against 
+#'         all algorithms in the data frame. 
+#'     \item{\code{left}} (`double`)\cr Left probability. 
+#'     \item{\code{rope}} (`double`)\cr Rope probability. 
+#'     \item{\code{right}} (`double`)\cr Right probability. 
+#'     \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+#'         probabilities and threshold probability. 
 #' }
 #' @details
-#'     The test has first been implemented in scmamp. 
-#'     Note that if no measure column is defined per default the first column 
-#'     defined as measure_* in the data frame is used. The default of rho is 
-#'     0.1. If rho equals 0 this converts the test in the equivalent of the 
+#'     The test has first been implemented in scmamp.
+#'     If rho equals 0 this converts the test in the equivalent of the 
 #'     standard t test.   
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
@@ -78,36 +92,53 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 #'     This function implements the Bayesian version of the sign test. The 
 #'     performance of one baseline algorithm on one or multiple data sets is 
 #'     compared to either one or multiple algorithms.   
-#' @param df Input data frame. 
-#' @param problem Problem set on which the test should be performed. 
-#' @param baseline First algorithm.
-#' @param algorithm Second algorithm. If not defined, every algorithm will be 
-#'     tested against baseline. 
-#' @param measure Measure column. 
-#' @param z_0 Prior pseudo-observation. 
-#' @param s Prior pseudo-observation probability. 
-#' @param weights A-priori weights. 
-#' @param mc_samples Number of samples of the distribution. 
-#' @param rope Region of practical equivalence. 
-#' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is 0.95. 
-#' @param compare Defines whether the baseline should be tested for either 
-#'     being better ('better') or being just as good ('equal') as the other 
-#'     algorithms. If not defined, the default is to test for 'better'.
-#' @return A list containing the following components:
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param problem (`character`)\cr Problem set used to evaluate the algorithms 
+#'     performance. Value in 'problem' column. 
+#' @param baseline (`character`)\cr First algorithm. Value in 'algorithm'  
+#'     column. 
+#' @param algorithm (`character`)\cr Second algorithm. Value in 'algorithm' 
+#'     column. If not defined, the baseline is tested against all algorithms 
+#'     in the data frame. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used. 
+#' @param compare (`character`)\cr Defines if one algorithm needs to perform 
+#'     better ({\code{better}}) for decisions based on the posterior 
+#'     distribution or whether it is sufficient to perform not worse 
+#'     ({\code{equal}}). 
+#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
+#' @param rope (`double`)\cr Region of practical equivalence. Default is 
+#'     c(-0.01, 0.01).
+#' @param prob (`double`)\cr Threshold probability that decision rely on. 
+#'     Default is 0.95. 
+#' @param s (`double`)\cr Scale parameter of the prior Dirichlet Process. 
+#'     Default is 0.5
+#' @param z_0 (`double`)\cr Position of the pseudo-observation associated to 
+#'     the prior Dirichlet Process. Default is 0. 
+#' @param weights (`any`)\cr A prior weights.  
+#' @param mc_samples (`double`)\cr Number of samples used to estimate the 
+#'     posterior probability distribution. 
+#' @return (`list`)\cr A list containing the following components:
 #' \itemize{
-#'     \item{code{measure}} A string with the name of the measure column used.
-#'     \item{code{method}} A string with the name of the method used.
-#'     \item{code{baseline}} A string with the name of the baseline algorithm.
-#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'         algorithm that is compared to the baseline. The columns show the 
-#'         posterior probabilities and whether significance appears.
+#'     \item{\code{measure}} (`character`)\cr A string with the name of the 
+#'         measure column. 
+#'     \item{\code{method}} (`character`)\cr A string with the name of the 
+#'         method. 
+#'     \item{\code{baseline}} (`character`)\cr A string with the name of the 
+#'         first algorithm. Value in 'algorithm' column. 
+#'     \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+#'         components:
+#'     \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+#'         'algorithm' column. If not defined, the baseline is tested against 
+#'         all algorithms in the data frame. 
+#'     \item{\code{left}} (`double`)\cr Left probability. 
+#'     \item{\code{rope}} (`double`)\cr Rope probability. 
+#'     \item{\code{right}} (`double`)\cr Right probability. 
+#'     \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+#'         probabilities and threshold probability. 
 #' }
 #' @details 
-#'     The test has first been implemented in rNPBST. For testing over multiple 
-#'     datasets, don´t specify the problem set argument in the function. Note 
-#'     that if no measure column is defined per default the first column 
-#'     defined as measure_* in the data frame is used. 
+#'     The test has first been implemented in rNPBST. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @examples
 #'     results <- b_sign_test(df= test_benchmark_small, 
@@ -174,36 +205,53 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
 #'     This function implements the Bayesian version of the signed rank test. 
 #'     The performance of one baseline algorithm on one or multiple data sets is 
 #'     compared to either one or multiple algorithms.    
-#' @param df Input data frame. 
-#' @param problem Problem set on which the test should be performed. 
-#' @param baseline First algorithm.
-#' @param algorithm Second algorithm. If not defined, every algorithm will be 
-#'     tested against baseline. 
-#' @param measure Measure column. 
-#' @param z_0 Prior pseudo-observation. 
-#' @param s Prior pseudo-observation probability. 
-#' @param weights A-priori weights. 
-#' @param mc_samples Number of samples of the distribution. 
-#' @param rope Region of practical equivalence. 
-#' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is 0.95. 
-#' @param compare Defines whether the baseline should be tested for either 
-#'     being better ('better') or being just as good ('equal') as the other 
-#'     algorithms. If not defined, the default is to test for 'better'.
-#' @return A list containing the following components:
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param problem (`character`)\cr Problem set used to evaluate the algorithms 
+#'     performance. Value in 'problem' column. 
+#' @param baseline (`character`)\cr First algorithm. Value in 'algorithm'  
+#'     column. 
+#' @param algorithm (`character`)\cr Second algorithm. Value in 'algorithm' 
+#'     column. If not defined, the baseline is tested against all algorithms 
+#'     in the data frame. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used. 
+#' @param compare (`character`)\cr Defines if one algorithm needs to perform 
+#'     better ({\code{better}}) for decisions based on the posterior 
+#'     distribution or whether it is sufficient to perform not worse 
+#'     ({\code{equal}}). 
+#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
+#' @param rope (`double`)\cr Region of practical equivalence. Default is 
+#'     c(-0.01, 0.01).
+#' @param prob (`double`)\cr Threshold probability that decision rely on. 
+#'     Default is 0.95. 
+#' @param s (`double`)\cr Scale parameter of the prior Dirichlet Process. 
+#'     Default is 0.5
+#' @param z_0 (`double`)\cr Position of the pseudo-observation associated to 
+#'     the prior Dirichlet Process. Default is 0. 
+#' @param weights (`any`)\cr A prior weights.  
+#' @param mc_samples (`double`)\cr Number of samples used to estimate the 
+#'     posterior probability distribution. 
+#' @return (`list`)\cr A list containing the following components:
 #' \itemize{
-#'     \item{code{measure}} A string with the name of the measure column used.
-#'     \item{code{method}} A string with the name of the method used.
-#'     \item{code{baseline}} A string with the name of the baseline algorithm.
-#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'         algorithm that is compared to the baseline. The columns show the 
-#'         posterior probabilities and whether significance appears.
+#'     \item{\code{measure}} (`character`)\cr A string with the name of the 
+#'         measure column. 
+#'     \item{\code{method}} (`character`)\cr A string with the name of the 
+#'         method. 
+#'     \item{\code{baseline}} (`character`)\cr A string with the name of the 
+#'         first algorithm. Value in 'algorithm' column. 
+#'     \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+#'         components:
+#'     \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+#'         'algorithm' column. If not defined, the baseline is tested against 
+#'         all algorithms in the data frame. 
+#'     \item{\code{left}} (`double`)\cr Left probability. 
+#'     \item{\code{rope}} (`double`)\cr Rope probability. 
+#'     \item{\code{right}} (`double`)\cr Right probability. 
+#'     \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+#'         probabilities and threshold probability. 
 #' }
 #' @details 
-#'     The test has first been implemented in rNPBST. For testing over multiple 
-#'     datasets, don´t specify the problem set argument in the function. Note 
-#'     that if no measure column is defined per default the first column 
-#'     defined as measure_* in the data frame is used. 
+#'     The test has first been implemented in rNPBST. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @examples 
 #'     results <- b_signed_rank_test(df= test_benchmark_small,
@@ -270,52 +318,69 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #'     This function implements a Bayesian hierarchical test. The performance of 
 #'     one baseline algorithm on multiple data set is compared to either one or
 #'     multiple algorithms.  
-#' @param df Input data frame. 
-#' @param baseline First algorithm.
-#' @param algorithm Second algorithm. If not defined, every algorithm will be 
-#'     tested against baseline. 
-#' @param measure Measure column. 
-#' @param rho Correlation factor. 
-#' @param std.upper Factor to set the upper bound for both sigma_i and sigma_0.
-#' @param d0.lower Lower bound for the prior for mu_0. If not provided, 
-#'     the smallest observed difference is used.
-#' @param d0.upper Upper bound for the prior for mu_0. If not provided, 
-#'     the biggest observed difference is used.
-#' @param alpha.lower Lower bound for the (uniform) prior for the alpha 
-#'     hyperparameter. Default value set at 0.5.
-#' @param alpha.upper Upper bound for the (uniform) prior for the alpha 
-#'     hyperparameter. Default value set at 0.5.
-#' @param beta.lower Lower bound for the (uniform) prior for the beta 
-#'     hyperparameter. Default value set at 0.5.
-#' @param beta.lower Upper bound for the (uniform) prior for the beta 
-#'     hyperparameter. Default value set at 0.5.
-#' @param z0 Position of the pseudo-observation associated to the prior 
-#'     Dirichlet Process. The default value is set to 0 (inside the rope).
-#' @param rope Interval for the difference considered as 'irrelevant'.
-#' @param nsim Number of samples (per chain) used to estimate the posterior 
-#'     distribution. Note that, by default, half the simulations are used for 
-#'     the burn-in.
-#' @param nchain Number of MC chains to be simulated. As half the simulations 
-#'     are used for the warm-up, the total number of simulations will 
-#'     be \code{nchain}*\code{nsim}/2.
-#' @param parallel Logical value. If \code{true}, Stan code is executed in 
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param baseline (`character`)\cr First algorithm. Value in 'algorithm'  
+#'     column. 
+#' @param algorithm (`character`)\cr Second algorithm. Value in 'algorithm' 
+#'     column. If not defined, the baseline is tested against all algorithms 
+#'     in the data frame. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used. 
+#' @param compare (`character`)\cr Defines if one algorithm needs to perform 
+#'     better ({\code{better}}) for decisions based on the posterior 
+#'     distribution or whether it is sufficient to perform not worse 
+#'     ({\code{equal}}). 
+#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
+#' @param rope (`double`)\cr Region of practical equivalence. Default is 
+#'     c(-0.01, 0.01).
+#' @param prob (`double`)\cr Threshold probability that decision rely on. 
+#'     Default is 0.95. 
+#' @param std.upper (`double`)\cr Factor to set the upper bound for both sigma_i 
+#'     and sigma_0. Default is 1000. 
+#' @param d0.lower (`any`)\cr Lower bound for the prior for mu_0. If not 
+#'     provided, the smallest observed difference is used.
+#' @param d0.upper (`any`)\cr Upper bound for the prior for mu_0. If not 
+#'     provided, the biggest observed difference is used.
+#' @param alpha.lower (`double`)\cr Lower bound for the (uniform) prior for the 
+#'     alpha hyperparameter. Default is 0.5.
+#' @param alpha.upper (`double`)\cr Upper bound for the (uniform) prior for the 
+#'     alpha hyperparameter. Default is 0.5.
+#' @param beta.lower (`double`)\cr Lower bound for the (uniform) prior for the  
+#'     beta hyperparameter. Default is 0.5.
+#' @param beta.upper (`double`)\cr Upper bound for the (uniform) prior for the  
+#'     beta hyperparameter. Default is 0.5.
+#' @param nsim (`double`)\cr Number of samples (per chain) used to estimate the 
+#'     posterior distribution. Note that, by default, half the simulations are 
+#'     used for the burn-in.
+#' @param nchain (`double`)\cr Number of MC chains to be simulated. As half the 
+#'     simulations are used for the warm-up, the total number of simulations  
+#'     will be \code{nchain}*\code{nsim}/2.
+#' @param parallel (`logical`)\cr If \code{true}, Stan code is executed in 
 #'     parallel.
-#' @param stan.output.file String containing the base name for the output files 
-#'     produced by Stan. If \code{NULL}, no files are stored.
-#' @param seed Optional parameter used to fix the random seed.
-#' @param prob Probability, which the decision that the Baseline is better than 
-#'     the algorithm is based on. The default is 0.95. 
-#' @param compare Defines whether the baseline should be tested for either 
-#'     being better ('better') or being just as good ('equal') as the other 
-#'     algorithms. If not defined, the default is to test for 'better'.
-#' @return A list containing the following components:
+#' @param stan.output.file (`character`)\cr String containing the base name for 
+#'     the output files produced by Stan. If \code{NULL}, no files are stored.
+#' @param seed (`double`)\cr Optional parameter used to fix the random seed.
+#' @param adapt_delta (`double`)\cr Average proposal acceptance probability 
+#'     during Stan’s adaptation period. 
+#' @param max_treedepth (`double`)\cr  Maximum treedepth parameter. 
+#' @return (`list`)\cr A list containing the following components:
 #' \itemize{
-#'     \item{code{measure}} A string with the name of the measure column used.
-#'     \item{code{method}} A string with the name of the method used.
-#'     \item{code{baseline}} A string with the name of the baseline algorithm.
-#'     \item{code{posteriror_probabilities}} A data frame with one row for every 
-#'         algorithm that is compared to the baseline. The columns show the 
-#'         posterior probabilities and whether significance appears.
+#'     \item{\code{measure}} (`character`)\cr A string with the name of the 
+#'         measure column. 
+#'     \item{\code{method}} (`character`)\cr A string with the name of the 
+#'         method. 
+#'     \item{\code{baseline}} (`character`)\cr A string with the name of the 
+#'         first algorithm. Value in 'algorithm' column. 
+#'     \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+#'         components:
+#'     \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+#'         'algorithm' column. If not defined, the baseline is tested against 
+#'         all algorithms in the data frame. 
+#'     \item{\code{left}} (`double`)\cr Left probability. 
+#'     \item{\code{rope}} (`double`)\cr Rope probability. 
+#'     \item{\code{right}} (`double`)\cr Right probability. 
+#'     \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+#'         probabilities and threshold probability. 
 #' }
 #' @details 
 #'     The test has first been implemented in scmamp. 

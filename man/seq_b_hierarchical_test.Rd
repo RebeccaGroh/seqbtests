@@ -14,84 +14,102 @@ seq_b_hierarchical_test(baseline, algorithm = NULL, measure = NULL,
   max_treedepth = 10, ...)
 }
 \arguments{
-\item{baseline}{First algorithm.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{algorithm}{Second algorithm. If not defined, every algorithm will be 
-tested against baseline.}
+\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+column. If not defined, the baseline is tested against all algorithms 
+in the data frame.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{compare}{Defines whether the baseline should be tested for either 
-being better ('better') or being just as good ('equal') as the other 
-algorithms. If not defined, the default is to test for 'better'.}
+\item{compare}{(`character`)\cr Defines if one algorithm needs to perform 
+better ({\code{better}}) for decisions based on the posterior 
+distribution or whether it is sufficient to perform not worse 
+({\code{equal}}).}
 
-\item{rho}{Correlation factor.}
+\item{rho}{(`double`)\cr Correlation factor. Default is 0.1.}
 
-\item{max_repls}{Maximum number of replications that should be build in 
-get_replications. Or maximum number of replications in data frame, if 
-a data frame that has already been built is being used.}
+\item{max_repls}{(`double`)\cr Maximum number of replications. If a complete 
+data frame is passed ({\code{max_repls}}) should correspond to the 
+maximum number of replications that are built. Default is 20.}
 
-\item{rope}{Region of practical equivalence.}
+\item{rope}{(`double`)\cr Region of practical equivalence. Default is 
+c(-0.01, 0.01).}
 
-\item{std.upper}{Factor to set the upper bound for both sigma_i and sigma_0.}
+\item{std.upper}{(`double`)\cr Factor to set the upper bound for both sigma_i 
+and sigma_0. Default is 1000.}
 
-\item{d0.lower}{Lower bound for the prior for mu_0. If not provided, 
-the smallest observed difference is used.}
+\item{d0.lower}{(`any`)\cr Lower bound for the prior for mu_0. If not 
+provided, the smallest observed difference is used.}
 
-\item{d0.upper}{Upper bound for the prior for mu_0. If not provided, 
-the biggest observed difference is used.}
+\item{d0.upper}{(`any`)\cr Upper bound for the prior for mu_0. If not 
+provided, the biggest observed difference is used.}
 
-\item{alpha.lower}{Lower bound for the (uniform) prior for the alpha 
-hyperparameter. Default value set at 0.5.}
+\item{alpha.lower}{(`double`)\cr Lower bound for the (uniform) prior for the 
+alpha hyperparameter. Default is 0.5.}
 
-\item{alpha.upper}{Upper bound for the (uniform) prior for the alpha 
-hyperparameter. Default value set at 0.5.}
+\item{alpha.upper}{(`double`)\cr Upper bound for the (uniform) prior for the 
+alpha hyperparameter. Default is 0.5.}
 
-\item{beta.lower}{Lower bound for the (uniform) prior for the beta 
-hyperparameter. Default value set at 0.5.}
+\item{beta.lower}{(`double`)\cr Lower bound for the (uniform) prior for the
+beta hyperparameter. Default is 0.5.}
 
-\item{nsim}{Number of samples (per chain) used to estimate the posterior 
-distribution. Note that, by default, half the simulations are used for 
-the burn-in.}
+\item{beta.upper}{(`double`)\cr Upper bound for the (uniform) prior for the
+beta hyperparameter. Default is 0.5.}
 
-\item{parallel}{Logical value. If \code{true}, Stan code is executed in 
+\item{nsim}{(`double`)\cr Number of samples (per chain) used to estimate the 
+posterior distribution. Note that, by default, half the simulations are 
+used for the burn-in.}
+
+\item{parallel}{(`logical`)\cr If \code{true}, Stan code is executed in 
 parallel.}
 
-\item{stan.output.file}{String containing the base name for the output files 
-produced by Stan. If \code{NULL}, no files are stored.}
+\item{stan.output.file}{(`character`)\cr String containing the base name for 
+the output files produced by Stan. If \code{NULL}, no files are stored.}
 
-\item{prob}{Probability, which the decision that the Baseline is better than 
-   the algorithm is based on. The default is 0.95. 
-@param min_repls The minimum number of replications that is either generated 
-    or used to perform the first Bayesian test in the sequential approach. 
-    To prevent an bias through early stopping a minimum number of 5 runs 
-    (default) is recommended.}
+\item{prob}{(`double`)\cr Threshold probability that decision rely on. 
+Default is 0.95.}
 
-\item{seed}{Optional parameter used to fix the random seed.}
+\item{seed}{(`double`)\cr Optional parameter used to fix the random seed.}
 
-\item{...}{Additional arguments. When already built dataset is used the User 
-can define it with code{df}.}
+\item{min_repls}{(`double`)\cr Minimum number of replications that is 
+used/generated before an optional stopping rule is activated. Default is 
+5.}
 
-\item{beta.lower}{Upper bound for the (uniform) prior for the beta 
-hyperparameter. Default value set at 0.5.}
+\item{adapt_delta}{(`double`)\cr Average proposal acceptance probability 
+during Stan’s adaptation period.}
 
-\item{z0}{Position of the pseudo-observation associated to the prior 
-Dirichlet Process. The default value is set to 0 (inside the rope).}
+\item{max_treedepth}{(`double`)\cr  Maximum treedepth parameter.}
 
-\item{nchain}{Number of MC chains to be simulated. As half the simulations 
-are used for the warm-up, the total number of simulations will 
-be \code{nchain}*\code{nsim}/2.}
+\item{...}{(any)\cr Additional arguments for ({\code{get_replications}}). 
+To pass a complete data frame, set ({\code{df}}) (`character`).}
+
+\item{nchain}{(`double`)\cr Number of MC chains to be simulated. As half the 
+simulations are used for the warm-up, the total number of simulations  
+will be \code{nchain}*\code{nsim}/2.}
 }
 \value{
-A list containing the following components:
+(`list`)\cr A list containing the following components:
 \itemize{
-    \item{code{measure}} A string with the name of the measure column used.
-    \item{code{method}} A string with the name of the method used.
-    \item{code{baseline}} A string with the name of the baseline algorithm.
-    \item{code{posteriror_probabilities}} A data frame with one row for every 
-        algorithm that is compared to the baseline. The columns show the 
-        posterior probabilities and whether significance appears.
-    \item{code{repls}} Number of the considered replications.
+    \item{\code{measure}} (`character`)\cr A string with the name of the 
+        measure column. 
+    \item{\code{method}} (`character`)\cr A string with the name of the 
+        method. 
+    \item{\code{baseline}} (`character`)\cr A string with the name of the 
+        first algorithm. Value in 'algorithm' column. 
+    \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+        components:
+    \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+        'algorithm' column. If not defined, the baseline is tested against 
+        all algorithms in the data frame. 
+    \item{\code{left}} (`double`)\cr Left probability. 
+    \item{\code{rope}} (`double`)\cr Rope probability. 
+    \item{\code{right}} (`double`)\cr Right probability. 
+    \item{\code{repls}} (`double`)\cr Number of evaluated replications. 
+    \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+        probabilities and threshold probability. 
 }
 }
 \description{
@@ -99,14 +117,10 @@ This function implements a sequential approach of the Bayesian
     hierarchical test to compare the performance of machine learning 
     algorithms to one another. Sample size is not fixed in advance, data are 
     evaluated as they are collected. Further sampling is stopped in 
-    accordance with a pre-defined stopping rule as soon as significant 
-    results are obtained.
+    accordance with a pre-defined stopping rule.
 }
 \details{
-The basis for this test has first been implemented in scmamp. 
-    Note that if no measure column is defined per default the first column 
-    defined as measure_* in the data frame is used. The default of rho is 
-    0.1.
+The basis for this test has first been implemented in scmamp.
 }
 \examples{
     results <- seq_b_hierarchical_test(df = test_benchmark_small,

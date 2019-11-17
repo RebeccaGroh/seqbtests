@@ -7,17 +7,21 @@
 friedman_test(df, measure = NULL)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 }
 \value{
 A list containing the following components: 
 \itemize{
-    \item{code{measure}} A string with the name of the measure column used.
-    \item{code{method}} A string with the name of the method used.
-    \item{code{statistic}} The value of the statistic used in the test.
-    \item{code{p_value}} The p-value for the test.
+    \item{\code{measure}} (`character`)\cr A string with the name of the 
+        measure column. 
+    \item{\code{method}} (`character`)\cr A string with the name of the 
+        method. 
+    \item{\code{statistic}} (`double`)\cr The value of the statistic used in 
+        the test.
+    \item{\code{p_value}} (`double`)\cr The p-value for the test.
 }
 }
 \description{
@@ -26,9 +30,7 @@ This function implements the Friedman's test for multiple
     in algorithms performances over multiple datasets.
 }
 \details{
-The test has first been implemented in scmamp. 
-    Note that if no measure column is defined per default the first column 
-    defined as measure_* in the data frame is used.
+The test has first been implemented in scmamp.
 }
 \examples{
     results <- friedman_test(test_benchmark) 

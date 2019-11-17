@@ -3,8 +3,8 @@
 #'     Dirichlet distribution into a 2D triangle. The function is used from the 
 #'     package rNPBST. Since it is a numeric function, the code was copied for
 #'     further use in this package. 
-#' @param x Results of a Bayesian test. 
-#' @param num.points Number of points to be shown in the plot. 
+#' @param x (`list`)\cr Test results. 
+#' @param num.points (`double`)\cr Number of points to be shown in the plot. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 plot_triangles <- function(x, num.points = nrow(x$sample), ...){
   sample <- x$sample

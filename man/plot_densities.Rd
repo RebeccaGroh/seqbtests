@@ -7,9 +7,13 @@
 plot_densities(df, measure = NULL)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
+}
+\value{
+(`list`) \cr List containing a `gg` object.
 }
 \description{
 This function estimates and plots the densities of the 

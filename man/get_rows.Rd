@@ -7,10 +7,11 @@
 get_rows(result)
 }
 \arguments{
-\item{result}{Data frame with all the results within in the tests.}
+\item{result}{(`list`)\cr Data frame with all the results within in the 
+tests.}
 }
 \value{
-Data frame with just the relevant rows.
+(`list`)\cr Data frame with just the relevant rows.
 }
 \description{
 This function drops the non-final results during the sequential 

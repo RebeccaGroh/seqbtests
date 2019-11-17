@@ -7,10 +7,10 @@
 get_main_columns(df)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-A vector containing all main column names.
+(`list`)\cr A vector containing all main column names.
 }
 \description{
 Get the list of names of the main columns within the data frame, 

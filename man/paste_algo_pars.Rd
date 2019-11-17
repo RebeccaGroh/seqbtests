@@ -7,13 +7,14 @@
 paste_algo_pars(df, parameter_algo = NULL)
 }
 \arguments{
-\item{df}{Input data frame,}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{parameter_algorithm}{Algorithm parameter in data frame.}
+\item{parameter_algorithm}{df (`character`)\cr Algorithm parameter in data 
+frame.}
 }
 \value{
-New data frame, where the algorithm and parameter_algorithm column, 
-    as well as the value names are combined.
+df (`list`)\cr New data frame, where the algorithm and 
+    parameter_algorithm column, as well as the value names are combined.
 }
 \description{
 If there is a parameter additional to the algorithm, both can 

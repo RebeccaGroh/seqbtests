@@ -8,36 +8,42 @@ corr_t_test(df, problem, baseline, algorithm = NULL, measure = NULL,
   rho = 0.01)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{problem}{Problem set on which the test should be performed.}
+\item{problem}{(`character`)\cr Problem set used to evaluate the algorithms 
+performance. Value in 'problem' column.}
 
-\item{baseline}{First algorithm.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{algorithm}{Second algorithm.}
+\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+column. If not defined, the baseline is tested against all algorithms 
+in the data frame.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{rho}{Correlation factor. (For the case of cross validated results, the 
-heuristic to set the correlation is size of test set divided by total 
-size of the dataset.)}
+\item{rho}{(`double`)\cr Correlation factor. Default is 0.1. (For the case of 
+cross validated results, the heuristic to set the correlation is size of 
+test set divided by total size of the dataset.)}
 }
 \value{
 A list containing the following components: 
 \itemize{
-    \item{code{measure}} A string with the name of the measure column used.
-    \item{code{method}} A string with the name of the method used.
-    \item{code{statistic}} The value of the statistic used in the test.
-    \item{code{p_value}} The p-value for the test.
+    \item{\code{measure}} (`character`)\cr A string with the name of the 
+        measure column. 
+    \item{\code{method}} (`character`)\cr A string with the name of the 
+        method. 
+    \item{\code{statistic}} (`double`)\cr The value of the statistic used in 
+        the test.
+    \item{\code{p_value}} (`double`)\cr The p-value for the test.
 }
 }
 \description{
 This function implements a two-sided t test for paired samples.
 }
 \details{
-The test has first been implemented in scmamp. 
-    Note that if no measure column is defined per default the first column 
-    defined as measure_* in the data frame is used.
+The test has first been implemented in scmamp.
 }
 \examples{
     results <- corr_t_test(df= test_benchmark_small, 

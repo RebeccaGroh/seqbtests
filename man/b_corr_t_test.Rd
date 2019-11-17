@@ -8,37 +8,53 @@ b_corr_t_test(df, problem, baseline, algorithm = NULL, measure = NULL,
   compare = NULL, rho = 0.1, rope = c(-0.01, 0.01), prob = 0.95)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{problem}{Problem set on which the test should be performed.}
+\item{problem}{(`character`)\cr Problem set used to evaluate the algorithms 
+performance. Value in 'problem' column.}
 
-\item{baseline}{First algorithm.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{algorithm}{Algorithm to be compared. If no algorithm is defined, the 
-baseline is compared to every algorithm in the data frame.}
+\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+column. If not defined, the baseline is tested against all algorithms 
+in the data frame.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{compare}{Defines whether the baseline should be tested for either 
-being better ('better') or being just as good ('equal') as the other 
-algorithms. If not defined, the default is to test for 'better'.}
+\item{compare}{(`character`)\cr Defines if one algorithm needs to perform 
+better ({\code{better}}) for decisions based on the posterior 
+distribution or whether it is sufficient to perform not worse 
+({\code{equal}}).}
 
-\item{rho}{Correlation factor.}
+\item{rho}{(`double`)\cr Correlation factor. Default is 0.1.}
 
-\item{rope}{Region of practical equivalence.}
+\item{rope}{(`double`)\cr Region of practical equivalence. Default is 
+c(-0.01, 0.01).}
 
-\item{prob}{Probability, which the decision that the Baseline is better than 
-the algorithm is based on. The default is 0.95.}
+\item{prob}{(`double`)\cr Threshold probability that decision rely on. 
+Default is 0.95.}
 }
 \value{
-A list containing the following components:
+(`list`)\cr A list containing the following components:
 \itemize{
-    \item{code{measure}} A string with the name of the measure column used.
-    \item{code{method}} A string with the name of the method used.
-    \item{code{baseline}} A string with the name of the baseline algorithm.
-    \item{code{posteriror_probabilities}} A data frame with one row for every 
-        algorithm that is compared to the baseline. The columns show the 
-        posterior probabilities and whether significance appears.
+    \item{\code{measure}} (`character`)\cr A string with the name of the 
+        measure column. 
+    \item{\code{method}} (`character`)\cr A string with the name of the 
+        method. 
+    \item{\code{baseline}} (`character`)\cr A string with the name of the 
+        first algorithm. Value in 'algorithm' column. 
+    \item{\code{data_frame}} (`list`)\cr  A list containing the following 
+        components:
+    \item{\code{algorithm}} (`character`)\cr Second algorithm. Value in 
+        'algorithm' column. If not defined, the baseline is tested against 
+        all algorithms in the data frame. 
+    \item{\code{left}} (`double`)\cr Left probability. 
+    \item{\code{rope}} (`double`)\cr Rope probability. 
+    \item{\code{right}} (`double`)\cr Right probability. 
+    \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
+        probabilities and threshold probability. 
 }
 }
 \description{
@@ -47,10 +63,8 @@ This function implements the Bayesian version of the correlated t-test.
     either one or multiple algorithms.
 }
 \details{
-The test has first been implemented in scmamp. 
-    Note that if no measure column is defined per default the first column 
-    defined as measure_* in the data frame is used. The default of rho is 
-    0.1. If rho equals 0 this converts the test in the equivalent of the 
+The test has first been implemented in scmamp.
+    If rho equals 0 this converts the test in the equivalent of the 
     standard t test.
 }
 \examples{

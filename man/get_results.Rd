@@ -7,18 +7,20 @@
 get_results(baseline, method, measure, data = NULL, extra = NULL)
 }
 \arguments{
-\item{baseline}{Baseline algorithms that every algorithm can be compared to.}
+\item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
+column.}
 
-\item{method}{Bayesian test.}
+\item{method}{(`character`)\cr Bayesian test.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{data}{Data frame containing the posterior probabilities.}
+\item{data}{(`list`)\cr Data frame containing the posterior probabilities.}
 
-\item{extra}{Any extra arguments needed to build the plots.}
+\item{extra}{(`any`)\cr Any extra arguments needed to build the plots.}
 }
 \value{
-List.
+(`list`)\cr List.
 }
 \description{
 This function collects the results of the Bayesian tests.

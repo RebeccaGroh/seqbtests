@@ -7,14 +7,15 @@
 get_data_frame_seq(k, posterior, repls)
 }
 \arguments{
-\item{k}{algorithm tested against the baseline.}
+\item{k}{(`character`)\cr Algorithm tested against the baseline.}
 
-\item{posterior}{Call for the posterior probabilities of the bayesian tests.}
+\item{posterior}{(`character`)\cr Call for the posterior probabilities of the 
+Bayesian tests.}
 
-\item{repls}{Number of replications used until a decision is made.}
+\item{repls}{(`double`)\cr Number of replications used until a decision is made.}
 }
 \value{
-List.
+(`list`)\cr List.
 }
 \description{
 This function collects the part of the results shown in the data 

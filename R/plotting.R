@@ -1,8 +1,10 @@
 #' @title Plot Densities 
 #' @description This function estimates and plots the densities of the 
 #' performances of each algorithm in the data frame  
-#' @param df Input data frame.
-#' @param measure Measure column. 
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used.
+#' @return (`list`) \cr List containing a `gg` object. 
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
@@ -28,8 +30,10 @@ plot_densities <- function(df, measure = NULL) {
 #' @title Boxplot  
 #' @description This function plots the performance of every algorithm in each 
 #'     data frame in boxplots.
-#' @param df Input data frame. 
-#' @param measure Measure column. 
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used.
+#' @return (`list`) \cr List containing a `gg` object. 
 #' @details The test has first been implemented in scmamp.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
@@ -58,14 +62,14 @@ plot_boxplot <- function(df, measure = NULL) {
 #' @title Critical differences plot 
 #' @description This function implements the critical difference plots 
 #'     introduced in Demsar (2006).
-#' @param df Input data frame.
-#' @param measure Measure column. 
-#' @param alpha Significance level to get the critical difference.
-#' @param cex Numeric value to control the size of the font. 
+#' @param df (`list`)\cr Data frame containing the performane measure. 
+#' @param measure (`character`)\cr Name of the 'measure' column. If not 
+#'     defined, the first 'measure' column in the data frame is used.
+#' @param alpha (`double`)\cr Significance level to get the critical difference.
+#' @param cex (`double`)\cr Numeric value to control the size of the font. 
+#' @return (`list`) \cr List containing a `gg` object. 
 #' @details 
-#'     The test has first been implemented in scmamp. 
-#'     Note that if no measure column is defined per default the first column 
-#'     defined as measure_* in the data frame is used. By default, the alpha 
+#'     The test has first been implemented in scmamp. By default, the alpha 
 #'     value is 0.05 and the default for cex is 0.75.
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
@@ -94,11 +98,13 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
 #'     via Bayesian correlated t tests. Or, if either a Bayesian Sign, Signed 
 #'     Rank or Hierarchical correlated t test have been used, it plots the 
 #'     projection of 3-simplex points into a 2D triangle. 
-#' @param results Results of the Bayesian analysis performed before. 
-#' @param method The Bayesian test that has been performed. Either
-#'     "b_corr_t_test", b_sign_test", "b_signed_rank_test" or 
+#' @param results (`character`)\cr Results of the Bayesian analysis performed 
+#'     before. 
+#' @param method (`character`)\cr The Bayesian test that has been performed. 
+#'     Either "b_corr_t_test", b_sign_test", "b_signed_rank_test" or 
 #'     "b_hierarchical_test".
-#' @param points Number of points used to plot the function. 
+#' @param points (`double`)\cr Number of points used to plot the function. 
+#' @return (`list`) \cr List containing a `gg` object. 
 #' @details 
 #'     The plot for Bayesian correlated t tests has first been implemented in 
 #'     scmamp. The plots for the other Bayesian tests have first been 

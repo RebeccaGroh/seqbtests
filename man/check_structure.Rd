@@ -7,12 +7,15 @@
 check_structure(df)
 }
 \arguments{
-\item{df}{Input data frame,}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 }
 \value{
-TRUE if test was successful.
+(`logical`)\cr TRUE if test was successful.
 }
 \description{
 Check if the structure of the data frame satisfies the 
     requirements.
+}
+\examples{
+    check_structure(test_benchmark_small)
 }

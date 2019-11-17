@@ -7,30 +7,32 @@
 nemenyi_test(df, measure = NULL, alpha = 0.05)
 }
 \arguments{
-\item{df}{Input data frame.}
+\item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{measure}{Measure column.}
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 
-\item{alpha}{Significance level.}
+\item{alpha}{(`double`)\cr Significance level to get the critical difference.}
 }
 \value{
 A list containing the following components: 
 \itemize{
-    \item{code{measure}} A string with the name of the measure column used.
-    \item{code{method}} A string with the name of the method used.
-    \item{code{statistic}} The value of the statistic used in the test.
-    \item{code{p_value}} The p-value for the test.
-    \item{code{diff_matrix}} A matrix with all the pair wise differences of 
-    average rankings.
+    \item{\code{measure}} (`character`)\cr A string with the name of the 
+        measure column. 
+    \item{\code{method}} (`character`)\cr A string with the name of the 
+        method. 
+    \item{\code{statistic}} (`double`)\cr The value of the statistic used in 
+        the test.
+    \item{\code{p_value}} (`double`)\cr The p-value for the test.
+    \item{\code{diff_matrix}} (`matrix`)\cr A matrix with all the pair wise
+        differences of average rankings.
 }
 }
 \description{
 This function implements the Nemenyi post hoc test.
 }
 \details{
-The test has first been implemented in scmamp. 
-    Note that if no measure column is defined per default the first column 
-    defined as measure_* in the data frame is used.
+The test has first been implemented in scmamp.
 }
 \examples{
     nemenyi_test(test_benchmark)
