@@ -46,17 +46,22 @@ This package implements statistical testing in order to assess statistical
 differences between the performances of Machine Learning (ML) algorithms for 
 classification. The package and vignette are mainly based on @benavoli2017.
 Benavoli et al. argue against the use of null hypothesis significance testing, 
-instead they are promoting the use of Bayesian testing. The seqbtests package 
-provides both frequentist and Bayesian tests for comparison of algorithms on one 
-or multiple data sets. As a new element, the package offers a sequential 
-approach to Bayesian testing. Since, evaluation of ML algorithms with performance
-measures like classification accuracy can be quite time consuming, the approach 
-offers new possibilities to save time. After each iteration of evaluation, 
-the sequential tests compare the estimated posterior probabilities to a defined 
-threshold and stop further testing, if a decision based on the probabilities 
-can be made. The package offers the possibility to evaluate the algorithms performance, while 
-simultaneously testing the results, thus, in the case of early stopping this 
-procedure can considerably save evaluation time.  
+due to some drawbacks, like not accounting for magnitude of the effects or 
+uncertainty in the estimates. Further, the estimation of the p-value depends on 
+sampling intentions and the sample size. Instead they are promoting the use of 
+Bayesian testing. 
+
+The `seqbtests` package provides both, frequentist and Bayesian, tests for 
+comparison of algorithms on one or multiple data sets. As a new element, the 
+package offers a sequential approach to Bayesian testing. Since, evaluation of 
+ML algorithms can be quite time consuming, the approach offers a new possibility
+to optimize the evaluation process and make it more effective. After each 
+iteration of evaluation, the sequential tests compare the estimated posterior 
+probabilities to a defined threshold and stop further testing, if a decision 
+based on the probabilities can be made. The package offers the possibility to 
+evaluate the algorithms performance, while simultaneously testing the results, 
+thus, in the case of early stopping this procedure can considerably save 
+evaluation time.  
 
 This vignette is divided in four parts. The first introduces the data structure
 that needs to be provided for testing. The second and third part respectively 
@@ -127,7 +132,7 @@ For each value of the defined `check_var` (either `problem` or `algorithm`)
 `na_check` shows the number and ratio of NAs in the `measure` column. To perform
 any of the tests for each problem the same number of algorithms and replications
 must be included in the data frame. Thus, when comparing the results of 
-`na_check` for `problem` and `algorithm` one can decide rather to drop the 
+`na_check` one can decide rather to drop the 
 specific values of either `problem` or `algorithm`. To remove one specific group
 of values the package provides the function `na_drop`. Via the same `check_var` 
 the user can specify to either drop all values containing NAs for either 
@@ -177,7 +182,7 @@ Assumptions:
 
 * Every parametric test assumes that the data follows a certain 
     distribution. Most tests assume it to be a normal distribution. 
-* Data from multiple groups should show equal standard deviations. 
+* Homogeneity of variances. 
 
 Before testing the differences one should always have a further look on the 
 algorithms by visualizing their aggregated performance on all problem sets with `plot_densities`. 
@@ -218,10 +223,10 @@ results on a single problem set.
 
 ```{r}
 results_corr <- corr_t_test(df= test_benchmark_small, problem = "problem_a", 
-  baseline = "algo_1", algorithm = "algo_3")
+  baseline = "algo_1", algorithm = "algo_2")
 ```
 
-```{r, include = FALSE}
+```{r}
 results_corr
 ```
 
@@ -250,7 +255,7 @@ results_wilcoxon <-  wilcoxon_signed_test(df = test_benchmark,
   baseline = "algo_1", algorithm = "algo_2", problem = "problem_a")  
 ```
 
-```{r, include = FALSE}
+```{r}
 results_wilcoxon
 ```
 
@@ -273,7 +278,7 @@ It is the non-parametric equivalent to the ANOVA test.
 results_friedman <- friedman_test(test_benchmark) 
 ```
 
-```{r, include = FALSE}
+```{r}
 results_friedman
 ```
 
@@ -305,7 +310,7 @@ different.
 results_nemenyi <- nemenyi_test(test_benchmark_small)
 ```
 
-```{r, include = FALSE}
+```{r}
 results_nemenyi
 ```
 
@@ -345,15 +350,18 @@ emphasize the many advantages of the Bayesian approach:
 While the null hypothesis of the frequentist test states that there are no differences between 
 the algorithms performances, this hypothesis can only be rejected, in Bayesian testing further 
 information is available by querying the posterior distribution. 
-The posterior distribution is calculated using a prior distribution about a 
+First, a prior distribution is set up that expresses the prior beliefs about the 
+parameters of interest, when no data is yet taken into account. 
+The posterior distribution is calculated using the prior distribution about a 
 parameter and a likelihood model providing actual information about the given 
 parameter through the observed data. Thus, it enables to evaluate 
 probabilities of different hypothesis. One can differentiate between three 
 different probabilities: the probability that the baseline algorithms is better 
 than the compared algorithm (P(baseline >> algorithm)), the probability that the
 algorithm performs better than the baseline (P(baseline << algorithm)). 
-Additional, through the ROPE (Region of Practical Equivalence) one is able to
-tell if two algorithms are practically equivalent (P(baseline = algorithm)). 
+Additional, an interval around the null value is established to be able to tell 
+if two algorithms are practically equivalent (P(baseline = algorithm)). This 
+interval is referred to as the ROPE (Region of Practical Equivalence).
 Usually two algorithms are practically equivalent if the mean differences of 
 accuracy are less than 1%. 
 
@@ -383,7 +391,7 @@ results_b_corr <- b_corr_t_test(df= test_benchmark_small,
   problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 ```
 
-```{r, include = FALSE}
+```{r}
 results_b_corr
 ```
 
@@ -460,12 +468,9 @@ compares these ranks, while considering the signs.
 ```{r}
 results_b_sign <- b_sign_test(df= test_benchmark_small, 
   problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
+results_b_sign
 results_b_signed <- b_signed_rank_test(df= test_benchmark_small, 
   baseline = "algo_1", algorithm = "algo_2")
-```
-
-```{r, include = FALSE}
-results_b_sign
 results_b_signed
 ```
 
@@ -498,13 +503,13 @@ hierarchical models are particularly powerful and flexible. Computations are
 obtained by Markov-Chain Monte Carlo sampling. 
 
 ```{r, message = FALSE, warning = FALSE}
-#results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
-#  baseline = "algo_1", algorithm = "algo_2", rho=0.1, rope=c(-0.01, 0.01), 
-#  nsim=2000,  nchains=5)
+results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
+  baseline = "algo_1", algorithm = "algo_2", rho=0.1, rope=c(-0.01, 0.01), 
+  nsim=2000,  nchains=5)
 ```
 
-```{r, include = FALSE}
-#results_b_hierarchical
+```{r}
+results_b_hierarchical
 ```
 
 The hierarchical approach is recommended by @benavoli2017 over the 
@@ -562,15 +567,15 @@ himself via ` min_repls `.
 ```{r, message = FALSE, warning = FALSE}
 results_seq_corr <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
   problem = "problem_a", baseline = "algo_1", compare = "equal", max_repls = 10)
-
+results_seq_corr
 results_seq_sign <- seq_b_sign_test(df = test_benchmark_small, 
   baseline = "algo_1", max_repls = 10)
 
 results_seq_ranks <- seq_b_signed_rank_test(df = test_benchmark_small,
   baseline = 'algo_1', max_repls = 10)
 
-# results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
-#   baseline = 'algo_1', max_repls = 10)
+results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
+   baseline = 'algo_1', max_repls = 10)
 ```
 
 ```{r, include = FALSE}

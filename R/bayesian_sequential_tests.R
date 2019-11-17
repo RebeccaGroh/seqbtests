@@ -5,7 +5,7 @@
 #'     another. Sample size is not fixed in advance, data are evaluated as they 
 #'     are collected. Further sampling is stopped in accordance with a 
 #'     pre-defined stopping rule as soon as significant results are obtained.  
-#' @param problem Problem set on which the test should be performed. 
+#' @param problem (`character`)\cr Problem set on which the test should be performed. 
 #' @param baseline First algorithm.
 #' @param algorithm Second algorithm. If not defined, every algorithm will be 
 #'     tested against baseline. 
@@ -66,12 +66,12 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
       & data[["algorithm"]] == baseline, measure]
     algorithms <- unique(data[["algorithm"]])
     if (i == min_repls) {
-      liste <- c()
+      term_algos <- c()
     }
     if (!is.null(algorithm)) {
       algorithms <- algorithm
     }
-    algorithms <- setdiff(algorithms, liste)
+    algorithms <- setdiff(algorithms, term_algos)
     for (k in algorithms[algorithms != baseline]) {
       y <- data[data[["problem"]] == problem 
         & data[["algorithm"]] == k, measure]
@@ -84,7 +84,7 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
       thresholds <- get_threshold(compare = compare, 
         posterior = b_test$posterior.probabilities)
       if (thresholds[1] > prob | thresholds[2] > prob | thresholds[3] > prob) {
-        liste <- rbind(liste, k)
+        term_algos <- rbind(term_algos, k)
       }
     }
   }
@@ -176,12 +176,12 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
     ## alle "algorithm" mit k ersetzen? 
     algorithms <- unique(data[["algorithm"]])
     if (i == min_repls) {
-      liste <- c()
+      term_algos <- c()
     }
     if (!is.null(algorithm)) {
       algorithms <- algorithm
     }
-    algorithms <- setdiff(algorithms, liste)
+    algorithms <- setdiff(algorithms, term_algos)
     for (k in algorithms[algorithms != baseline]) {
       # define samples when testing on multiple datasets
       if (is.null(problem)) {
@@ -208,7 +208,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
       thresholds <- get_threshold(compare = compare, 
         posterior = b_sign$probabilities)
       if (thresholds[1] > prob | thresholds[2] > prob | thresholds[3] > prob) {
-        liste <- rbind(liste, k)
+        term_algos <- rbind(term_algos, k)
       }
     }
   }
@@ -301,12 +301,12 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
     ## alle "algorithm" mit k ersetzen? 
     algorithms <- unique(data[["algorithm"]])
     if (i == min_repls) {
-      liste <- c()
+      term_algos <- c()
     }
     if (!is.null(algorithm)) {
       algorithms <- algorithm
     }
-    algorithms <- setdiff(algorithms, liste)
+    algorithms <- setdiff(algorithms, term_algos)
     for (k in algorithms[algorithms != baseline]) {
       # define samples when testing on multiple datasets
       if (is.null(problem)) {
@@ -333,7 +333,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
       thresholds <- get_threshold(compare = compare, 
         posterior = b_signed_rank$probabilities)
       if (thresholds[1] > prob | thresholds[2] > prob | thresholds[3] > prob) {
-        liste <- rbind(liste, k)
+        term_algos <- rbind(term_algos, k)
       }
     }
   }
@@ -442,12 +442,12 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
     }
     algorithms <- unique(data[["algorithm"]])
     if (i == min_repls) {
-      liste <- c()
+      term_algos <- c()
     }
     if (!is.null(algorithm)) {
       algorithms <- algorithm
     }
-    algorithms <- setdiff(algorithms, liste)
+    algorithms <- setdiff(algorithms, term_algos)
     # define samples
     x.matrix <- data_transformation(data, algo = baseline, measure)
     for (k in algorithms[algorithms != baseline]) {
@@ -469,7 +469,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
       thresholds <- get_threshold(compare = compare, 
         posterior = b_hierarchical$posterior.probabilities)
       if (thresholds[1] > prob | thresholds[2] > prob | thresholds[3] > prob) {
-        liste <- rbind(liste, k)
+        term_algos <- rbind(term_algos, k)
       }
     }
   }
