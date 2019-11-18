@@ -63,6 +63,10 @@ beta hyperparameter. Default is 0.5.}
 posterior distribution. Note that, by default, half the simulations are 
 used for the burn-in.}
 
+\item{nchains}{(`double`)\cr Number of MC chains to be simulated. As half the 
+simulations are used for the warm-up, the total number of simulations  
+will be \code{nchain}*\code{nsim}/2.}
+
 \item{parallel}{(`logical`)\cr If \code{true}, Stan code is executed in 
 parallel.}
 
@@ -85,10 +89,6 @@ during Stan’s adaptation period.}
 
 \item{...}{(any)\cr Additional arguments for ({\code{get_replications}}). 
 To pass a complete data frame, set ({\code{df}}) (`character`).}
-
-\item{nchain}{(`double`)\cr Number of MC chains to be simulated. As half the 
-simulations are used for the warm-up, the total number of simulations  
-will be \code{nchain}*\code{nsim}/2.}
 }
 \value{
 (`list`)\cr A list containing the following components:
@@ -123,8 +123,9 @@ This function implements a sequential approach of the Bayesian
 The basis for this test has first been implemented in scmamp.
 }
 \examples{
-    results <- seq_b_hierarchical_test(df = test_benchmark_small,
-    baseline = "algo_1", algorithm = "algo_2", max_repls = 10, min_repls = 8)
+    results <- seq_b_hierarchical_test(df = test_benchmark_small, 
+      baseline = "algo_1", algorithm = "algo_3", max_repls = 10, 
+      min_repls = 8)
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

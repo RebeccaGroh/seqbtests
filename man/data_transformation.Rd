@@ -9,12 +9,12 @@ data_transformation(df, algo, measure)
 \arguments{
 \item{df}{(`list`)\cr Data frame containing the performane measure.}
 
-\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
-defined, the first 'measure' column in the data frame is used.}
-
-\item{algorithm}{(`character`)\cr Second algorithm. Value in 'algorithm' 
+\item{algo}{(`character`)\cr Algorithm name. Value in 'algorithm' 
 column. If not defined, the baseline is tested against all algorithms 
 in the data frame.}
+
+\item{measure}{(`character`)\cr Name of the 'measure' column. If not 
+defined, the first 'measure' column in the data frame is used.}
 }
 \value{
 (`matrix`)\cr Matrix.

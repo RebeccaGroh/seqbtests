@@ -1,4 +1,5 @@
 context("bayesian_sequential_tests")
+Sys.unsetenv("R_TESTS")
 
 # check if seq_b_corr_t_test() returns a list with right information 
 test_that("seq_b_corr_t_test returns a list" , {
@@ -26,8 +27,8 @@ test_that("check if early stopping works for seq_b_corr_t_test", {
     problem = "problem_a", baseline = "algo_1", compare = "equal", 
     max_repls = 10)
   for (i in nrow(results$data_frame)) {
-    replications[i] <- results$data_frame$repls[i]
-    if (replications[i] < 10) {
+    replications <- results$data_frame$repls[i]
+    if (replications < 10) {
       expect_false(results$data_frame$probabilities[i] == "no decision")
     }
   }
@@ -116,7 +117,7 @@ test_that("seq_b_hierarchical_test() returns error", {
 })
 
 # check that if theres early stopping, the left column needs to be >= 0.95
-test_that("check if early stopping works for seq_b_corr_t_test", {
+test_that("check if early stopping works for seq_b_hierarchical_test", {
   results <- seq_b_hierarchical_test(df = test_benchmark_small,
     baseline = 'algo_1', max_repls = 10)
   for (i in nrow(results$data_frame)) {

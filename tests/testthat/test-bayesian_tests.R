@@ -1,4 +1,5 @@
 context("bayesian_tests")
+Sys.unsetenv("R_TESTS")
 
 # check if b_corr_t_test() returns a list with right information 
 test_that("b_corr_t_test returns a list" , {
@@ -52,8 +53,8 @@ test_that("b_sign_test returns a list" , {
 
 # check if b_sign_test() returns error if names are not correct 
 test_that("b_sign_test() returns error", {
-  expect_error(b_sign_test(df= test_benchmark_small, problem = "problem_1",
-    baseline = "algo_1", algorithm = "algo_2"))
+  expect_error(b_sign_test(df= test_benchmark_small,
+    baseline = "algo_1", algorithm = "algo_b"))
 })
 
 # check if b_signed_rank_test() returns a list with right information 
@@ -71,7 +72,7 @@ test_that("b_signed_rank_test returns a list" , {
 # check if b_signed_rank_test() returns error if names are not correct 
 test_that("b_signed_rank_test() returns error", {
   expect_error(b_signed_rank_test(df= test_benchmark_small, 
-    problem = "problem_a", baseline = "algo_a", algorithm = "algo_2"))
+    baseline = "algo_a", algorithm = "algo_2"))
 })
 
 # check if b_hierarchical_test() returns a list with right information 

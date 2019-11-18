@@ -8,6 +8,8 @@ get_extras_scmamp(x, ...)
 }
 \arguments{
 \item{x}{(`list`)\cr Test results.}
+
+\item{...}{(any)\cr Additional arguments.}
 }
 \value{
 (`list`)\cr List.

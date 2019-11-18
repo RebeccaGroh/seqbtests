@@ -87,10 +87,10 @@ check_structure <- function(df) {
 #' @description If there is a parameter additional to the algorithm, both can 
 #'     be combined, when using this function. 
 #' @param df (`list`)\cr Data frame containing the performane measure. 
-#' @param parameter_algorithm df (`character`)\cr Algorithm parameter in data 
+#' @param parameter_algo df (`character`)\cr Algorithm parameter in data 
 #'     frame. 
 #' @return df (`list`)\cr New data frame, where the algorithm and 
-#'     parameter_algorithm column, as well as the value names are combined. 
+#'     parameter_algo column, as well as the value names are combined. 
 #' @export 
 paste_algo_pars <- function(df, parameter_algo = NULL) {
   df[["algorithm"]] <- 

@@ -86,7 +86,7 @@ get_replications_count <- function(x, y) {
 #'     The replications are stored in the rows, while the columns are according  
 #'     to the problem sets. 
 #' @param df (`list`)\cr Data frame containing the performane measure. 
-#' @param algorithm (`character`)\cr Second algorithm. Value in 'algorithm' 
+#' @param algo (`character`)\cr Algorithm name. Value in 'algorithm' 
 #'     column. If not defined, the baseline is tested against all algorithms 
 #'     in the data frame. 
 #' @param measure (`character`)\cr Name of the 'measure' column. If not 
@@ -212,6 +212,7 @@ get_data_frame_htest_small <- function(p_value, test, statistic) {
 #' @description This function collects additional information from the test 
 #'     summed up as "extras". 
 #' @param x (`list`)\cr Test results. 
+#' @param ... (any)\cr Additional arguments.
 #' @return (`list`)\cr List. 
 get_extras_scmamp <- function(x, ...) {
   extras <- list(x$additional, x$approximate, x$parameters, x$posterior,
@@ -301,3 +302,6 @@ get_threshold <- function(posterior, compare) {
   }
   return(thresholds)
 }
+
+
+utils::globalVariables(c("algorithm", "replications", "alpha", "parameter_algorithm")) 

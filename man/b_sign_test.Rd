@@ -45,8 +45,6 @@ posterior probability distribution.}
 
 \item{rope}{(`double`)\cr Region of practical equivalence. Default is 
 c(-0.01, 0.01).}
-
-\item{rho}{(`double`)\cr Correlation factor. Default is 0.1.}
 }
 \value{
 (`list`)\cr A list containing the following components:

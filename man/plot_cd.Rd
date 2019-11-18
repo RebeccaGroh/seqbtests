@@ -15,6 +15,8 @@ defined, the first 'measure' column in the data frame is used.}
 \item{alpha}{(`double`)\cr Significance level to get the critical difference.}
 
 \item{cex}{(`double`)\cr Numeric value to control the size of the font.}
+
+\item{...}{(any)\cr Additional arguments.}
 }
 \value{
 (`list`) \cr List containing a `gg` object.

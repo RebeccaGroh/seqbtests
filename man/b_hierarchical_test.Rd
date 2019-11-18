@@ -69,16 +69,16 @@ parallel.}
 \item{stan.output.file}{(`character`)\cr String containing the base name for 
 the output files produced by Stan. If \code{NULL}, no files are stored.}
 
+\item{nchains}{(`double`)\cr Number of MC chains to be simulated. As half the 
+simulations are used for the warm-up, the total number of simulations  
+will be \code{nchain}*\code{nsim}/2.}
+
 \item{seed}{(`double`)\cr Optional parameter used to fix the random seed.}
 
 \item{adapt_delta}{(`double`)\cr Average proposal acceptance probability 
 during Stan’s adaptation period.}
 
 \item{max_treedepth}{(`double`)\cr  Maximum treedepth parameter.}
-
-\item{nchain}{(`double`)\cr Number of MC chains to be simulated. As half the 
-simulations are used for the warm-up, the total number of simulations  
-will be \code{nchain}*\code{nsim}/2.}
 }
 \value{
 (`list`)\cr A list containing the following components:
@@ -114,7 +114,7 @@ The test has first been implemented in scmamp.
 }
 \examples{
     results <- b_hierarchical_test(df= test_benchmark_small, 
-    baseline = "algo_1", algorithm = "algo_2",  rho=0.1, 
+    baseline = "algo_1", algorithm = "algo_3",  rho=0.1, 
     rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 }
 \references{

@@ -56,8 +56,6 @@ used/generated before an optional stopping rule is activated. Default is
 
 \item{...}{(any)\cr Additional arguments for ({\code{get_replications}}). 
 To pass a complete data frame, set ({\code{df}}) (`character`).}
-
-\item{rho}{(`double`)\cr Correlation factor. Default is 0.1.}
 }
 \value{
 (`list`)\cr A list containing the following components:

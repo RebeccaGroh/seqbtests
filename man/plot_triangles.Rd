@@ -10,6 +10,8 @@ plot_triangles(x, num.points = nrow(x$sample), ...)
 \item{x}{(`list`)\cr Test results.}
 
 \item{num.points}{(`double`)\cr Number of points to be shown in the plot.}
+
+\item{...}{(any)\cr Additional arguments.}
 }
 \description{
 Plot of the projection of 3-simplex points of a posterior 

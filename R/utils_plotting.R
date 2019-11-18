@@ -5,6 +5,7 @@
 #'     further use in this package. 
 #' @param x (`list`)\cr Test results. 
 #' @param num.points (`double`)\cr Number of points to be shown in the plot. 
+#' @param ... (any)\cr Additional arguments.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 plot_triangles <- function(x, num.points = nrow(x$sample), ...){
   sample <- x$sample

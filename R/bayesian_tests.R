@@ -106,7 +106,6 @@ b_corr_t_test <- function(df, problem, baseline, algorithm = NULL,
 #'     better ({\code{better}}) for decisions based on the posterior 
 #'     distribution or whether it is sufficient to perform not worse 
 #'     ({\code{equal}}). 
-#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
 #' @param rope (`double`)\cr Region of practical equivalence. Default is 
 #'     c(-0.01, 0.01).
 #' @param prob (`double`)\cr Threshold probability that decision rely on. 
@@ -219,7 +218,6 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
 #'     better ({\code{better}}) for decisions based on the posterior 
 #'     distribution or whether it is sufficient to perform not worse 
 #'     ({\code{equal}}). 
-#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
 #' @param rope (`double`)\cr Region of practical equivalence. Default is 
 #'     c(-0.01, 0.01).
 #' @param prob (`double`)\cr Threshold probability that decision rely on. 
@@ -330,9 +328,9 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #'     better ({\code{better}}) for decisions based on the posterior 
 #'     distribution or whether it is sufficient to perform not worse 
 #'     ({\code{equal}}). 
-#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
 #' @param rope (`double`)\cr Region of practical equivalence. Default is 
 #'     c(-0.01, 0.01).
+#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
 #' @param prob (`double`)\cr Threshold probability that decision rely on. 
 #'     Default is 0.95. 
 #' @param std.upper (`double`)\cr Factor to set the upper bound for both sigma_i 
@@ -352,7 +350,7 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #' @param nsim (`double`)\cr Number of samples (per chain) used to estimate the 
 #'     posterior distribution. Note that, by default, half the simulations are 
 #'     used for the burn-in.
-#' @param nchain (`double`)\cr Number of MC chains to be simulated. As half the 
+#' @param nchains (`double`)\cr Number of MC chains to be simulated. As half the 
 #'     simulations are used for the warm-up, the total number of simulations  
 #'     will be \code{nchain}*\code{nsim}/2.
 #' @param parallel (`logical`)\cr If \code{true}, Stan code is executed in 
@@ -389,7 +387,7 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #'     0.1. 
 #' @examples 
 #'     results <- b_hierarchical_test(df= test_benchmark_small, 
-#'     baseline = "algo_1", algorithm = "algo_2",  rho=0.1, 
+#'     baseline = "algo_1", algorithm = "algo_3",  rho=0.1, 
 #'     rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
@@ -435,3 +433,5 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
 # results <- b_hierarchical_test(df= test_benchmark_small, baseline = "algo_1",
 #   rho=0.1, rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 # results
+
+

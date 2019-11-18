@@ -51,11 +51,11 @@ plot_boxplot <- function(df, measure = NULL) {
     ggplot2::scale_y_continuous(name = "Measure") +
     ggplot2::scale_x_discrete(name = "Algorithms") +
     ggplot2::ggtitle("Boxplot of mean measure by algorithms") +
-    ggplot2::theme(plot.title = element_text(hjust = 0.5)) +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
     ggplot2::facet_wrap(. ~ problem) +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank(),
-          axis.ticks.x=element_blank())
+    ggplot2::theme(axis.title.x=ggplot2::element_blank(),
+          axis.text.x=ggplot2::element_blank(),
+          axis.ticks.x=ggplot2::element_blank())
 }
 
 
@@ -67,6 +67,7 @@ plot_boxplot <- function(df, measure = NULL) {
 #'     defined, the first 'measure' column in the data frame is used.
 #' @param alpha (`double`)\cr Significance level to get the critical difference.
 #' @param cex (`double`)\cr Numeric value to control the size of the font. 
+#' @param ... (any)\cr Additional arguments.
 #' @return (`list`) \cr List containing a `gg` object. 
 #' @details 
 #'     The test has first been implemented in scmamp. By default, the alpha 
@@ -128,15 +129,15 @@ plot_posterior <- function(results, method, points = 1000){
     ppos <- function(mu) {
       #Standarize the value and get the density
       x <- (mu - tdist.mean)/tdist.sd
-      return(pt(x, tdist.df))
+      return(stats::pt(x, tdist.df))
     }
     qpos <- function(q) {
-      return(qt(q, tdist.df) * tdist.sd + tdist.mean)
+      return(stats::qt(q, tdist.df) * tdist.sd + tdist.mean)
     }
     dpos <- function(mu) {
       #Standarize the value and get the density
       x <- (mu - tdist.mean)/tdist.sd
-      return(dt(x, tdist.df))
+      return(stats::dt(x, tdist.df))
     }
     test[["additional"]] <- list(pposterior = ppos, 
       qposterior = qpos, posterior.df = tdist.df, posterior.mean = tdist.mean,
@@ -145,7 +146,7 @@ plot_posterior <- function(results, method, points = 1000){
     test[["parameters"]] <- as.data.frame(results[["extra"]][3])
     test[["posterior"]] <- dpos
     scmamp::plotPosterior(results = test, num.points = points, plot.rope = TRUE, 
-      plot.samples = TRUE, alpha)
+      plot.samples = TRUE)
   } else if (method == "b_sign_test" | method == "b_signed_rank_test") {
     test <- list()
     test[["sample"]] <- as.data.frame(results[["extra"]])
@@ -157,3 +158,4 @@ plot_posterior <- function(results, method, points = 1000){
     warning("Method must be correctly specified.")
   }
 }
+

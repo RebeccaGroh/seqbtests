@@ -108,7 +108,7 @@ friedman_test <- function(df, measure = NULL) {
   class(output) <- "h_test_small"
   return(output)
 }
-# results <- friedman_test(test_benchmark) 
+# results <- friedman_test(test_benchmark)
 # results
 
 #' @title Wilcoxon signed-rank test 

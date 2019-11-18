@@ -131,7 +131,6 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 #'     better ({\code{better}}) for decisions based on the posterior 
 #'     distribution or whether it is sufficient to perform not worse 
 #'     ({\code{equal}}). 
-#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
 #' @param rope (`double`)\cr Region of practical equivalence. Default is 
 #'     c(-0.01, 0.01).
 #' @param max_repls (`double`)\cr Maximum number of replications. If a complete 
@@ -273,7 +272,6 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 #'     better ({\code{better}}) for decisions based on the posterior 
 #'     distribution or whether it is sufficient to perform not worse 
 #'     ({\code{equal}}). 
-#' @param rho (`double`)\cr Correlation factor. Default is 0.1.
 #' @param rope (`double`)\cr Region of practical equivalence. Default is 
 #'     c(-0.01, 0.01).
 #' @param max_repls (`double`)\cr Maximum number of replications. If a complete 
@@ -441,7 +439,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #' @param nsim (`double`)\cr Number of samples (per chain) used to estimate the 
 #'     posterior distribution. Note that, by default, half the simulations are 
 #'     used for the burn-in.
-#' @param nchain (`double`)\cr Number of MC chains to be simulated. As half the 
+#' @param nchains (`double`)\cr Number of MC chains to be simulated. As half the 
 #'     simulations are used for the warm-up, the total number of simulations  
 #'     will be \code{nchain}*\code{nsim}/2.
 #' @param parallel (`logical`)\cr If \code{true}, Stan code is executed in 
@@ -478,8 +476,9 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #'     The basis for this test has first been implemented in scmamp. 
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
-#'     results <- seq_b_hierarchical_test(df = test_benchmark_small,
-#'     baseline = "algo_1", algorithm = "algo_2", max_repls = 10, min_repls = 8)
+#'     results <- seq_b_hierarchical_test(df = test_benchmark_small, 
+#'       baseline = "algo_1", algorithm = "algo_3", max_repls = 10, 
+#'       min_repls = 8)
 #' @export
 seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL, 
   compare = NULL, rho = 0.1, max_repls = 20, rope = c(-0.01, 0.01), 
@@ -541,7 +540,6 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
 # results <- seq_b_hierarchical_test(df = test_benchmark_small,
 #   baseline = 'algo_1', max_repls = 10, adapt_delta = 0.9999)
 # results
-
 
 
 

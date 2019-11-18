@@ -226,7 +226,7 @@ results_corr <- corr_t_test(df= test_benchmark_small, problem = "problem_a",
   baseline = "algo_1", algorithm = "algo_2")
 ```
 
-```{r}
+```{r, include=FALSE}
 results_corr
 ```
 
@@ -255,7 +255,7 @@ results_wilcoxon <-  wilcoxon_signed_test(df = test_benchmark,
   baseline = "algo_1", algorithm = "algo_2", problem = "problem_a")  
 ```
 
-```{r}
+```{r, include = FALSE}
 results_wilcoxon
 ```
 
@@ -278,7 +278,7 @@ It is the non-parametric equivalent to the ANOVA test.
 results_friedman <- friedman_test(test_benchmark) 
 ```
 
-```{r}
+```{r, include = FALSE}
 results_friedman
 ```
 
@@ -310,7 +310,7 @@ different.
 results_nemenyi <- nemenyi_test(test_benchmark_small)
 ```
 
-```{r}
+```{r, include = FALSE}
 results_nemenyi
 ```
 
@@ -391,7 +391,7 @@ results_b_corr <- b_corr_t_test(df= test_benchmark_small,
   problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
 ```
 
-```{r}
+```{r, include = FALSE}
 results_b_corr
 ```
 
@@ -468,16 +468,19 @@ compares these ranks, while considering the signs.
 ```{r}
 results_b_sign <- b_sign_test(df= test_benchmark_small, 
   problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
-results_b_sign
 results_b_signed <- b_signed_rank_test(df= test_benchmark_small, 
   baseline = "algo_1", algorithm = "algo_2")
+```
+
+```{r, include=FALSE}
+results_b_sign
 results_b_signed
 ```
 
 The graphical visualization can be called the same way as for correlated 
 t-tests by `plot_posterior`. 
 
-```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
+```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5, message = FALSE}
 plot_posterior(results_b_sign, method = "b_sign_test")
 plot_posterior(results_b_signed, method = "b_signed_rank_test")
 ```
@@ -503,13 +506,13 @@ hierarchical models are particularly powerful and flexible. Computations are
 obtained by Markov-Chain Monte Carlo sampling. 
 
 ```{r, message = FALSE, warning = FALSE}
-results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
-  baseline = "algo_1", algorithm = "algo_2", rho=0.1, rope=c(-0.01, 0.01), 
-  nsim=2000,  nchains=5)
+#results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
+#  baseline = "algo_1", algorithm = "algo_2", rho=0.1, rope=c(-0.01, 0.01), 
+#  nsim=2000,  nchains=5)
 ```
 
 ```{r}
-results_b_hierarchical
+#results_b_hierarchical
 ```
 
 The hierarchical approach is recommended by @benavoli2017 over the 
@@ -567,21 +570,21 @@ himself via ` min_repls `.
 ```{r, message = FALSE, warning = FALSE}
 results_seq_corr <- seq_b_corr_t_test(df = test_benchmark_small, rho=0.1,
   problem = "problem_a", baseline = "algo_1", compare = "equal", max_repls = 10)
-results_seq_corr
+# results_seq_corr
 results_seq_sign <- seq_b_sign_test(df = test_benchmark_small, 
   baseline = "algo_1", max_repls = 10)
 
 results_seq_ranks <- seq_b_signed_rank_test(df = test_benchmark_small,
   baseline = 'algo_1', max_repls = 10)
 
-results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
-   baseline = 'algo_1', max_repls = 10)
+#results_seq_hierarchical <- seq_b_hierarchical_test(df = test_benchmark_small,
+#   baseline = 'algo_1', max_repls = 10)
 ```
 
 ```{r, include = FALSE}
-results_seq_corr
-results_seq_sign
-results_seq_ranks
+#results_seq_corr
+#results_seq_sign
+#results_seq_ranks
 # results_seq_hierarchical
 ```
 
