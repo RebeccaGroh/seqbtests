@@ -385,10 +385,6 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used. The default of rho is 
 #'     0.1. 
-#' @examples 
-#'     results <- b_hierarchical_test(df= test_benchmark_small, 
-#'     baseline = "algo_1", algorithm = "algo_3",  rho=0.1, 
-#'     rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
 b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL, 
@@ -399,7 +395,8 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
   adapt_delta = 0.8, max_treedepth = 10) {
   result <- data.frame()
   checkmate::assert_true(check_structure(df))
-  checkmate::assert_true(check_names(df, baseline, algorithm, measure, problem = NULL))
+  checkmate::assert_true(check_names(df, baseline, algorithm, measure, 
+    problem = NULL))
   if (is.null(measure)) {
     measure <- get_measure_columns(df)[1]
   }

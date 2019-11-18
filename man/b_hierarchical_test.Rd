@@ -112,11 +112,6 @@ The test has first been implemented in scmamp.
     defined as measure_* in the data frame is used. The default of rho is 
     0.1.
 }
-\examples{
-    results <- b_hierarchical_test(df= test_benchmark_small, 
-    baseline = "algo_1", algorithm = "algo_3",  rho=0.1, 
-    rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
-}
 \references{
 \url{https://github.com/b0rxa/scmamp}
 }

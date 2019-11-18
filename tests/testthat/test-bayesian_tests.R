@@ -75,10 +75,11 @@ test_that("b_signed_rank_test() returns error", {
     baseline = "algo_a", algorithm = "algo_2"))
 })
 
+
 # check if b_hierarchical_test() returns a list with right information 
 test_that("b_hierarchical_test returns a list" , {
   results <- b_hierarchical_test(df= test_benchmark_small,
-    baseline = "algo_1", algorithm = "algo_2")
+    baseline = "algo_1", algorithm = "algo_2", parallel = FALSE)
   expect_type(results, "list")
   expect_output(str(results), "List of 5")
   expect_type(results$baseline, "character")
