@@ -252,8 +252,10 @@ b_sign_test <- function(df, problem, baseline, algorithm = NULL,
 #'     The test has first been implemented in rNPBST. 
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @examples 
+#'     \dontrun{
 #'     results <- b_signed_rank_test(df= test_benchmark_small,
 #'     baseline = "algo_1", algorithm = "algo_2")
+#'     }
 #' @export
 b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
   algorithm = NULL, measure = NULL, prob = 0.95, s = 0.5, z_0 = 0, 

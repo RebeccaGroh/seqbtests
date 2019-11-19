@@ -140,6 +140,13 @@ This function implements a sequential approach of the Bayesian
 \details{
 The basis for this test has first been implemented in scmamp.
 }
+\examples{
+    \dontrun{
+    results <- seq_b_hierarchical_test(df = test_benchmark_small, 
+      baseline = "algo_1", algorithm = "algo_3", max_repls = 10, 
+      min_repls = 8)
+    }
+}
 \references{
 \url{https://github.com/b0rxa/scmamp}
 }
