@@ -8,7 +8,7 @@
 \describe{
   \item{problem}{Problem set, where the data is tested on}
   \item{algorithm}{ML algorithms}
-  \item{replications}{Number of replication, generated through sub-sampling}
+  \item{replication}{Number of replication, generated through sub-sampling}
   \item{measure_col}{Performance of algorithm measured with accuracy}
 }}
 \source{

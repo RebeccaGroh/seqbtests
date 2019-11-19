@@ -29,7 +29,7 @@
 #' @param min_repls (`double`)\cr Minimum number of replications that is 
 #'     used/generated before an optional stopping rule is activated. Default is 
 #'     5.
-#' @param ... (any)\cr Additional arguments for ({\code{get_replications}}). 
+#' @param ... (any)\cr Additional arguments for ({\code{get_replication}}). 
 #'     To pass a complete data frame, set ({\code{df}}) (`character`). 
 #' @return (`list`)\cr A list containing the following components:
 #' \itemize{
@@ -64,7 +64,7 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
   max_repls = 20, prob = 0.95, min_repls = 5, ...) {
   result <- data.frame()
   for (i in min_repls:max_repls) {
-    data <- get_replications(i, ...)
+    data <- get_replication(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problem, baseline, algorithm, 
@@ -148,7 +148,7 @@ seq_b_corr_t_test <- function(problem, baseline, algorithm = NULL,
 #' @param weights (`any`)\cr A prior weights.  
 #' @param mc_samples (`double`)\cr Number of samples used to estimate the 
 #'     posterior probability distribution. 
-#' @param ... (any)\cr Additional arguments for ({\code{get_replications}}). 
+#' @param ... (any)\cr Additional arguments for ({\code{get_replication}}). 
 #'     To pass a complete data frame, set ({\code{df}}) (`character`). 
 #' @return (`list`)\cr A list containing the following components:
 #' \itemize{
@@ -193,7 +193,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
   rope.max <- rope[2]
   result <- data.frame()
   for (i in min_repls:max_repls) {
-    data <- get_replications(i, ...)
+    data <- get_replication(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problem = NULL, baseline, 
@@ -289,7 +289,7 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 #' @param weights (`any`)\cr A prior weights.  
 #' @param mc_samples (`double`)\cr Number of samples used to estimate the 
 #'     posterior probability distribution. 
-#' @param ... (any)\cr Additional arguments for ({\code{get_replications}}). 
+#' @param ... (any)\cr Additional arguments for ({\code{get_replication}}). 
 #'     To pass a complete data frame, set ({\code{df}}) (`character`). 
 #' @return (`list`)\cr A list containing the following components:
 #' \itemize{
@@ -334,7 +334,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
   rope.max <- rope[2]
   result <- data.frame()
   for (i in min_repls:max_repls) {
-    data <- get_replications(i, ...)
+    data <- get_replication(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, problem = NULL, baseline, 
@@ -450,7 +450,7 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #' @param adapt_delta (`double`)\cr Average proposal acceptance probability 
 #'     during Stan’s adaptation period. 
 #' @param max_treedepth (`double`)\cr  Maximum treedepth parameter. 
-#' @param ... (any)\cr Additional arguments for ({\code{get_replications}}). 
+#' @param ... (any)\cr Additional arguments for ({\code{get_replication}}). 
 #'     To pass a complete data frame, set ({\code{df}}) (`character`). 
 #' @return (`list`)\cr A list containing the following components:
 #' \itemize{
@@ -489,7 +489,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
   max_treedepth = 10, ...) {
   result <- data.frame()
   for (i in min_repls:max_repls) {
-    data <- get_replications(i, ...)
+    data <- get_replication(i, ...)
     ## check if passed names, define columns in dataset
     checkmate::assert_true(check_structure(df = data))
     checkmate::assert_true(check_names(df = data, baseline, algorithm, 
@@ -510,7 +510,7 @@ seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL,
     for (k in algorithms[algorithms != baseline]) {
         y.matrix <- data_transformation(data, algo = k, measure)
       # check numbers in sample
-      checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
+      checkmate::assert_true(get_replication_count(x.matrix, y.matrix))
       # Bayesian correlated t-test
       b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, 
         std.upper, d0.lower, d0.upper, alpha.lower, alpha.upper, beta.lower,

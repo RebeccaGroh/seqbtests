@@ -3,7 +3,7 @@ Type: Package
 Title: Sequential Bayesian Comparison of ML Algorithm Performances
 Version: 0.1.0
 Authors@R: person("Rebecca", "Groh", email = "rebeccagroh@hotmail.de",
-                  role = c("aut", "cre"))
+    role = c("aut", "cre"))
 Description: This package implements different Bayesian tests to compare the 
     performance of Machine Learning Algorithms. The performance of the 
     algorithms to be compared can be built up within the packages by a function 
@@ -36,7 +36,7 @@ Suggests:
     roxygen2, 
     rNPBST,
     scmamp
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Remotes: 
     bioc::3.8/graph, 
     bioc::3.8/Rgraphviz,
@@ -44,4 +44,3 @@ Remotes:
     JacintoCC/rNPBST
 VignetteBuilder: 
     knitr
-    

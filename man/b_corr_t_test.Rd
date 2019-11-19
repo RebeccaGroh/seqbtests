@@ -4,8 +4,17 @@
 \alias{b_corr_t_test}
 \title{Bayesian correlated t test}
 \usage{
-b_corr_t_test(df, problem, baseline, algorithm = NULL, measure = NULL,
-  compare = NULL, rho = 0.1, rope = c(-0.01, 0.01), prob = 0.95)
+b_corr_t_test(
+  df,
+  problem,
+  baseline,
+  algorithm = NULL,
+  measure = NULL,
+  compare = NULL,
+  rho = 0.1,
+  rope = c(-0.01, 0.01),
+  prob = 0.95
+)
 }
 \arguments{
 \item{df}{(`list`)\cr Data frame containing the performane measure.}

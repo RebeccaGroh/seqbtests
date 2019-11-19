@@ -12,7 +12,7 @@ get_data_frame_seq(k, posterior, repls)
 \item{posterior}{(`character`)\cr Call for the posterior probabilities of the 
 Bayesian tests.}
 
-\item{repls}{(`double`)\cr Number of replications used until a decision is made.}
+\item{repls}{(`double`)\cr Number of replication used until a decision is made.}
 }
 \value{
 (`list`)\cr List.

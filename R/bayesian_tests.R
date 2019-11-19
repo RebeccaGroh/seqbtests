@@ -380,6 +380,10 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #'     \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
 #'         probabilities and threshold probability. 
 #' }
+#' @examples 
+#'     results <- b_hierarchical_test(df= test_benchmark_small, 
+#'     baseline = "algo_1", algorithm = "algo_3",  rho=0.1, 
+#'     rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 #' @details 
 #'     The test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
@@ -409,7 +413,7 @@ b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL,
     x.matrix <- data_transformation(df, algo = baseline, measure)
     y.matrix <- data_transformation(df, algo = k, measure)
     # check numbers in sample
-    checkmate::assert_true(get_replications_count(x.matrix, y.matrix))
+    checkmate::assert_true(get_replication_count(x.matrix, y.matrix))
     # Bayesian correlated t Test
     b_hierarchical <- scmamp::bHierarchicalTest(x.matrix, y.matrix, rho, 
       std.upper, d0.lower, d0.upper, alpha.lower, alpha.upper, beta.lower, 

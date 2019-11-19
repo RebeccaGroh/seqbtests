@@ -4,14 +4,32 @@
 \alias{seq_b_hierarchical_test}
 \title{Sequential Bayesian hierarchical correlated t-test}
 \usage{
-seq_b_hierarchical_test(baseline, algorithm = NULL, measure = NULL,
-  compare = NULL, rho = 0.1, max_repls = 20, rope = c(-0.01, 0.01),
-  std.upper = 1000, d0.lower = NULL, d0.upper = NULL,
-  alpha.lower = 0.5, alpha.upper = 5, beta.lower = 0.05,
-  beta.upper = 0.15, nsim = 2000, nchains = 8, parallel = TRUE,
-  stan.output.file = NULL, prob = 0.95,
-  seed = as.numeric(Sys.time()), min_repls = 5, adapt_delta = 0.8,
-  max_treedepth = 10, ...)
+seq_b_hierarchical_test(
+  baseline,
+  algorithm = NULL,
+  measure = NULL,
+  compare = NULL,
+  rho = 0.1,
+  max_repls = 20,
+  rope = c(-0.01, 0.01),
+  std.upper = 1000,
+  d0.lower = NULL,
+  d0.upper = NULL,
+  alpha.lower = 0.5,
+  alpha.upper = 5,
+  beta.lower = 0.05,
+  beta.upper = 0.15,
+  nsim = 2000,
+  nchains = 8,
+  parallel = TRUE,
+  stan.output.file = NULL,
+  prob = 0.95,
+  seed = as.numeric(Sys.time()),
+  min_repls = 5,
+  adapt_delta = 0.8,
+  max_treedepth = 10,
+  ...
+)
 }
 \arguments{
 \item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'
@@ -87,7 +105,7 @@ during Stan’s adaptation period.}
 
 \item{max_treedepth}{(`double`)\cr  Maximum treedepth parameter.}
 
-\item{...}{(any)\cr Additional arguments for ({\code{get_replications}}). 
+\item{...}{(any)\cr Additional arguments for ({\code{get_replication}}). 
 To pass a complete data frame, set ({\code{df}}) (`character`).}
 }
 \value{

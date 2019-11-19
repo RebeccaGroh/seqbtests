@@ -4,8 +4,7 @@
 \alias{get_results_htest}
 \title{Get test results (Frequentist tests)}
 \usage{
-get_results_htest(baseline = NULL, method, measure, data = NULL,
-  matrix = NULL)
+get_results_htest(baseline = NULL, method, measure, data = NULL, matrix = NULL)
 }
 \arguments{
 \item{baseline}{(`character`)\cr First algorithm. Value in 'algorithm'

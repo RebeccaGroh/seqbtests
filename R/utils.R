@@ -1,10 +1,10 @@
 #' @title Main columns 
 #' @description Get the list of names of the main columns within the data frame, 
-#'   namely 'problem', 'algorithm' and 'replications'. 
+#'   namely 'problem', 'algorithm' and 'replication'. 
 #' @param df (`list`)\cr Data frame containing the performane measure. 
 #' @return (`list`)\cr A vector containing all main column names.
 get_main_columns <- function(df) {
-  main_columns <- c("problem", "algorithm", "replications")
+  main_columns <- c("problem", "algorithm", "replication")
   return(intersect(names(df), main_columns))
 }
 
@@ -59,24 +59,24 @@ get_measure_columns_count <- function(df) {
   return(length(get_measure_columns(df)))
 }
 
-#' @title Build replications
-#' @description When not defined by user, it calls the replications in a 
-#' complete data frame provided by the user. Can otherwise be used to build 
-#' replications during testing procedure.
-#' @param i (`double`)\cr Number of replications in data frame.  
+#' @title Build replication
+#' @description When not defined by user, it calls the replication in a 
+#'     complete data frame provided by the user. Can otherwise be used to build 
+#'     replications during testing procedure.
+#' @param i (`double`)\cr Number of replication in data frame.  
 #' @param df (`list`)\cr Data frame containing the performane measure. 
-#' @return (`list`)\cr Data frame containing defined the number of replications.   
-get_replications <- function(i, df) {
-  df[df[["replications"]] <= i, ]
+#' @return (`list`)\cr Data frame containing defined the number of replication.   
+get_replication <- function(i, df) {
+  df[df[["replication"]] <= i, ]
 }
 
-#' @title Check number of replications 
+#' @title Check number of replication 
 #' @description  Check if number of observations in the first and second 
 #'     sample are equal.
 #' @param x (`list`)\cr First sample.
 #' @param y (`list`)\cr Second sample.
 #' @return (`logical`)\cr TRUE if both samples are of same length. 
-get_replications_count <- function(x, y) {
+get_replication_count <- function(x, y) {
   checkmate::assert_true(length(x) == length(y))
 }
 
@@ -94,9 +94,9 @@ get_replications_count <- function(x, y) {
 #' @return (`matrix`)\cr Matrix. 
 data_transformation <- function(df, algo, measure) {
   keep_algo <- subset(df, df[["algorithm"]] == algo)
-  data_wide <- tidyr::spread(keep_algo, replications, measure)
+  data_wide <- tidyr::spread(keep_algo, replication, measure)
   # columns need to be dropped
-  drop_cols <- setdiff(colnames(data_wide), unique(df[["replications"]]))
+  drop_cols <- setdiff(colnames(data_wide), unique(df[["replication"]]))
   # columns to keep
   names.use <- names(data_wide)[!(names(data_wide) %in% drop_cols)]
   # subset
@@ -164,7 +164,7 @@ get_data_frame <- function(k, posterior) {
 #' @param k (`character`)\cr Algorithm tested against the baseline.    
 #' @param posterior (`character`)\cr Call for the posterior probabilities of the 
 #'     Bayesian tests. 
-#' @param repls (`double`)\cr Number of replications used until a decision is made. 
+#' @param repls (`double`)\cr Number of replication used until a decision is made. 
 #' @return (`list`)\cr List. 
 get_data_frame_seq <- function(k, posterior, repls) {
   result <- data.frame()
@@ -304,4 +304,4 @@ get_threshold <- function(posterior, compare) {
 }
 
 
-utils::globalVariables(c("algorithm", "replications", "alpha", "parameter_algorithm")) 
+utils::globalVariables(c("algorithm", "replication", "alpha", "parameter_algorithm")) 

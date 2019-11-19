@@ -18,8 +18,8 @@ test_that("check_structure for test_benchmark", {
 })
 
 # check if check_structure() throws error without problem, algorithm 
-# and replications
-test_that("check_structure without problem/algorithm/replications", {
+# and replication
+test_that("check_structure without problem/algorithm/replication", {
   tmp <- test_benchmark
   tmp$problem <- NULL 
   expect_error(check_structure(tmp))
@@ -27,7 +27,7 @@ test_that("check_structure without problem/algorithm/replications", {
   tmp$algorithm <- NULL 
   expect_error(check_structure(tmp))
   tmp <- test_benchmark
-  tmp$replications <- NULL 
+  tmp$replication <- NULL 
   expect_error(check_structure(tmp))
 })
 
@@ -39,7 +39,7 @@ test_that("check_structure with unknown column", {
 })
 
 # check if check_structure() throws error without measure column
-test_that("check_structure without problem/algorithm/replications", {
+test_that("check_structure without problem/algorithm/replication", {
   tmp <- test_benchmark
   tmp$measure_col <- NULL 
   expect_error(check_structure(tmp))

@@ -4,9 +4,20 @@
 \alias{b_sign_test}
 \title{Bayesian Sign test}
 \usage{
-b_sign_test(df, problem, baseline, algorithm = NULL, measure = NULL,
-  compare = NULL, prob = 0.95, s = 1, z_0 = 0, weights = c(s/2,
-  rep(1, length(x))), mc_samples = 1e+05, rope = c(-0.01, 0.01))
+b_sign_test(
+  df,
+  problem,
+  baseline,
+  algorithm = NULL,
+  measure = NULL,
+  compare = NULL,
+  prob = 0.95,
+  s = 1,
+  z_0 = 0,
+  weights = c(s/2, rep(1, length(x))),
+  mc_samples = 1e+05,
+  rope = c(-0.01, 0.01)
+)
 }
 \arguments{
 \item{df}{(`list`)\cr Data frame containing the performane measure.}

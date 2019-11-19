@@ -4,13 +4,30 @@
 \alias{b_hierarchical_test}
 \title{Bayesian hierarchical correlated t-test}
 \usage{
-b_hierarchical_test(df, baseline, algorithm = NULL, measure = NULL,
-  rho = 0.1, compare = NULL, std.upper = 1000, d0.lower = NULL,
-  d0.upper = NULL, prob = 0.95, alpha.lower = 0.5, alpha.upper = 5,
-  beta.lower = 0.05, beta.upper = 0.15, rope = c(-0.01, 0.01),
-  nsim = 2000, parallel = TRUE, stan.output.file = NULL,
-  nchains = 8, seed = as.numeric(Sys.time()), adapt_delta = 0.8,
-  max_treedepth = 10)
+b_hierarchical_test(
+  df,
+  baseline,
+  algorithm = NULL,
+  measure = NULL,
+  rho = 0.1,
+  compare = NULL,
+  std.upper = 1000,
+  d0.lower = NULL,
+  d0.upper = NULL,
+  prob = 0.95,
+  alpha.lower = 0.5,
+  alpha.upper = 5,
+  beta.lower = 0.05,
+  beta.upper = 0.15,
+  rope = c(-0.01, 0.01),
+  nsim = 2000,
+  parallel = TRUE,
+  stan.output.file = NULL,
+  nchains = 8,
+  seed = as.numeric(Sys.time()),
+  adapt_delta = 0.8,
+  max_treedepth = 10
+)
 }
 \arguments{
 \item{df}{(`list`)\cr Data frame containing the performane measure.}
@@ -111,6 +128,11 @@ The test has first been implemented in scmamp.
     Note that if no measure column is defined per default the first column 
     defined as measure_* in the data frame is used. The default of rho is 
     0.1.
+}
+\examples{
+    results <- b_hierarchical_test(df= test_benchmark_small, 
+    baseline = "algo_1", algorithm = "algo_3",  rho=0.1, 
+    rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 }
 \references{
 \url{https://github.com/b0rxa/scmamp}

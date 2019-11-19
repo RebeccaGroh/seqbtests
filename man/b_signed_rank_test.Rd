@@ -4,10 +4,20 @@
 \alias{b_signed_rank_test}
 \title{Bayesian Signed Rank test}
 \usage{
-b_signed_rank_test(df, problem = NULL, baseline, compare = NULL,
-  algorithm = NULL, measure = NULL, prob = 0.95, s = 0.5,
-  z_0 = 0, weights = NULL, mc_samples = 1e+05, rope = c(-0.01,
-  0.01))
+b_signed_rank_test(
+  df,
+  problem = NULL,
+  baseline,
+  compare = NULL,
+  algorithm = NULL,
+  measure = NULL,
+  prob = 0.95,
+  s = 0.5,
+  z_0 = 0,
+  weights = NULL,
+  mc_samples = 1e+05,
+  rope = c(-0.01, 0.01)
+)
 }
 \arguments{
 \item{df}{(`list`)\cr Data frame containing the performane measure.}

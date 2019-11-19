@@ -4,10 +4,22 @@
 \alias{seq_b_signed_rank_test}
 \title{Sequential Bayesian Signed Rank test}
 \usage{
-seq_b_signed_rank_test(problem = NULL, baseline, algorithm = NULL,
-  measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
-  weights = NULL, mc_samples = 1e+05, rope = c(-0.01, 0.01),
-  max_repls = 20, prob = 0.95, min_repls = 5, ...)
+seq_b_signed_rank_test(
+  problem = NULL,
+  baseline,
+  algorithm = NULL,
+  measure = NULL,
+  compare = NULL,
+  s = 0.5,
+  z_0 = 0,
+  weights = NULL,
+  mc_samples = 1e+05,
+  rope = c(-0.01, 0.01),
+  max_repls = 20,
+  prob = 0.95,
+  min_repls = 5,
+  ...
+)
 }
 \arguments{
 \item{problem}{(`character`)\cr Problem set used to evaluate the algorithms 
@@ -53,7 +65,7 @@ Default is 0.95.}
 used/generated before an optional stopping rule is activated. Default is 
 5.}
 
-\item{...}{(any)\cr Additional arguments for ({\code{get_replications}}). 
+\item{...}{(any)\cr Additional arguments for ({\code{get_replication}}). 
 To pass a complete data frame, set ({\code{df}}) (`character`).}
 }
 \value{

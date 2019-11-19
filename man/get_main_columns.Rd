@@ -14,5 +14,5 @@ get_main_columns(df)
 }
 \description{
 Get the list of names of the main columns within the data frame, 
-  namely 'problem', 'algorithm' and 'replications'.
+  namely 'problem', 'algorithm' and 'replication'.
 }

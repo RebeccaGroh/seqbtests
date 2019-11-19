@@ -47,7 +47,7 @@ check_column_names <- function(df) {
     get_measure_columns_count(df) + get_parameter_columns_count(df) == ncol(df))
   checkmate::assert_true("problem" %in% colnames(df))
   checkmate::assert_true("algorithm" %in% colnames(df))
-  checkmate::assert_true("replications" %in% colnames(df))
+  checkmate::assert_true("replication" %in% colnames(df))
   return(TRUE)
 }
 
@@ -62,7 +62,7 @@ check_column_names <- function(df) {
 #' @export
 check_structure <- function(df) {
   # check column and row count: at least 4 cols (problem, algorithm, 
-  # replications, 1x measure_) and minimum of 1 row
+  # replication, 1x measure_) and minimum of 1 row
   checkmate::assert_data_frame(df, min.rows = 1, min.cols = 4)
   # check number of measures is at least 1
   checkmate::assert_true(get_measure_columns_count(df) >= 1)

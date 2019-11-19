@@ -9,9 +9,9 @@ r:
   - devel
   
  
-#script:
-#  - R CMD build . --compact-vignettes=gs+qpdf
-#  - R CMD check *tar.gz --as-cran
+script:
+  - R CMD build . --compact-vignettes=gs+qpdf
+  - R CMD check *tar.gz --as-cran
 bioc_packages:
   - Rgraphviz
   - graph

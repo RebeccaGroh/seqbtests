@@ -4,8 +4,7 @@
 \alias{wilcoxon_signed_test}
 \title{Wilcoxon signed-rank test}
 \usage{
-wilcoxon_signed_test(df, problem, baseline, algorithm = NULL,
-  measure = NULL)
+wilcoxon_signed_test(df, problem, baseline, algorithm = NULL, measure = NULL)
 }
 \arguments{
 \item{df}{(`list`)\cr Data frame containing the performane measure.}

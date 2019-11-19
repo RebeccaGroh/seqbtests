@@ -11,7 +11,7 @@ library(gridExtra)
 # Used Data: Benchmark Data 
 # Tests: Bayesian Correlated t-test, Bayesian Signed Ranks Test
 # Baseline = ranger.pow_wavelet_tune
-# Ground Truth: Decision after the maximum number of replications 
+# Ground Truth: Decision after the maximum number of replications
 
 benchmark_data <- result  
 
@@ -41,7 +41,7 @@ benchmark_small <- unique(benchmark_small)
 
 # rename values and measure column value von ranger.pow vorher umbenennen 
 colnames(benchmark_small)[colnames(benchmark_small) == "mmce"] <- "measure_mmce"
-colnames(benchmark_small)[colnames(benchmark_small) == "repl"] <- "replications"
+colnames(benchmark_small)[colnames(benchmark_small) == "repl"] <- "replication"
 
 # drop NAs 
 benchmark_small <- na_drop(df = benchmark_small, check_var = "algorithm") 
@@ -118,14 +118,14 @@ error_plot <- ggplot(data=plot_error, aes(x=as.numeric(start_iter),
                        y=as.numeric(errors), group=1)) +
   geom_line()+
   geom_point() + 
-  xlab("minimum number of replications") + ylab("error rate") + 
+  xlab("minimum number of replication") + ylab("error rate") + 
   ylim(0, 1)
 
 time_plot <- ggplot(data=plot_time, aes(x=as.numeric(start_iter), 
                       y=as.numeric(time_saved), group=1)) +
   geom_line()+
   geom_point() + 
-  xlab("minimum number of replications") + ylab("time saving (%)") + 
+  xlab("minimum number of replication") + ylab("time saving (%)") + 
   ylim(0, 1)
 
 
@@ -204,14 +204,14 @@ error_plot <- ggplot(data=plot_error, aes(x=as.numeric(start_iter),
                                           y=as.numeric(errors), group=1)) +
   geom_line()+
   geom_point() + 
-  xlab("minimum number of replications") + ylab("error rate") + 
+  xlab("minimum number of replication") + ylab("error rate") + 
   ylim(0, 1)
 
 time_plot <- ggplot(data=plot_time, aes(x=as.numeric(start_iter), 
                                         y=as.numeric(time_saved), group=1)) +
   geom_line()+
   geom_point() + 
-  xlab("minimum number of replications") + ylab("time saving (%)") + 
+  xlab("minimum number of replication") + ylab("time saving (%)") + 
   ylim(0, 1)
 
 

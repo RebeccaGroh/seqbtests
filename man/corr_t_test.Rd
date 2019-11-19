@@ -4,8 +4,14 @@
 \alias{corr_t_test}
 \title{Correlated t test}
 \usage{
-corr_t_test(df, problem, baseline, algorithm = NULL, measure = NULL,
-  rho = 0.01)
+corr_t_test(
+  df,
+  problem,
+  baseline,
+  algorithm = NULL,
+  measure = NULL,
+  rho = 0.01
+)
 }
 \arguments{
 \item{df}{(`list`)\cr Data frame containing the performane measure.}

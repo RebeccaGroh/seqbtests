@@ -40,18 +40,18 @@ test_that("get_measure_columns_count for test_benchmark", {
   expect_equal(count, 1)
 })
 
-# check if get_replications() works correctly for test_benchmark 
-test_that("get_replications for test_benchmark" , {
-  data <- get_replications(df = test_benchmark, i = 10)
+# check if get_replication() works correctly for test_benchmark 
+test_that("get_replication for test_benchmark" , {
+  data <- get_replication(df = test_benchmark, i = 10)
   expect_type(data, "list")
 })
 
 
-# check if get_replications_count() works correctly on test samples 
-test_that("get_replications tests for the same number of replications", {
+# check if get_replication_count() works correctly on test samples 
+test_that("get_replication tests for the same number of replication", {
   x <- rnorm(25, 1, 1)
   y <- rnorm(25, 1.5, 1)
-  expect_true(get_replications_count(x, y))
+  expect_true(get_replication_count(x, y))
 })
 
 # check if data_transformation() returns data frame, with only numeric columns 

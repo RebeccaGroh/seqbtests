@@ -210,9 +210,13 @@ sets in the data frame. Thus, it's easy to observe strong outliers.
 After the visualization, statistical differences in the performances of the 
 algorithms can be tested by three frequentist tests implemented in the package, 
 namely, the correlated t-test and the non-parametric Friedman and Wilcoxon
-Signed Ranks test. The null hypothesis for these tests states that there are no 
+signed ranks test. The null hypothesis for these tests states that there are no 
 differences among the algorithms, thus all algorithm score the same performance.
 
+| 2 algorithms x 1 problem set | 2 algortihms x n problem sets | n algorithms x n problem sets|
+|:------:|:------:|:------:|
+| correlated t-test | Wilcoxon signed rank test | Friedman test |
+|                   | Nemenyi pos-hoc test      |               |
 
 ## Correlated t-test 
 
@@ -244,9 +248,9 @@ problems into account and may adjust the significance level via correction
 procedures such as Bonferroni correction. 
 
 
-## Wilcoxon Signed Ranks test 
+## Wilcoxon signed ranks test 
 
-The Wilcoxon Signed Ranks test is recommended by @demsar2006 
+The Wilcoxon signed ranks test is recommended by @demsar2006 
 for the comparison of two classifiers on multiple problem sets. It is a 
 non-parametric test that ranks and compares the performances of two classifiers, based on their ranks.
 
@@ -365,13 +369,18 @@ interval is referred to as the ROPE (Region of Practical Equivalence).
 Usually two algorithms are practically equivalent if the mean differences of 
 accuracy are less than 1%. 
 
-
 The package provides four Bayesian tests, which have been summarized and 
 recommended in @benavoli2017.  The Bayesian correlated t
 test, is used for the comparison of two algorithms on one data set. 
-The other three tests, namely the Bayesian Sign test, the Bayesian Signed Rank 
+The other three tests, namely the Bayesian sign test, the Bayesian signed rank 
 test and the Bayesian hierarchical correlated t-test are used to test 
 algorithms on multiple problem sets.
+
+| 2 algorithms x 1 problem set | 2 algortihms x n problem sets |
+|:------:|:------:|
+| Bayesian correlated t-test | Bayesian sign test | 
+|                            | Bayesian signed rank test | 
+|                            | Bayesian hierarchical correlated t-test | 
 
 
 ## Bayesian correlated t-test 
@@ -421,6 +430,16 @@ case it can often be helpful to know that the computationally less complex
 algorithm performs at least as well as the other one. If no decision could be 
 made the column states `no decision` for the specific algorithm.
 
+The decisions based on the posterior probabilities can be outlined as follows: 
+
+| Decisions |
+|:------:|
+| algo_1 > algo_2 if right probability > 0.95  | 
+| algo_1 = algo_2 if rope probability > 0.95  | 
+| algo_1 < algo_2 if left probability > 0.95   | 
+| algo_1 >= algo_2 if right + rope probability > 0.95  | 
+| algo_1 <= algo_2 if left + rope probability > 0.95   | 
+
 
 The posterior probability can be plotted by the function `plot_posterior`. 
 It is a graphically visualization of the test results. 
@@ -449,18 +468,18 @@ probability mass is inside the ROPE one can conclude that the Baseline and
 compared algorithm are practically equivalent.
 
 
-## Bayesian Sign test and Bayesian Signed Ranks test
+## Bayesian sign test and Bayesian signed ranks test
 
-The Bayesian Sign and Signed Ranks tests compare classifiers on multiple problem 
-sets. They are respectively the Bayesian counterparts to the non-parametric Sign 
-and Wilcoxon Signed Ranks test and assume a Dirichlet Process (DP) prior. 
+The Bayesian sign and signed ranks tests compare classifiers on multiple problem 
+sets. They are respectively the Bayesian counterparts to the non-parametric sign 
+and Wilcoxon signed ranks test and assume a Dirichlet Process (DP) prior. 
 Different than the Bayesian and frequentist correlated t-test these tests don't 
 take correlation into account. However, due to their non-parametric nature, they do 
 not assume normality of the samples mean, are robust regarding outliers and do 
 not assume commensurability.
 
-The Bayesian Sign test is less powerful than the Bayesian Signed Rank test, 
-since the Signed Ranks test does not only take the sign into account, but also 
+The Bayesian sign test is less powerful than the Bayesian signed rank test, 
+since the signed ranks test does not only take the sign into account, but also 
 the size of differences. It ranks the absolute values of differences and 
 compares these ranks, while considering the signs.
 
@@ -516,11 +535,11 @@ obtained by Markov-Chain Monte Carlo sampling.
 ```
 
 The hierarchical approach is recommended by @benavoli2017 over the 
-Bayesian Signed test. Yet, it is quite time consuming, which is inconvenient if 
+Bayesian signed test. Yet, it is quite time consuming, which is inconvenient if 
 tests needs to be run often. 
 
-The graphical visualization shows a similar triangle plot as the Bayesian Sign 
-and Signed Ranks test.
+The graphical visualization shows a similar triangle plot as the Bayesian sign 
+and signed ranks test.
 
 ```{r, prompt=TRUE , fig.width=5.5, fig.height=3.5}
 # plot_posterior(results_b_hierarchical, method = "b_hierarchical_test")
@@ -543,6 +562,13 @@ this run and the prematurely results are used. If all algorithms in the data
 frame are tested against the baseline and the baseline outperforms one algorithm
 after a few evaluations, or vice versa, the analysis is terminated for this specific algorithm,
 yet the procedure continues for the other algorithms. 
+
+The sequential procedure can be outlined as follows: 
+
+1. Define a maximum number of observations to be iterated and a stopping rule
+2. Choose a prior distribution 
+3. Run a minimal number of replications, increase sample size as often as needed and compute the posterior distribution at any stage
+4. As soon as one of the thresholds in step 1 is reached, stop sampling and report the final posterior probability distribution 
 
 Within this package the user has the possibility to generate each new run of 
 performance evaluation within the Bayesian tests. This works by the function 
@@ -592,6 +618,32 @@ The results of the sequential tests are structured and can be interpreted the
 same way as the non-sequential tests. The output also specifies the 
 number of replications that were considered. If no decision concerning the 
 probabilities could be made, the replications were examined up to `max_repls`.
+
+The example below shows how the function `get_replications` can easily be 
+replaced by a self-written one. The user can use this to evaluate the applied 
+algorithms within the test procedure.  
+
+```{r, eval = FALSE}
+sepcific_get_replication <- function(i){
+  set.seed(1234)
+  data <- data.frame(algorithm = rep(c("algo_a", "algo_b"), length = i*2), 
+                     measure_accuracy = rnorm(n = i*2, mean = c(0.4, 0.7), sd = 0.05))
+  data$problem <- "problem_1"
+  for (i in unique(data$algorithm)) {
+    data$replication[data$algorithm == i] <- seq_len(sum(data$algorithm == i))
+  }
+  return(data)
+}
+
+unlockBinding("get_replication", as.environment("package:seqbtests"))
+assignInNamespace("get_replication", sepcific_get_replication, ns="seqbtests", envir=as.environment("package:seqbtests"))
+assign("get_replication", sepcific_get_replication, envir=as.environment("package:seqbtests"))
+lockBinding("get_replication", as.environment("package:seqbtests"))
+
+results <- seq_b_corr_t_test(problem = "problem_1", 
+                             baseline = "algo_a", algorithm = "algo_b")
+```
+
 
 <!-- # References -->
 

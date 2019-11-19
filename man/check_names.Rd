@@ -4,8 +4,13 @@
 \alias{check_names}
 \title{Check column names}
 \usage{
-check_names(df, problem = NULL, baseline = NULL, algorithm = NULL,
-  measure = NULL)
+check_names(
+  df,
+  problem = NULL,
+  baseline = NULL,
+  algorithm = NULL,
+  measure = NULL
+)
 }
 \arguments{
 \item{df}{(`list`)\cr Data frame containing the performane measure.}

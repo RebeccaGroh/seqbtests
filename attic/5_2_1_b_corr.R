@@ -29,7 +29,7 @@ generate_data <- function(num, mu, delta_mean, sigma){
     sd = sigma))
   data$problem <- "problem_1"
   for (i in unique(data$algorithm)) {
-    data$replications[data$algorithm == i] <- seq_len(sum(data$algorithm == i))
+    data$replication[data$algorithm == i] <- seq_len(sum(data$algorithm == i))
   } 
   return(data)
 }
