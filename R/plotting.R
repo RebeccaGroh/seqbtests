@@ -112,9 +112,9 @@ plot_cd <- function(df, measure = NULL, alpha = 0.05, cex = 0.75, ...) {
 #'     implemented in rNPBST.
 #' @examples 
 #'     \dontrun{
-#'       results <- b_corr_t_test(df= test_benchmark_small, 
-#'         problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
-#'       plot_posterior(results, method = "b_corr_t_test")
+#'       results <- b_signed_rank_test(df= test_benchmark_small,
+#'         baseline = "algo_1", algorithm = "algo_2")
+#'       plot_posterior(results, method = "b_signed_rank_test")
 #'     }
 #' @references 
 #'     \url{https://github.com/b0rxa/scmamp}
@@ -147,7 +147,7 @@ plot_posterior <- function(results, method, points = 1000){
     test[["parameters"]] <- as.data.frame(results[["extra"]][3])
     test[["posterior"]] <- dpos
     scmamp::plotPosterior(results = test, num.points = points, plot.rope = TRUE, 
-      plot.samples = TRUE)
+      plot.samples = TRUE) 
   } else if (method == "b_sign_test" | method == "b_signed_rank_test") {
     test <- list()
     test[["sample"]] <- as.data.frame(results[["extra"]])
@@ -159,4 +159,3 @@ plot_posterior <- function(results, method, points = 1000){
     warning("Method must be correctly specified.")
   }
 }
-

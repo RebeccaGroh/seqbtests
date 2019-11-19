@@ -23,6 +23,7 @@ Imports:
     checkmate,
     devtools,
     ggplot2,
+    knitr,
     metRology,
     remotes,
     rstan,
@@ -31,7 +32,6 @@ Imports:
 Suggests: 
     testthat (>= 2.1.0),
     ggtern,
-    knitr,
     rmarkdown,
     roxygen2, 
     rNPBST,

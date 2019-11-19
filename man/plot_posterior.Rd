@@ -33,9 +33,9 @@ The plot for Bayesian correlated t tests has first been implemented in
 }
 \examples{
     \dontrun{
-      results <- b_corr_t_test(df= test_benchmark_small, 
-        problem = "problem_a", baseline = "algo_1", algorithm = "algo_2")
-      plot_posterior(results, method = "b_corr_t_test")
+      results <- b_signed_rank_test(df= test_benchmark_small,
+        baseline = "algo_1", algorithm = "algo_2")
+      plot_posterior(results, method = "b_signed_rank_test")
     }
 }
 \references{

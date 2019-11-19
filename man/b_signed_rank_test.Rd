@@ -87,8 +87,10 @@ This function implements the Bayesian version of the signed rank test.
 The test has first been implemented in rNPBST.
 }
 \examples{
+    \dontrun{
     results <- b_signed_rank_test(df= test_benchmark_small,
     baseline = "algo_1", algorithm = "algo_2")
+    }
 }
 \references{
 \url{https://github.com/JacintoCC/rNPBST}

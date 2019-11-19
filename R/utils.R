@@ -262,13 +262,13 @@ get_probabilities <- function(result, compare, prob) {
       decision_algo <- "<="
     }
     if (threshold > prob) {
-      result$probabilities[i] <- paste("P(Baseline", decision_algo,  
-        "Algorithm) >", prob, sep = " ")
+      result$probabilities[i] <- paste("P(baseline", decision_algo,  
+        "algorithm)>", prob, sep = "")
     } else if (threshold_vv > prob) {
-      result$probabilities[i] <- paste("P(Baseline", decision_base, 
-        "Algorithm) >", prob, sep = " ")
+      result$probabilities[i] <- paste("P(baseline", decision_base, 
+        "algorithm)>", prob, sep = "")
     } else if (result[i, "rope"] > prob) {
-      result$probabilities[i] <- paste("P(Baseline = Algorithm) >", prob)
+      result$probabilities[i] <- paste("P(baseline=algorithm)>", prob)
     } else {
       result$probabilities[i] <- "no decision"
     }

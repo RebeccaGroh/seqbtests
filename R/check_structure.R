@@ -118,6 +118,7 @@ print.b_test <- function(x, ...) {
   print(output_data)
 }
 
+
 #' @title Table test results (Frequentist tests)
 #' @description Create a list containing the Frequentist test results based on a 
 #'     generic function.
