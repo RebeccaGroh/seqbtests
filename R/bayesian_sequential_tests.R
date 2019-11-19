@@ -317,8 +317,10 @@ seq_b_sign_test <- function(problem = NULL, baseline, algorithm = NULL,
 #'     function.
 #' @references \url{https://github.com/JacintoCC/rNPBST}
 #' @examples     
-#'     results <- seq_b_signed_rank_test(df = test_benchmark_small, 
-#'     baseline = 'algo_1', algorithm = "algo_2", max_repls = 10)
+#'     \dontrun{
+#'       results <- seq_b_signed_rank_test(df = test_benchmark_small, 
+#'       baseline = 'algo_1', algorithm = "algo_2", max_repls = 10)
+#'     }
 #' @export
 seq_b_signed_rank_test <- function(problem = NULL, baseline, 
   algorithm = NULL, measure = NULL, compare = NULL, s = 0.5, z_0 = 0,
@@ -472,13 +474,15 @@ seq_b_signed_rank_test <- function(problem = NULL, baseline,
 #'     \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
 #'         probabilities and threshold probability. 
 #' }
-#' @details 
-#'     The basis for this test has first been implemented in scmamp. 
-#' @references \url{https://github.com/b0rxa/scmamp}
 #' @examples 
+#'     \dontrun{
 #'     results <- seq_b_hierarchical_test(df = test_benchmark_small, 
 #'       baseline = "algo_1", algorithm = "algo_3", max_repls = 10, 
 #'       min_repls = 8)
+#'     }
+#' @details 
+#'     The basis for this test has first been implemented in scmamp. 
+#' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
 seq_b_hierarchical_test <- function(baseline, algorithm = NULL, measure = NULL, 
   compare = NULL, rho = 0.1, max_repls = 20, rope = c(-0.01, 0.01), 

@@ -380,15 +380,17 @@ b_signed_rank_test <- function(df, problem = NULL, baseline, compare = NULL,
 #'     \item{\code{probabilities}} (`character`)\cr Decisions based on posterior 
 #'         probabilities and threshold probability. 
 #' }
-#' @examples 
-#'     results <- b_hierarchical_test(df= test_benchmark_small, 
-#'     baseline = "algo_1", algorithm = "algo_3",  rho=0.1, 
-#'     rope=c(-0.01, 0.01), nsim=2000,  nchains=5)
 #' @details 
 #'     The test has first been implemented in scmamp. 
 #'     Note that if no measure column is defined per default the first column 
 #'     defined as measure_* in the data frame is used. The default of rho is 
 #'     0.1. 
+#' @examples 
+#'     \dontrun{
+#'       results <- b_hierarchical_test(df= test_benchmark_small, 
+#'         baseline = "algo_1", algorithm = "algo_3",  rho=0.1, 
+#'         rope=c(-0.01, 0.01))
+#'     }
 #' @references \url{https://github.com/b0rxa/scmamp}
 #' @export
 b_hierarchical_test <- function(df, baseline, algorithm = NULL,  measure = NULL, 

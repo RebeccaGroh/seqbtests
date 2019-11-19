@@ -98,9 +98,10 @@ evaluation. Finally, the results of evaluation are displayed in the
 column named `measure_*`. The data format allows to include more than one 
 performance measure in the data frame by setting a specification after 
 `measure_`. For example one can include `measure_acc` and `measure_f1` for 
-accuracy and F1 Score, the harmonic mean of precision and recall, of the algorithms performances. However, for 
-each test or plot one specific measure column has to be defined since it is not 
-possible to  compare multiple measures at once. 
+accuracy and F1 Score, the harmonic mean of precision and recall, of the 
+algorithms performances. However, for each test or plot one specific measure 
+column has to be defined since it is not possible to  compare multiple measures 
+at once. 
 
 The package offers the advantage that there is no need to provide a complete data set 
 when using the sequential tests. The package includes the function 
@@ -627,7 +628,7 @@ algorithms within the test procedure.
 sepcific_get_replication <- function(i){
   set.seed(1234)
   data <- data.frame(algorithm = rep(c("algo_a", "algo_b"), length = i*2), 
-                     measure_accuracy = rnorm(n = i*2, mean = c(0.4, 0.7), sd = 0.05))
+    measure_accuracy = rnorm(n = i*2, mean = c(0.4, 0.7), sd = 0.05))
   data$problem <- "problem_1"
   for (i in unique(data$algorithm)) {
     data$replication[data$algorithm == i] <- seq_len(sum(data$algorithm == i))
@@ -637,11 +638,13 @@ sepcific_get_replication <- function(i){
 
 unlockBinding("get_replication", as.environment("package:seqbtests"))
 assignInNamespace("get_replication", sepcific_get_replication, ns="seqbtests", envir=as.environment("package:seqbtests"))
-assign("get_replication", sepcific_get_replication, envir=as.environment("package:seqbtests"))
-lockBinding("get_replication", as.environment("package:seqbtests"))
+assign("get_replication", 
+  sepcific_get_replication, envir=as.environment("package:seqbtests"))
+lockBinding("get_replication", 
+  as.environment("package:seqbtests"))
 
 results <- seq_b_corr_t_test(problem = "problem_1", 
-                             baseline = "algo_a", algorithm = "algo_b")
+  baseline = "algo_a", algorithm = "algo_b")
 ```
 
 
