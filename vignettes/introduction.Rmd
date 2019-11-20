@@ -540,8 +540,7 @@ obtained by Markov-Chain Monte Carlo sampling.
 
 ```{r, message = FALSE, warning = FALSE}
 results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
-  baseline = "algo_1", algorithm = "algo_2", rho=0.1, rope=c(-0.01, 0.01), 
-  nsim=2000,  nchains=5)
+  baseline = "algo_1", algorithm = "algo_3",  rho=0.1, rope=c(-0.01, 0.01))
 ```
 
 ```{r, echo = FALSE}
