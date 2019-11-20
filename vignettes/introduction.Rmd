@@ -1,14 +1,13 @@
 ---
 title: "A Sequential Bayesian Approach for Performance Comparison of Machine Learning Algorithms"
-output: 
-  pdf_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: refs.bib
 ---
-
+<!-- output: pdf_document -->
 <!-- \pagenumbering{gobble}  -->
 <!-- \renewcommand*{\nameyeardelim}{\addcomma\space} -->
 <style>
