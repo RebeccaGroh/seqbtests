@@ -7,14 +7,9 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: refs.bib
-suppress-bibliography: true
 ---
-<!-- suppress-bibliography: true -> unterdrückt die Bibiliografie -->
-<!-- Am Ende vom Blatt muss wieder # References eingefügt werden  -->
-<!-- \pagenumbering{gobble} -> unterdrückt die Seitennummerierung -->
-<!--highlight: null wieder löschen damit die farben wieder drin sind -->
 
-\pagenumbering{gobble} 
+<!-- \pagenumbering{gobble}  -->
 <!-- \renewcommand*{\nameyeardelim}{\addcomma\space} -->
 <style>
 body {
@@ -538,14 +533,12 @@ difference of accuracies on all considered problem sets. In Bayesian analysis
 hierarchical models are particularly powerful and flexible. Computations are 
 obtained by Markov-Chain Monte Carlo sampling. 
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE,eval = FALSE}
 results_b_hierarchical <- b_hierarchical_test(df= test_benchmark_small, 
   baseline = "algo_1", algorithm = "algo_3",  rho=0.1, rope=c(-0.01, 0.01))
 ```
 
-```{r, echo = FALSE}
-results_b_hierarchical$data_frame
-```
+
 
 The hierarchical approach is recommended over the Bayesian signed test by 
 @benavoli2017. Yet, it is quite time consuming, which is inconvenient if 
@@ -554,7 +547,7 @@ tests needs to be run often.
 The graphical visualization shows a similar triangle plot as the Bayesian sign 
 and signed rank test.
 
-```{r, prompt=TRUE , fig.width=5, fig.height=3}
+```{r, prompt=TRUE , fig.width=5, fig.height=3, eval = FALSE}
 plot_posterior(results_b_hierarchical, method = "b_hierarchical_test")
 ```
 
@@ -682,5 +675,5 @@ results <- seq_b_corr_t_test(problem = "problem_1",
 ```
 
 
-<!-- # References -->
+# References
 
