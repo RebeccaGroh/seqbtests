@@ -29,7 +29,7 @@ Once you install the package, you can access individual man pages by a call to, 
 ## Package 
 
 This package provides some Bayesian approaches to compare classifiers in either single or multiple datasets. 
-The tests [without any adaptions] in this package are modifications of tests provided by other packages, available at [github](https://github.com/br0rxa/scmamp), [github](https://github.com/JacintoCC/rNPBST).
+The tests [without any adaptions] in this package are modifications of tests provided by other packages, available at [github](https://github.com/b0rxa/scmamp), [github](https://github.com/JacintoCC/rNPBST).
 
 ## Data Frame 
 
